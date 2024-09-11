@@ -376,15 +376,12 @@ class StudentController extends Controller
                     <?php while ($currentDate < $endDate) : ?>
                         <?php
                         $monthlyFees = 0;
-                        $paymentTypes = [];
-
                         // Loop through student fees details to sum all payments for the current month
                         foreach ($get_student_detail['student_fees_detail'] as $fee) {
                             $submissionDate = new \DateTime($fee['submission_date']);
                             if ($submissionDate->format('m-Y') == $currentDate->format('m-Y')) {
                                 $monthlyFees += $fee['user_fees'];
                                 $paidFees += $fee['user_fees'];
-                                $paymentTypes[] = $fee['payment_type']; // Collect payment types
                             }
                         }
                         ?>
@@ -392,18 +389,30 @@ class StudentController extends Controller
                             <td><?php echo $count++ ?>.</td>
                             <td><?php echo $currentDate->format('M Y') ?></td>
                             <td>
-                                <?php if ($monthlyFees > 0) : ?>
-                                    <?php echo number_format($monthlyFees, 0) ?>
-                                    <?php if (in_array('cash', $paymentTypes)) : ?>
-                                        (Cash)
-                                    <?php endif; ?>
-                                    <?php if (in_array('online', $paymentTypes)) : ?>
-                                        (Online)
-                                    <?php endif; ?>
-                                    <button class="btn btn-primary btn-sm edit-btn" data-fee-id="<?php echo $fee['id']; ?>" data-fee-month="<?php echo $fee['submission_date']; ?>">
-                                        <img src="<?php echo url('public/admin/images/edite-icon.svg'); ?>">
-                                    </button>
-                                <?php else : ?>
+                                <?php if (count($get_student_detail['student_fees_detail']) > 0): 
+                                    if($monthlyFees > 0){?>
+                                    <strong>Paid Fees:
+                                        <?php echo number_format($monthlyFees, 0); ?>
+                                    </strong>
+                                    <?php } else {
+                                        echo number_format($monthlyFees, 0);
+                                    }?>
+                                    <?php foreach ($get_student_detail['student_fees_detail'] as $fee): ?>
+                                        <?php
+                                            $submissionDate = new \DateTime($fee['submission_date']);
+                                            if ($submissionDate->format('m-Y') == $currentDate->format('m-Y')):
+                                        ?>
+                                            <span class="total-paid-payment">
+                                                <em>(<?php echo $fee['user_fees']; ?> / <?php echo $fee['payment_type']; ?>)</em>
+                                                <button class="btn btn-primary btn-sm edit-btn" 
+                                                    data-fee-id="<?php echo $fee['id']; ?>" 
+                                                    data-fee-month="<?php echo $fee['submission_date']; ?>">
+                                                <img src="<?php echo url('public/admin/images/edite-icon.svg'); ?>" alt="Edit Icon">
+                                            </button>
+                                            </span><br>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
                                     -
                                 <?php endif; ?>
                             </td>
@@ -420,7 +429,7 @@ class StudentController extends Controller
                     <td><strong><?php echo number_format($totalFees, 0) ?></strong></td>
                 </tr>
                 <tr class="tfooter">
-                    <td class="space" colspan="2"><span style="color: green;">Paid Fees:</span></td>
+                    <td class="space" colspan="2"><span style="color: green;">Total Paid Fees:</span></td>
                     <td><strong style="color: green;"><?php echo number_format($paidFees, 0) ?></strong></td>
                 </tr>
                 <tr class="tfooter">

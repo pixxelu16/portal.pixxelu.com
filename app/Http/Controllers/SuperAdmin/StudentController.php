@@ -373,40 +373,47 @@ class StudentController extends Controller
                                 ?>
                                 <?php while ($currentDate < $endDate) : ?>
                                 <?php
-                                $fee_detail = null;
-                                foreach ($get_student_detail['student_fees_detail'] as $fee) {
-                                    $submissionDate = new \DateTime($fee['submission_date']);
-                                    if ($submissionDate->format('m-Y') == $currentDate->format('m-Y')) {
-                                        $fee_detail = $fee;
-                                        break;
+                                    $monthlyFees = 0;
+                                    // Loop through student fees details to sum all payments for the current month
+                                    foreach ($get_student_detail['student_fees_detail'] as $fee) {
+                                        $submissionDate = new \DateTime($fee['submission_date']);
+                                        if ($submissionDate->format('m-Y') == $currentDate->format('m-Y')) {
+                                            $monthlyFees += $fee['user_fees'];
+                                            $paidFees += $fee['user_fees'];
+                                        }
                                     }
-                                }
                                 ?>
                                 <tr>
                                 <td><?php echo $count++ ?>.</td>
                                 <td><?php echo $currentDate->format('M Y') ?></td>
-                                <td> <?php if ($fee_detail) : ?>
-                                    <?php echo $fee_detail['user_fees'] ?>
-                                    <?php
-                                        $paidFees += $fee_detail['user_fees'];
-                                        
+                                <td>
+                                <?php if (count($get_student_detail['student_fees_detail']) > 0): 
+                                    if($monthlyFees > 0){?>
+                                    <strong>Paid Fees:
+                                        <?php echo number_format($monthlyFees, 0); ?>
+                                    </strong>
+                                    <?php } else {
+                                        echo number_format($monthlyFees, 0);
+                                    }?>
+                                    <?php foreach ($get_student_detail['student_fees_detail'] as $fee): ?>
+                                        <?php
+                                            $submissionDate = new \DateTime($fee['submission_date']);
+                                            if ($submissionDate->format('m-Y') == $currentDate->format('m-Y')):
                                         ?>
-                                    <?php if ($fee_detail['payment_type'] == 'cash') : ?>
-                                    (Cash)
-                                    <?php elseif ($fee_detail['payment_type'] == 'online') : ?>
-                                    (Online)
-                                    <?php else : ?>
-                                    <?php endif; ?>
-                                    <button class="btn btn-primary btn-sm edit-btn" data-fee-id="<?php echo $fee['id']; ?>" data-fee-month="<?php echo $fee['submission_date']; ?>">
-                                    <img src="<?php echo url('public/admin/images/edite-icon.svg'); ?>">
-                                    </button>
-                                    <?php else : ?>
+                                            <span class="total-paid-payment">
+                                                <em>(<?php echo $fee['user_fees']; ?> / <?php echo $fee['payment_type']; ?>)</em>
+                                                <button class="btn btn-primary btn-sm edit-btn" 
+                                                    data-fee-id="<?php echo $fee['id']; ?>" 
+                                                    data-fee-month="<?php echo $fee['submission_date']; ?>">
+                                                <img src="<?php echo url('public/admin/images/edite-icon.svg'); ?>" alt="Edit Icon">
+                                            </button>
+                                            </span><br>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
                                     -
-                                    <?php endif; ?>    
-                                    <?php if ($fee_detail && $fee_detail['user_fees'] > 0) : ?>
-                                    <?php else : ?>
-                                    <?php endif; ?>
-                                </td>
+                                <?php endif; ?>
+                            </td>
                                 </tr>
                                 <?php
                                 $currentDate->modify('+1 month');
@@ -420,7 +427,7 @@ class StudentController extends Controller
                                 <td><strong><?php echo number_format($totalFees, 0) ?></strong></td>
                                 </tr>
                                 <tr class="tfooter">
-                                <td class="space" colspan="2"><span style="color: green;">Paid Fees:</span></td>
+                                <td class="space" colspan="2"><span style="color: green;">Total Paid Fees:</span></td>
                                 <td><strong style="color: green;"><?php echo number_format($paidFees, 0) ?></strong></td>
                                 </tr>
                                 <tr class="tfooter">

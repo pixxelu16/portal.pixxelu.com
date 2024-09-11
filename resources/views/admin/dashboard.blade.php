@@ -123,7 +123,6 @@
                   <th>Joining Date</th>
                   <th>Course</th>
                   <th>Monthly Fees</th>
-                  <th>Payment Type</th>
                </tr>
             </thead>
             <tbody>
@@ -134,50 +133,60 @@
                @foreach($get_student_list as $student)    
                <tr>
                   <td>{{ $count++ }}</td>
-                  <td>{{ $student->user_id }} </td>
+                  <td>{{ $student->id }} </td>
                   <td data-th="Image">
                      <div class="user-image">
-                        @if($student->student_fees_detail->user_pic)
-                        <img src="{{ url('public/uploads/users/' . $student->student_fees_detail->user_pic) }}" alt="User Image">
+                        @if($student->user_pic)
+                        <img src="{{ url('public/uploads/users/' . $student->user_pic) }}" alt="User Image">
                         @else
                         <img src="{{ url('public/uploads/users/default_user.png') }}" alt="Default User Image">
                         @endif
                      </div>
                   </td>
                   <td>
-                     <span onclick="openNav()"><a href="#" class="student-link" data-student_id="{{ $student->student_fees_detail->id }}">{{ $student->student_fees_detail->name }}</a></span>
+                     <span onclick="openNav()"><a href="#" class="student-link" data-student_id="{{ $student->id }}">{{ $student->name }}</a></span>
                   </td>
                   <td>
-                     @if($student->student_fees_detail->student_phone_no)
-                     <a href="https://wa.me/{{ str_replace(['+', '-', ' '], '', $student->student_fees_detail->student_phone_no) }}" target="_blank">
-                     {{ substr($student->student_fees_detail->student_phone_no, 0, 5) }}-{{ substr($student->student_fees_detail->student_phone_no, 5) }}
+                     @if($student->student_phone_no)
+                     <a href="https://wa.me/{{ str_replace(['+', '-', ' '], '', $student->student_phone_no) }}" target="_blank">
+                     {{ substr($student->student_phone_no, 0, 5) }}-{{ substr($student->student_phone_no, 5) }}
                      </a>
                      @else
                      No phone number available
                      @endif
                   </td>
-                  <td>{{ \Carbon\Carbon::parse($student->student_fees_detail->course_joining_date)->format('d M Y') }}</td>
-                  @if($student->student_fees_detail->course_type == 'Full Stack Development') 
+                  <td>{{ \Carbon\Carbon::parse($student->course_joining_date)->format('d M Y') }}</td>
+                  @if($student->course_type == 'Full Stack Development') 
                   <td class="lights-blue-color"><span>Full Stack Development</span></td>
-                  @elseif($student->student_fees_detail->course_type == 'PHP Development')
+                  @elseif($student->course_type == 'PHP Development')
                   <td class="lights-green-color"><span>PHP Development</span></td>
-                  @elseif($student->student_fees_detail->course_type == 'Web Development')
+                  @elseif($student->course_type == 'Web Development')
                   <td class="light-yellow-color"><span>Web Development</span></td>
-                  @elseif($student->student_fees_detail->course_type == 'Web Designing')
+                  @elseif($student->course_type == 'Web Designing')
                   <td class="light-pink-color"><span>Web Designing</span></td>
-                  @elseif($student->student_fees_detail->course_type == 'Graphic Designing')
+                  @elseif($student->course_type == 'Graphic Designing')
                   <td class="light-cyan-color"><span>Graphic Designing</span></td>
                   @else
                   <td></td>
                   @endif
-                  <td>{{ $student->user_fees }}<br>
-                     <span class="date-tbl">{{ Carbon::parse($student->submission_date)->format('d M Y') }}</span>
-                  </td>
-                  @if($student->payment_type =='cash') 
-                  <td>Cash</td>
-                  @else($student->payment_type =='online')
-                  <td>Online</td>
-                  @endif
+                  <td style="text-align:left;">
+                  @php
+                     $total_fees = 0;
+                  @endphp  
+
+                  @foreach($student->student_fees_detail as $fees_detail)
+                     @php
+                           $total_fees += $fees_detail->user_fees;
+                     @endphp
+                     <span class="date-tbl">
+                           {{ Carbon::parse($fees_detail->submission_date)->format('d M Y') }}
+                           <em>({{ $fees_detail->user_fees }} / {{ $fees_detail->payment_type }})</em>
+                     </span><br>
+                  @endforeach
+                  <!-- Display total fees after the loop -->
+                  <strong>Paid Fees: {{ $total_fees }}</strong>
+               </td>
+
                </tr>
                @endforeach
             </tbody>

@@ -2714,7 +2714,18 @@ tfoot th:first-child {
 	margin: 0 0 0 6px;
 	bottom: 5px;
 	display: none;
-	position: absolute;
+}
+td .total-paid-payment {
+    float: none !important;
+}
+span.total-paid-payment em {
+    font-size: 10px;
+    font-weight: 400;
+}
+#main-table.main-table strong {
+    display: inline-block;
+    width: 100%;
+    font-size: 12px;
 }
 .first-table tr:hover td button {
 	display: inline-block;
