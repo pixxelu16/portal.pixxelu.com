@@ -1,0 +1,36 @@
+
+@media  (max-width: 1650px) {
+.sticky {
+    top: 0;
+    z-index: 11;
+    background-color: #fff;
+}
+.login-form {
+	width: 90%;
+}
+.rwd-table td {
+	font-size: 14px;
+	padding: 5px 10px !important;
+}
+
+.card-body {
+	scrollbar-width: thin;
+	scrollbar-color: #018294 #f7f7f8;
+	scrollbar-width: thin;
+}
+
+table.dataTable {
+	width: 100%;
+	margin: 0 auto;
+	clear: both;
+	border-collapse: separate;
+	border-spacing: 0;
+	overflow: scroll !important;
+	overflow-y: scroll !important;
+	overflow-x: scroll;
+}
+#example1_wrapper {
+	padding: 0 0 20px 0;
+}
+
+}

@@ -1,0 +1,43 @@
+<nav>
+   <div class="logo-name">
+      <div class="logo-image">
+      <i class="uil uil-bars sidebar-toggle"><img src="{{ url('public/admin/images/Menu.svg') }}" alt=""></i> 
+      </div>
+   </div>
+   <div class="menu-items">
+      <ul class="nav-links">
+         <li class="{{ request()->is('employee/dashboard') ? 'active' : '' }}">
+            <a href="{{ url('employee/dashboard') }}">
+            <img src="{{ url('public/admin/images/dashboard.svg') }}" alt="dashboard" />
+            <span class="link-name">Dashboard</span>
+            </a>
+         </li>
+         <!-- <li class="{{ request()->is('employee/attendance') ? 'active' : '' }}">
+            <a href="aatendance.html">
+               <img src="{{ url('public/admin/images/attendance.svg') }}" alt="attendance" />
+               <span class="link-name">Attendance</span>
+            </a>
+            </li> -->
+         <li class="nav-item">
+            <a class="dropdown-item" href="{{ route('logout') }}"
+               onclick="event.preventDefault();
+               document.getElementById('logout-form').submit();">
+            <img src="{{ url('public/admin/images/logout.svg') }}" alt="leads" />
+            {{ __('Logout') }}
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+               @csrf
+            </form>
+         </li>
+         <li class="mode">
+            <a href="#">
+            <i class="uil uil-moon"></i>
+            <span class="link-name">Dark Mode</span>
+            </a>
+            <div class="mode-toggle">
+               <span class="switch"></span>
+            </div>
+         </li>
+      </ul>
+   </div>
+</nav>

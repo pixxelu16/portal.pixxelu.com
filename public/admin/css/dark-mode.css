@@ -1,0 +1,118 @@
+/* dark-mood-css  */
+
+body.dark .main-table {
+    background: #000;
+    color: #ccc;
+}
+
+body.dark table.rwd-table th {
+    background: #232323;
+    color: #ccc;
+}
+
+body.dark .dropdown-date input {
+    background: #000;
+    color: #ccc;
+    border: 1px solid #4d4c4c;
+}
+body.dark .dropdown-column input {
+    background: #242526;
+    color: #ccc;
+    border: 1px solid #4d4c4c;
+}
+body.dark .search-container input {
+    background: #242526;
+    color: #ccc;
+}
+
+body.dark .search-container {
+    background: #242526;
+    color: #ccc;
+    border: 1px solid #4d4c4c;
+}
+
+body.dark .title-subheading h2 {
+    color: #ccc;
+}
+body.dark section.dashboard {
+    background: #000;
+}
+body.dark .title-subheading h2 {
+    color: #ccc;
+}
+body.dark section.dashboard {
+    background: #181818;
+}
+body.dark table.rwd-table tr:hover {
+    background: #232323;
+}
+body.dark .btn-pixxelu a {
+    background: #242526;
+    color: #ccc;
+    border: 1px solid #4d4c4c;
+}
+
+body.dark .btn-pixxelu a i {
+    background: #232323;
+    color: #ccc;
+}
+
+body.dark .dyanmic-content h4 {
+    color: #ccc;
+}
+
+body.dark .dropdown-content-panel .dropdown button {
+    color: #ccc;
+}
+
+body.dark .dropdown:hover .dropbtn {
+    background: #3b3b3b;
+    padding: 10px;
+}
+
+body.dark .dropdown-admin-panel .dropdown:hover .dropdown-content {
+    background: #000;
+    border: 0;
+}
+
+body.dark .dropdown-admin-panel .dropdown-content a {
+    color: #ccc;
+}
+body.dark .top .search-box input {
+    background: #000;
+    border: 1px solid #4D4C4C;
+    color: #ccc;
+} 
+body.dark .footer-code {
+    background: #000;
+    color: #ccc;
+}
+body.dark nav {
+    background: #000;
+}
+
+body.dark .mode-toggle .switch {
+    background: #303030;
+}
+
+body.dark .switch:before {
+    background: #ccc;
+}
+body.dark .scrolling-data-table .modal-content {
+    background: #000;
+    border: 1px solid #4D4C4C;
+}
+
+body.dark .dashboard .top {
+    background: #000;
+    backdrop-filter: blur(150px);
+    border-bottom: 1px solid #ddd6;
+}
+
+body.dark .search-container img {
+    filter: invert(0.61);
+}
+
+
+
+/* dark-mood-css-end  */

@@ -1,0 +1,256 @@
+@extends('admin.layouts.master')
+@section('content')
+<div class="space-remove"></div>
+<div class="title-subheading">
+   <h2>Edit Profile</h2>
+</div>
+<div class="main-table">
+   @if (Session::has('success')) 
+   <div class="notification-green">
+      <p>{{ Session::get('success') }}</p>
+   </div>
+   @endif 
+   @if (Session::has('unsuccess')) 
+   <div class="notification-red">
+      <p>{{ Session::get('unsuccess') }}</p>
+   </div>
+   @endif 
+   <div class="login-form">
+      <form action="{{ route('admin.update.profile', $user_profile->id) }}" Method="POST" enctype="multipart/form-data">
+         @csrf
+         <div class="small-12 medium-2 large-2 columns">
+            <div class="avatar-upload">
+               <div class="avatar-edit">
+                  <input type="file" name="imagea" id="imageUpload" accept=".png, .jpg, .jpeg" />
+                  <label for="imageUpload"><i class="fas fa-pencil-alt"></i></label>
+               </div>
+               <div class="add-new-student-pic">
+                  <div class="avatar-preview">
+                     @if($user_profile->user_pic)
+                     <img id="imagePreview" src="{{ url('public/uploads/users/' .$user_profile->user_pic) }}" >
+                     @else
+                     <img id="imagePreview" src="{{ url('public/uploads/users/default_user.png') }}" >
+                     @endif
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="form-group display-column">
+            <div class="form-design first-name">
+               <label for="first-name">First Name</label>
+               <input type="text" id="first-name" name="first_name" value="{{ $user_profile->first_name }}" placeholder="Enter First Name">
+            </div>
+            <div class="form-design last-name">
+               <label for="last-name">Last Name</label>
+               <input type="text" id="last-name" name="last_name" value="{{ $user_profile->last_name }}" placeholder="Enter Last Name">
+            </div>
+            <div class="form-design mail">
+               <label for="email">Email</label>
+               <input type="email" id="email" name="email" class="email-disabled" value="{{ $user_profile->email }}" placeholder="Enter email address">
+            </div>
+         </div>
+         <div class="form-group display-column">
+            <div class="form-design dob">
+               <label for="dob">Date of Birth</label>
+               <input type="date" id="dob" name="dob" value="{{ $user_profile->dob }}">
+            </div>
+            <div class="form-design phone-no">
+               <label for="employee_phone_no">Mobile Number</label>
+               <input type="text" id="father_phone_no" name="employee_phone_no" value="{{ $user_profile->employee_phone_no }}" placeholder="Enter Phone Number">
+            </div>
+            <div class="form-design aadhaar-no">
+               <label for="aadhar_no">Aadhar Number</label>
+               <input type="text" id="aadhaar_no" name="aadhaar_no" value="{{ $user_profile->aadhaar_no }}" placeholder="Enter Aaadhar Number">
+            </div>
+         </div>
+         <div class="form-group display-column radio-btn-design">
+            <div class="form-group">
+               <label>Gender</label>
+               <div class="form-design gender-options">
+                  <div class="gender male">
+                     <input type="radio" name="gender" value="Male" <?php if ($user_profile->gender === 'Male') echo 'checked'; ?>>
+                     <span>Male</span>
+                  </div>
+                  <div class="gender male">  
+                     <input type="radio" name="gender" value="Female" <?php if ($user_profile->gender === 'Female') echo 'checked'; ?>>
+                     <span>Female</span>
+                  </div>
+               </div>
+            </div>
+            <div class="form-group">
+               <label>Marital Status</label>
+               <div class="form-design marital-status gender-options">
+                  <div class="gender male">  
+                     <input type="radio" name="marital_status" value="Married" <?php if ($user_profile->marital_status === 'Married') echo 'checked'; ?>>
+                     <span>Married</span>
+                  </div>
+                  <div class="gender male">  
+                     <input type="radio" name="marital_status" value="Unmarried" <?php if ($user_profile->marital_status === 'Unmarried') echo 'checked'; ?>>
+                     <span>Unmarried</span>
+                  </div>
+                  <div class="gender male">  
+                     <input type="radio" name="marital_status" value="Other" <?php if ($user_profile->marital_status === 'Other') echo 'checked'; ?>>
+                     <span>Other</span>
+                  </div>
+               </div>
+            </div>
+            <div class="form-design category">
+               <label for="category">Category</label>
+               <div class="form-design marital-status gender-options">
+                  <div class="gender male"> 
+                     <label class="radio-option">
+                     <input type="radio" name="category" value="General" <?php if ($user_profile->category === 'General') echo 'checked'; ?>>
+                     <span>General</span>
+                     </label>
+                  </div>
+                  <div class="gender male">  
+                     <label class="radio-option">
+                     <input type="radio" name="category" value="ST" <?php if ($user_profile->category === 'ST') echo 'checked'; ?>>
+                     <span>ST</span>
+                     </label>
+                  </div>
+                  <div class="gender male">  
+                     <label class="radio-option">
+                     <input type="radio" name="category" value="SC" <?php if ($user_profile->category === 'SC') echo 'checked'; ?>>
+                     <span>SC</span>
+                     </label>
+                  </div>
+                  <div class="gender male">  
+                     <label class="radio-option">
+                     <input type="radio" name="category" value="OBC" <?php if ($user_profile->category === 'OBC') echo 'checked'; ?>>
+                     <span>OBC</span>
+                     </label>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="form-design qualification">
+            <?php $qualification = explode(",", $user_profile['qualification']); ?>
+            <label for="qualification">Qualification</label>
+            <div class="qualification-ftp">
+               <div class="checkbox-option">
+                  <input type="checkbox" name="qualification[]" value="12th" <?php if(in_array('12th', $qualification)){ echo 'checked="checked"'; } ?>>
+                  <span>12th</span>
+               </div>
+               <div class="checkbox-option">
+                  <input type="checkbox" name="qualification[]" value="12th_Pursuing" <?php if(in_array('12th_Pursuing', $qualification)){ echo 'checked="checked"'; } ?>>
+                  <span>12th Pursuing</span>
+               </div>
+               <div class="checkbox-option">
+                  <input type="checkbox" name="qualification[]" value="Graduation" <?php if(in_array('Graduation', $qualification)){ echo 'checked="checked"'; } ?>>
+                  <span>Graduation</span>
+               </div>
+               <div class="checkbox-option">
+                  <input type="checkbox" name="qualification[]" value="Graduation_Pursuing" <?php if(in_array('Graduation_Pursuing', $qualification)){ echo 'checked="checked"'; } ?>>
+                  <span>Graduation Pursuing</span>
+               </div>
+               <div class="checkbox-option">
+                  <input type="checkbox" name="qualification[]" value="Other" <?php if(in_array('Other', $qualification)){ echo 'checked="checked"'; } ?>>
+                  <span>Other</span>
+               </div>
+            </div>
+         </div>
+         <div class="form-group display-column">
+            <div class="form-design address">
+               <label for="address">Address</label>
+               <input type="text" id="address" name="address" value="{{ $user_profile->address }}" placeholder="Enter Address">
+            </div>
+            <div class="form-design district">
+               <label for="district">District</label>
+               <select name="district" class="form-control" id="district">
+                  <option value="" disabled selected>Select District</option>
+                  <option value="Bilaspur" @if($user_profile->district == 'Bilaspur') selected @endif>Bilaspur</option>
+                  <option value="Chamba" @if($user_profile->district == 'Chamba') selected @endif>Chamba</option>
+                  <option value="Hamirpur" @if($user_profile->district == 'Hamirpur') selected @endif>Hamirpur</option>
+                  <option value="Kangra" @if($user_profile->district == 'Kangra') selected @endif>Kangra</option>
+                  <option value="Kinnaur" @if($user_profile->district == 'Kinnaur') selected @endif>Kinnaur</option>
+                  <option value="Kullu" @if($user_profile->district == 'Kullu') selected @endif>Kullu</option>
+                  <option value="Lahaul and Spiti" @if($user_profile->district == 'Lahaul and Spiti') selected @endif>Lahaul and Spiti</option>
+                  <option value="Mandi" @if($user_profile->district == 'Mandi') selected @endif>Mandi</option>
+                  <option value="Shimla" @if($user_profile->district == 'Shimla') selected @endif>Shimla</option>
+                  <option value="Sirmaur" @if($user_profile->district == 'Sirmaur') selected @endif>Sirmaur</option>
+                  <option value="Solan" @if($user_profile->district == 'Solan') selected @endif>Solan</option>
+                  <option value="Una" @if($user_profile->district == 'Una') selected @endif>Una</option>
+               </select>
+            </div>
+            <div class="form-design state">
+               <label for="state">State</label>
+               <select name="state" class="form-control" id="state">
+                  <option value="" disabled selected>Select State</option>
+                  <option value="Andhra Pradesh" @if($user_profile->state == 'Andhra Pradesh') selected @endif>Andhra Pradesh</option>
+                  <option value="Arunachal Pradesh" @if($user_profile->state == 'Arunachal Pradesh') selected @endif>Arunachal Pradesh</option>
+                  <option value="Assam" @if($user_profile->state == 'Assam') selected @endif>Assam</option>
+                  <option value="Bihar" @if($user_profile->state == 'Bihar') selected @endif>Bihar</option>
+                  <option value="Chhattisgarh" @if($user_profile->state == 'Chhattisgarh') selected @endif>Chhattisgarh</option>
+                  <option value="Goa" @if($user_profile->state == 'Goa') selected @endif>Goa</option>
+                  <option value="Gujarat" @if($user_profile->state == 'Gujarat') selected @endif>Gujarat</option>
+                  <option value="Haryana" @if($user_profile->state == 'Haryana') selected @endif>Haryana</option>
+                  <option value="Himachal Pradesh" @if($user_profile->state == 'Himachal Pradesh') selected @endif>Himachal Pradesh</option>
+                  <option value="Jharkhand" @if($user_profile->state == 'Jharkhand') selected @endif>Jharkhand</option>
+                  <option value="Karnataka" @if($user_profile->state == 'Karnataka') selected @endif>Karnataka</option>
+                  <option value="Kerala" @if($user_profile->state == 'Kerala') selected @endif>Kerala</option>
+                  <option value="Madhya Pradesh" @if($user_profile->state == 'Madhya Pradesh') selected @endif>Madhya Pradesh</option>
+                  <option value="Maharashtra" @if($user_profile->state == 'Maharashtra') selected @endif>Maharashtra</option>
+                  <option value="Manipur" @if($user_profile->state == 'Manipur') selected @endif>Manipur</option>
+                  <option value="Meghalaya" @if($user_profile->state == 'Meghalaya') selected @endif>Meghalaya</option>
+                  <option value="Mizoram" @if($user_profile->state == 'Mizoram') selected @endif>Mizoram</option>
+                  <option value="Nagaland" @if($user_profile->state == 'Nagaland') selected @endif>Nagaland</option>
+                  <option value="Odisha" @if($user_profile->state == 'Odisha') selected @endif>Odisha</option>
+                  <option value="Punjab" @if($user_profile->state == 'Punjab') selected @endif>Punjab</option>
+                  <option value="Rajasthan" @if($user_profile->state == 'Rajasthan') selected @endif>Rajasthan</option>
+                  <option value="Sikkim" @if($user_profile->state == 'Sikkim') selected @endif>Sikkim</option>
+                  <option value="Tamil Nadu" @if($user_profile->state == 'Tamil Nadu') selected @endif>Tamil Nadu</option>
+                  <option value="Telangana" @if($user_profile->state == 'Telangana') selected @endif>Telangana</option>
+                  <option value="Tripura" @if($user_profile->state == 'Tripura') selected @endif>Tripura</option>
+                  <option value="Uttar Pradesh" @if($user_profile->state == 'Uttar Pradesh') selected @endif>Uttar Pradesh</option>
+                  <option value="Uttarakhand" @if($user_profile->state == 'Uttarakhand') selected @endif>Uttarakhand</option>
+                  <option value="West Bengal" @if($user_profile->state == 'West Bengal') selected @endif>West Bengal</option>
+               </select>
+            </div>
+         </div>
+         <div class="form-group display-column">
+            <div class="form-design pin-code">
+               <label for="pin_code">Pin Code</label>
+               <input type="text" id="pin_code" name="pin_code" value="{{ $user_profile->pin_code }}" placeholder="Enter Pin Code">
+            </div>
+            <div class="form-design join-date">
+               <label for="joining_date">Joining Date</label>
+               <input type="date" id="joining_date" name="joining_date" value="{{ $user_profile->joining_date }}">
+            </div>
+            <div class="form-design district">
+               <label for="user_status">Status</label>
+               <select name="user_status" class="form-control" id="User Status">
+                  <option value ="" disabled selected>Select Status Type</option>
+                  <option value="Active" @if($user_profile->user_status == 'Active') selected @endif>Active</option>
+                  <option value="Pending" @if($user_profile->user_status == 'Pending') selected @endif>Pending</option>
+                  <option value="Leave" @if($user_profile->user_status == 'Leave') selected @endif>Leave</option>
+                  <option value="Suspend" @if($user_profile->user_status == 'Suspend') selected @endif>Suspend</option>
+                  <option value="Completed" @if($user_profile->user_status == 'Completed') selected @endif>Completed</option>
+               </select>
+            </div>
+         </div>
+         <div class="form-button">
+            <div class="back-button">
+               <input type="submit" class="btn btn-success" name="submit" value="Update">
+            </div>
+         </div>
+      </form>
+   </div>
+</div>
+<script>
+const aadharNoInput = document.getElementById('aadhaar_no');
+   aadharNoInput.addEventListener('input', function(event) {
+      const inputValue = event.target.value;
+      const numericValue = inputValue.replace(/\D/g, '');
+      const truncatedValue = numericValue.slice(0, 12);
+      event.target.value = truncatedValue;
+   });  
+const pinCodeInput = document.getElementById('pin_code');
+   pinCodeInput.addEventListener('input', function(event) {
+      const inputValue = event.target.value;
+      const numericValue = inputValue.replace(/\D/g, ''); 
+      const truncatedValue = numericValue.slice(0, 6); 
+      event.target.value = truncatedValue;
+   });   
+</script>
+@endsection
