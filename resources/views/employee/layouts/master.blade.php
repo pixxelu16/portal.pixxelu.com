@@ -13,6 +13,7 @@
       <link rel="stylesheet" href="{{ url('public/admin/css/mobile.css') }}">
       <link rel="stylesheet" href="{{ url('public/admin/css/bootstrap.min.css') }}">
       <link rel="stylesheet" href="{{ url('public/admin/css/table-custom.css') }}">
+      <link rel="icon" href="{{ url('public/Group-23.svg') }}" type="image/x-icon">
       <!-- SweetAlert2 CSS -->
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
       <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
@@ -30,7 +31,7 @@
       <!-- Charts scripts -->
       <script src="https://code.highcharts.com/highcharts.js"></script>
       <!-- End Charts scripts -->
-      <title>Employee Dashboard</title>
+      <title>Pixxelu Employee Portal</title>
    </head>
    <body>
       @include('employee.layouts.sidebar')

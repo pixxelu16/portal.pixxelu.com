@@ -12,7 +12,7 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-
+    <link rel="icon" href="{{ url('public/Group-23.svg') }}" type="image/x-icon">
     <!-- Scripts -->
 </head>
 <body>

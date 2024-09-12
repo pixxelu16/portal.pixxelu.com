@@ -179,7 +179,8 @@
                      ?>
                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                   <!-- Display total fees after the loop -->
-                  <strong><?php echo e($total_fees); ?></strong>
+                  Rs <?php echo e(number_format($total_fees)); ?>
+
                </td>
 
                </tr>
