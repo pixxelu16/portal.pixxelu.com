@@ -65,24 +65,24 @@
             </thead>
             <tbody>
                @php 
-               $count = 1;
-               use Carbon\Carbon;
-               $currentMonth = Carbon::now()->month;
-               $currentYear = Carbon::now()->year;
+                  $count = 1;
+                  use Carbon\Carbon;
+                  $currentMonth = Carbon::now()->month;
+                  $currentYear = Carbon::now()->year;
                @endphp
                @foreach($get_students_detail as $student)
-               @php 
-               $total_fees = $student->total_fees;
-               $pay_fees = 0;
-               @endphp
-               @if(isset($student->student_fees_detail))
-               @foreach($student->student_fees_detail as $fees)
-               @php 
-               $total_fees = $student->total_fees;
-               $pay_fees += $fees['user_fees'];
-               $submissionMonths[] = Carbon::parse($fees['submission_date'])->month;
-               @endphp
-               @endforeach 
+                  @php 
+                     $total_fees = $student->total_fees;
+                     $pay_fees = 0;
+                     @endphp
+                     @if(isset($student->student_fees_detail))
+                  @foreach($student->student_fees_detail as $fees)
+                     @php 
+                        $total_fees = $student->total_fees;
+                        $pay_fees += $fees['user_fees'];
+                        $submissionMonths[] = Carbon::parse($fees['submission_date'])->month;
+                     @endphp
+                  @endforeach 
                @endif                 
                <tr>
                   <td>{{ $count++ }}</td>
@@ -174,6 +174,7 @@
                         break;
                      }
                      }
+
                      //Check if the last payment date is more than 45 days ago
                      if ($lastPaymentDate && $lastPaymentDate->diffInDays(Carbon::now()) > 45) {
                          $isOverdue = true;
@@ -183,11 +184,11 @@
                      } 
 
                      //check user total fees
-                     if (isset($student->total_fees)) {
+                     if (!empty($student->total_fees) && $student->total_fees !== 0)  {
                         $noPayment = false;
                      }
                   @endphp
-                  @if($noPayment)
+                  @if($noPayment == true)
                   <td>-</td>
                   @elseif($isOverdue)
                   <td class="yellow-color"><span>Overdue</span></td>

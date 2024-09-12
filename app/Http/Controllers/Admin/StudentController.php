@@ -22,7 +22,7 @@ class StudentController extends Controller
     public function all_students() {
         //Get students details
         $get_students_detail = User::where('user_type', 'Student')->where('user_status', 'Active')->orderBy('id', 'DESC')->with('student_fees_detail')->get();
-
+       //echo "<pre>"; print_r($get_students_detail->toArray());exit;
         //Get all students total fees and all paid fees 
         $all_students_total_fees = User::where('user_status', 'Active')->sum('total_fees');
         $all_students_paid_fees = StudentFees::where('user_status', 'Active')->sum('user_fees');  
