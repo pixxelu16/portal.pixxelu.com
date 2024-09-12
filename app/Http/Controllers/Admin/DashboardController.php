@@ -70,6 +70,7 @@ class DashboardController extends Controller
         $current_month_paid_fees = StudentFees::where('user_status', 'Active')->whereBetween('submission_date', [$startOfMonth, $endOfMonth])->sum('user_fees');
 
         //Get student fees detail list
+        $get_student_list = User::orderBy('ID', 'DESC')
         ->where('user_status', 'Active')
         ->whereHas('student_fees_detail', function ($query) use ($startOfMonth, $endOfMonth) {
             $query->whereBetween('submission_date', [$startOfMonth, $endOfMonth]);
