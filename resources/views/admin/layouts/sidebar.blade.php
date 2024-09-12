@@ -1,22 +1,21 @@
 <nav>
    <div class="logo-name">
       <div class="logo-image">
-      <i class="uil uil-bars sidebar-toggle"><img src="{{ url('public/admin/images/Menu.svg') }}" alt=""></i>
-         
+         <i class="uil uil-bars sidebar-toggle"><img src="{{ url('public/admin/images/Menu.svg') }}" alt=""></i>
       </div>
    </div>
    <div class="menu-items">
       <ul class="nav-links">
          <li class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
             <a href="{{ url('admin/dashboard') }}">
-               <img src="{{ url('public/admin/images/dashboard.svg') }}" alt="dashboard" />
-               <span class="link-name">Dashboard</span>
+            <img src="{{ url('public/admin/images/dashboard.svg') }}" alt="dashboard" />
+            <span class="link-name">Dashboard</span>
             </a>
          </li>
          <li class="{{ request()->is('admin/all-students-list') ? 'active' : '' }}">
             <a href="{{ url('admin/all-students-list') }}">
-               <img src="{{ url('public/admin/images/student.svg') }}" alt="student" />
-               <span class="link-name">All Students</span>
+            <img src="{{ url('public/admin/images/student.svg') }}" alt="student" />
+            <span class="link-name">All Students</span>
             </a>
          </li>
          <!--<li class="{{ request()->is('admin/all-employees-attendance-list') ? 'active' : '' }}">-->
@@ -25,54 +24,55 @@
          <!--      <span class="link-name">Attendance</span>-->
          <!--   </a>-->
          <!--</li>-->
-         <li class="attendance_overview nav-item dropdown {{ request()->is('admin/all-employees-attendance-list') || request()->is('admin/all-students-attendance-list') ? 'active' : '' }}">
-  <a href="#" class="nav-link dropdown-toggle" id="attendanceDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    <img src="{{ url('public/admin/images/attendance.svg') }}" alt="attendance" />
-    <span class="link-name">Attendance</span>
-  </a>
-  <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
-    <li class="{{ request()->is('admin/all-employees-attendance-list') ? 'active' : '' }}">
-      <a href="{{ url('admin/all-employees-attendance-list') }}" class="dropdown-item">
-        Staff Attendance
-      </a>
-    </li>
-    <li class="{{ request()->is('admin/all-students-attendance-list') ? 'active' : '' }}">
-      <a href="{{ url('admin/all-students-attendance-list') }}" class="dropdown-item">
-        Student Attendance
-      </a>
-    </li>
-  </ul>
-  
-  
-</li>
-
-
-
+         <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle {{ request()->is('admin/all-employees-attendance-list') || request()->is('admin/all-students-attendance-list') ? 'active' : '' }}" 
+               href="#" id="attendanceDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="{{ url('public/admin/images/attendance.svg') }}" alt="attendance"/>
+            <span class="link-name">Attendance</span>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
+               <li class="{{ request()->is('admin/all-employees-attendance-list') ? 'active' : '' }}">
+                  <a class="dropdown-item" href="{{ url('admin/all-employees-attendance-list') }}">
+                  Staff 
+                  </a>
+               </li>
+               <li class="{{ request()->is('admin/all-students-attendance-list') ? 'active' : '' }}">
+                  <a class="dropdown-item" href="{{ url('admin/all-students-attendance-list') }}">
+                  Student
+                  </a>
+               </li>
+            </ul>
+         </li>
+         <li class="{{ request()->is('admin/all-employees-list') ? 'active' : '' }}">
+            <a href="{{ url('admin/all-employees-list') }}">
+            <img src="{{ url('public/admin/images/staff.svg') }}" alt="staff" />
+            <span class="link-name">Staff</span>
+            </a>
+         </li>
          <!-- <li class="{{ request()->is('admin/leads') ? 'active' : '' }}">
             <a href="#">
                <img src="{{ url('public/admin/images/leads.svg') }}" alt="leads" />
                <span class="link-name">Leads</span>
             </a>
-         </li> -->
+            </li> -->
          <li class="{{ request()->is('admin/all-inqueries-list') ? 'active' : '' }}">
             <a href="{{ url('admin/all-inqueries-list') }}">
-               <img src="{{ url('public/admin/images/leads.svg') }}" alt="inqueries" />
-               <span class="link-name">All Inqueries</span>
+            <img src="{{ url('public/admin/images/leads.svg') }}" alt="inqueries" />
+            <span class="link-name">All Inqueries</span>
             </a>
          </li>
       </ul>
       <ul class="logout-mode">
          <li><a href="#">
-         <img src="{{ url('public/admin/images/help.svg') }}" alt="leads" />
+            <img src="{{ url('public/admin/images/help.svg') }}" alt="leads" />
             <span class="link-name">Help</span>
             </a>
          </li>
          <li><a href="#">
-         <img src="{{ url('public/admin/images/setting.svg') }}" alt="leads" />
+            <img src="{{ url('public/admin/images/setting.svg') }}" alt="leads" />
             <span class="link-name">Settings</span>
             </a>
          </li>
-
          <li class="nav-item">
             <a class="dropdown-item" href="{{ route('logout') }}"
                onclick="event.preventDefault();
@@ -84,7 +84,6 @@
                @csrf
             </form>
          </li>
-
          <li class="mode">
             <a href="#">
             <i class="uil uil-moon"></i>
@@ -95,5 +94,5 @@
             </div>
          </li>
       </ul>
-   </div>  
+   </div>
 </nav>

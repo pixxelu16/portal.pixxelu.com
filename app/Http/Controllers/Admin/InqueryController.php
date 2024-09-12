@@ -95,6 +95,7 @@ class InqueryController extends Controller
             'mobile' => $request->mobile,
             'address' => $request->address,
             'course_type' => $request->course_type,
+            'priority' => $request->priority,
             'status' => $request->status,
         ]);
 
@@ -115,6 +116,7 @@ class InqueryController extends Controller
                     'course_joining_date' => $now,
                     'address' => $request->address,
                     'course_type' => $request->course_type,
+                    'priority' => $request->priority,
                     'user_status' => 'Active',
                     'user_type' => 'Student',
                     'user_pic' => $filename

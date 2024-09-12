@@ -49,6 +49,15 @@
                   <option value="Graphic" @if($inquery->course_type == 'Graphic') selected @endif>Graphic</option>
                   <option value="Full Stack Development" @if($inquery->course_type == 'Full Stack Development') selected @endif>Full Stack Development</option>
                </select>
+            </div> 
+            <div class="form-design fees">
+               <label for="status">Priority</label>
+               <select class="form-control" name="priority" id="User Status">
+                  <option value ="" disabled selected>Select Priority Type</option>
+                  <option value="hot" @if($inquery->priority == 'hot') selected @endif>Hot</option>
+                  <option value="cold" @if($inquery->priority == 'cold') selected @endif>Cold</option>
+                  <option value="warm" @if($inquery->priority == 'warm') selected @endif>Warm</option>
+               </select>
             </div>
             <div class="form-design fees">
                <label for="status">Status</label>
@@ -58,6 +67,7 @@
                   <option value="Office_Visited" @if($inquery->status == 'Office_Visited') selected @endif>Office Visited</option>
                   <option value="Closed" @if($inquery->status == 'Closed') selected @endif>Closed</option>
                   <option value="Converted" @if($inquery->status == 'Converted') selected @endif>Converted</option>
+                  <option value="Hot_Lead" @if($inquery->status == 'Hot_Lead') selected @endif>Hot Lead</option>
                </select>
             </div>
          </div>
