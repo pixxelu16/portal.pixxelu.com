@@ -3388,6 +3388,67 @@ td.yellow-color span {
 	border-radius: 10px;
 	border: 2px solid #018294;
 }
+
+td.priority-hot span {
+	background: #B7BCE3;
+	border-radius: 5px;
+	color: #1F2C9D;
+	font-size: 12px;
+	letter-spacing: 0.3px;
+	font-weight: 600;
+	width: 50px;
+	height: auto;
+	display: inline-block;
+	text-align: center;
+	line-height: inherit;
+	padding: 3px 5px;
+}
+
+td.priority-cold span {
+	background: #E18AD3;
+	border-radius: 5px;
+	color: #DC2953;
+	font-size: 12px;
+	letter-spacing: 0.3px;
+	font-weight: 600;
+	width: 50px;
+	height: auto;
+	display: inline-block;
+	text-align: center;
+	line-height: inherit;
+	padding: 3px 5px;
+}
+
+td.priority-warm span {
+	background: #7FDDBE;
+	border-radius: 5px;
+	color: #1C8BA5;
+	font-size: 12px;
+	letter-spacing: 0.3px;
+	font-weight: 600;
+	width: 50px;
+	height: auto;
+	display: inline-block;
+	text-align: center;
+	line-height: inherit;
+	padding: 3px 5px;
+}
+
+td.ligth-green-color span {
+    background: #51e756;
+    border-radius: 5px;
+    color: #23382a;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+    font-weight: 600;
+    width: 103px;
+    height: auto;
+    display: inline-block;
+    text-align: center;
+    line-height: inherit;
+    padding: 3px 10px;
+}
+
 /*end student attendances css*/
 
 

@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('course_type')->nullable();
             $table->string('mobile')->nullable();
-            $table->string('address')->nullable();
+            $table->string('address')->nullable(); 
             $table->string('desc')->nullable();
+            $table->string('priority')->nullable();
             $table->enum('status', ['Active','Closed','Converted','Office_Visited'])->default('Active')->nullable();
             $table->timestamps();
         });

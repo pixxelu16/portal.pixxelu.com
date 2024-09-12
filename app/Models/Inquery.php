@@ -10,5 +10,5 @@ class Inquery extends Model
     use HasFactory;
 
     protected $table = 'inqueries';
-    protected $fillable = ['name','mobile','address','desc','course_type','status'];
+    protected $fillable = ['name','mobile','address','desc','course_type','priority','status'];
 }
