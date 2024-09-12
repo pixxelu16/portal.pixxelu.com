@@ -164,6 +164,7 @@
                      $isOverdue = false;
                      $lastPaymentDate = null;
                      $noPayment = true;
+                     $payment_completed = false;
 
                      if (isset($student->student_fees_detail)) {
                      foreach ($student->student_fees_detail as $fees) {
@@ -190,6 +191,11 @@
                      if (!empty($student->total_fees) && $student->total_fees !== 0)  {
                         $noPayment = false;
                      }
+
+                  //check user fees completed or not
+                  if (isset($student->total_fees) && $student->total_fees == $pay_fees) {
+                     $payment_completed = true;
+                  }
                   ?>
                   <?php if($noPayment == true): ?>
                   <td>-</td>
@@ -197,6 +203,8 @@
                   <td class="yellow-color"><span>Overdue</span></td>
                   <?php elseif($isPending): ?>
                   <td class="red-color"><span>Pending</span></td>
+                  <?php elseif($payment_completed): ?>
+                  <td class="ligth-green-color"><span>Fees Complete</span></td>
                   <?php else: ?>
                   <td class="green-color"><span>Paid</span></td>
                   <?php endif; ?>
