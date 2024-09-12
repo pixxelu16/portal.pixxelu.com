@@ -121,7 +121,7 @@
                   <th>Phone No</th>
                   <th>Joining Date</th>
                   <th>Course</th>
-                  <th>Monthly Fees</th>
+                  <th>Fees Paid this Month</th>
                </tr>
             </thead>
             <tbody>
@@ -177,13 +177,9 @@
                      @php
                            $total_fees += $fees_detail->user_fees;
                      @endphp
-                     <span class="date-tbl">
-                           {{ Carbon::parse($fees_detail->submission_date)->format('d M Y') }}
-                           <em>({{ $fees_detail->user_fees }} / {{ $fees_detail->payment_type }})</em>
-                     </span><br>
                   @endforeach
                   <!-- Display total fees after the loop -->
-                  <strong>Paid Fees: {{ $total_fees }}</strong>
+                  <strong>{{ $total_fees }}</strong>
                </td>
 
                </tr>
