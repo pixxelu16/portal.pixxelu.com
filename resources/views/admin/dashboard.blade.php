@@ -180,7 +180,7 @@
                      @endphp
                   @endforeach
                   <!-- Display total fees after the loop -->
-                  <strong>{{ $total_fees }}</strong>
+                  Rs {{ number_format($total_fees) }}
                </td>
 
                </tr>
