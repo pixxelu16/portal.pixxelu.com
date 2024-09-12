@@ -3358,8 +3358,35 @@ td.yellow-color span {
 	border-radius: 5px;
 	margin: 5px 0 0 0;
 }
+
 .batch-time {
 	display: block ruby;
+}
+
+.duration {
+	display: block ruby;
+	text-align: center;
+	font-size: 10px;
+	color: #196f19;
+}
+.search-header {
+	height: 40px;
+}
+
+.search-student-attendance {
+	display: block ruby;
+	width: 600px;
+	height: 60px;
+	font-size: 16px;
+	font-weight: 700;
+	border-radius: 10px;
+}
+
+.btn.btn-success {
+	font-size: 16px;
+	font-weight: 700;
+	border-radius: 10px;
+	border: 2px solid #018294;
 }
 /*end student attendances css*/
 

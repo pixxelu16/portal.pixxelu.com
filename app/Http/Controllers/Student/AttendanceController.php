@@ -47,11 +47,28 @@ class AttendanceController extends Controller
             '12' => 'December'
         ];
 
-        //Get number of days in the current month
+        //Get current month
         $daysInMonth = Carbon::create($year, $month, 1)->daysInMonth;
         $days = range(1, $daysInMonth);
 
-        return view('student.attendances.student-attendance-list', compact('get_student_detail', 'months', 'days', 'month', 'year'));
+        //Get all Sundays and last Saturday of the month
+        $sundays = [];
+        $lastSaturday = null;
+
+        for ($day = 1; $day <= $daysInMonth; $day++) {
+            $date = Carbon::create($year, $month, $day);
+
+            //Check for Sundays
+            if ($date->isSunday()) {
+                $sundays[] = $day;
+            }
+
+            //Check for the last Saturday
+            if ($date->isSaturday() && $day >= ($daysInMonth - 6)) {
+                $lastSaturday = $day;
+            }
+        }
+            return view('student.attendances.student-attendance-list', compact('get_student_detail', 'months', 'days', 'month', 'year', 'sundays', 'lastSaturday'));
     }
 
     //Function for submit student punch in attendance
@@ -174,9 +191,27 @@ class AttendanceController extends Controller
             '12' => 'December'
         ];
 
-        //Get number of days in the current month
-        $daysInMonth = Carbon::create($year, $month, 1)->daysInMonth;
-        $days = range(1, $daysInMonth);
-        return view('student.attendances.search-student-attendances', compact('get_student_detail', 'months', 'days', 'month', 'year'));
+    //Get current month
+    $daysInMonth = Carbon::create($year, $month, 1)->daysInMonth;
+    $days = range(1, $daysInMonth);
+
+    //Get all Sundays and last Saturday of the month
+    $sundays = [];
+    $lastSaturday = null;
+
+    for ($day = 1; $day <= $daysInMonth; $day++) {
+        $date = Carbon::create($year, $month, $day);
+
+        //Check for Sundays
+        if ($date->isSunday()) {
+            $sundays[] = $day;
+        }
+
+        //Check for the last Saturday
+        if ($date->isSaturday() && $day >= ($daysInMonth - 6)) {
+            $lastSaturday = $day;
+        }
+    }
+        return view('student.attendances.search-student-attendances', compact('get_student_detail', 'months', 'days', 'month', 'year', 'sundays', 'lastSaturday'));
     }
 }
