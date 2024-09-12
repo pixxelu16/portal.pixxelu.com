@@ -91,7 +91,7 @@
       ?>
 </div>
 <div class="student-header">
-   <h6>All Students Monthly Fees Lists:- <?php echo MyCarbon::now()->format('F Y'); ?></h6>
+   <h6>All Students Monthly Fees List:- <?php echo MyCarbon::now()->format('F Y'); ?></h6>
 </div>
 <div class="main-table">
    <div class="data-table-listing">
