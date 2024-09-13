@@ -29,49 +29,45 @@ class AttendanceController extends Controller
                 }
             ])->get();
 
-       // Get details
-$totalPresentHours = 0;
-$totalPresentDays = 0;
-$totalAbsentDays = 0;
-$totalLeaveDays = 0;
-$totalHalfDay = 0;
+        //Get details
+        $totalPresentHours = 0;
+        $totalPresentDays = 0;
+        $totalAbsentDays = 0;
+        $totalLeaveDays = 0;
+        $totalHalfDay = 0;
 
-// Get the current month and year
-$currentMonth = Carbon::now()->month;
-$currentYear = Carbon::now()->year;
+        //Get the current month and year
+        $currentMonth = Carbon::now()->month;
+        $currentYear = Carbon::now()->year;
 
-// Calculate totals
-foreach ($get_student_detail as $student) {
-    foreach ($student->student_attendance_detail as $attendance) {
-        // Parse dates
-        $punchIn = Carbon::parse($attendance->punch_in_time);
-        $punchOut = $attendance->punch_out_time ? Carbon::parse($attendance->punch_out_time) : null;
+        //Calculate totals
+        foreach ($get_student_detail as $student) {
+            foreach ($student->student_attendance_detail as $attendance) {
+                //Get punch in and outs
+                $punchIn = Carbon::parse($attendance->punch_in_time);
+                $punchOut = $attendance->punch_out_time ? Carbon::parse($attendance->punch_out_time) : null;
 
-        // Check if attendance record is from the current month and year
-        if ($punchIn->month == $currentMonth && $punchIn->year == $currentYear) {
-            // Check attendance status using if-elseif statements
-            if ($attendance->attendance_status == 'present') {
-                // Calculate total present hours
-                if ($punchOut) {
-                    $duration = $punchIn->diff($punchOut);
-                    $totalPresentHours += ($duration->h + $duration->i / 60);
+                //Check if attendance record is from the current month and year
+                if ($punchIn->month == $currentMonth && $punchIn->year == $currentYear) {
+                    // Check attendance status using if-elseif statements
+                    if ($attendance->attendance_status == 'present') {
+                        // Calculate total present hours
+                        if ($punchOut) {
+                            $duration = $punchIn->diff($punchOut);
+                            $totalPresentHours += ($duration->h + $duration->i / 60);
+                        }
+                        //Count the day as present
+                        $totalPresentDays++;
+                    } elseif ($attendance->attendance_status == 'absent') {
+                        $totalAbsentDays++;
+                    } elseif ($attendance->attendance_status == 'leave') {
+                        $totalLeaveDays++;
+                    } elseif ($attendance->attendance_status == 'half_day') {
+                        $totalHalfDay++;
+                    }
                 }
-                //Count the day as present
-                $totalPresentDays++;
-            } elseif ($attendance->attendance_status == 'absent') {
-                $totalAbsentDays++;
-            } elseif ($attendance->attendance_status == 'leave') {
-                $totalLeaveDays++;
-            } elseif ($attendance->attendance_status == 'half_day') {
-                $totalHalfDay++;
             }
         }
-    }
-}
-
-
-            //echo "<pre>"; print_r($get_student_detail->toArray());exit;
-
         //Define months
         $months = [
             '1' => 'January',
@@ -109,9 +105,10 @@ foreach ($get_student_detail as $student) {
                 $lastSaturday = $day;
             }
         }
-          // Total holidays (all Sundays + last Saturday)
-           $totalHolidays = count($sundays) + ($lastSaturday ? 1 : 0);
-            return view('student.attendances.student-attendance-list', compact('get_student_detail', 'months', 'days', 'month', 'year', 'sundays', 'lastSaturday', 'totalPresentHours','totalPresentDays','totalAbsentDays','totalLeaveDays','totalHalfDay','totalHolidays','daysInMonth'));
+        //Total holidays (all Sundays + last Saturday)
+        $totalHolidays = count($sundays) + ($lastSaturday ? 1 : 0);
+
+        return view('student.attendances.student-attendance-list', compact('get_student_detail', 'months', 'days', 'month', 'year', 'sundays', 'lastSaturday', 'totalPresentHours', 'totalPresentDays', 'totalAbsentDays', 'totalLeaveDays', 'totalHalfDay', 'totalHolidays', 'daysInMonth'));
     }
 
     //Function for submit student punch in attendance
@@ -217,47 +214,45 @@ foreach ($get_student_detail as $student) {
                 }
             ])->get();
 
-             // Get details
-$totalPresentHours = 0;
-$totalPresentDays = 0;
-$totalAbsentDays = 0;
-$totalLeaveDays = 0;
-$totalHalfDay = 0;
+        // Get details
+        $totalPresentHours = 0;
+        $totalPresentDays = 0;
+        $totalAbsentDays = 0;
+        $totalLeaveDays = 0;
+        $totalHalfDay = 0;
 
-// Get the current month and year
-$currentMonth = Carbon::now()->month;
-$currentYear = Carbon::now()->year;
+        //Get the current month and year
+        $currentMonth = Carbon::now()->month;
+        $currentYear = Carbon::now()->year;
 
-// Calculate totals
-foreach ($get_student_detail as $student) {
-    foreach ($student->student_attendance_detail as $attendance) {
-        // Parse dates
-        $punchIn = Carbon::parse($attendance->punch_in_time);
-        $punchOut = $attendance->punch_out_time ? Carbon::parse($attendance->punch_out_time) : null;
+        //Calculate totals
+        foreach ($get_student_detail as $student) {
+            foreach ($student->student_attendance_detail as $attendance) {
+                //Get punch in and outs
+                $punchIn = Carbon::parse($attendance->punch_in_time);
+                $punchOut = $attendance->punch_out_time ? Carbon::parse($attendance->punch_out_time) : null;
 
-        // Check if attendance record is from the current month and year
-        if ($punchIn->month == $currentMonth && $punchIn->year == $currentYear) {
-            // Check attendance status using if-elseif statements
-            if ($attendance->attendance_status == 'present') {
-                // Calculate total present hours
-                if ($punchOut) {
-                    $duration = $punchIn->diff($punchOut);
-                    $totalPresentHours += ($duration->h + $duration->i / 60);
+                //Check if attendance current month and year
+                if ($punchIn->month == $currentMonth && $punchIn->year == $currentYear) {
+                    //Check attendance status 
+                    if ($attendance->attendance_status == 'present') {
+                        //Calculate total present hours
+                        if ($punchOut) {
+                            $duration = $punchIn->diff($punchOut);
+                            $totalPresentHours += ($duration->h + $duration->i / 60);
+                        }
+                        //Count the day as present
+                        $totalPresentDays++;
+                    } elseif ($attendance->attendance_status == 'absent') {
+                        $totalAbsentDays++;
+                    } elseif ($attendance->attendance_status == 'leave') {
+                        $totalLeaveDays++;
+                    } elseif ($attendance->attendance_status == 'half_day') {
+                        $totalHalfDay++;
+                    }
                 }
-                //Count the day as present
-                $totalPresentDays++;
-            } elseif ($attendance->attendance_status == 'absent') {
-                $totalAbsentDays++;
-            } elseif ($attendance->attendance_status == 'leave') {
-                $totalLeaveDays++;
-            } elseif ($attendance->attendance_status == 'half_day') {
-                $totalHalfDay++;
             }
         }
-    }
-}
-
-
         //Define months
         $months = [
             '1' => 'January',
@@ -274,29 +269,30 @@ foreach ($get_student_detail as $student) {
             '12' => 'December'
         ];
 
-    //Get current month
-    $daysInMonth = Carbon::create($year, $month, 1)->daysInMonth;
-    $days = range(1, $daysInMonth);
+        //Get current month
+        $daysInMonth = Carbon::create($year, $month, 1)->daysInMonth;
+        $days = range(1, $daysInMonth);
 
-    //Get all Sundays and last Saturday of the month
-    $sundays = [];
-    $lastSaturday = null;
+        //Get all Sundays and last Saturday of the month
+        $sundays = [];
+        $lastSaturday = null;
 
-    for ($day = 1; $day <= $daysInMonth; $day++) {
-        $date = Carbon::create($year, $month, $day);
+        for ($day = 1; $day <= $daysInMonth; $day++) {
+            $date = Carbon::create($year, $month, $day);
 
-        //Check for Sundays
-        if ($date->isSunday()) {
-            $sundays[] = $day;
+            //Check for Sundays
+            if ($date->isSunday()) {
+                $sundays[] = $day;
+            }
+
+            //Check for the last Saturday
+            if ($date->isSaturday() && $day >= ($daysInMonth - 6)) {
+                $lastSaturday = $day;
+            }
         }
+        //Total holidays all Sundays and last Saturday)
+        $totalHolidays = count($sundays) + ($lastSaturday ? 1 : 0);
 
-        //Check for the last Saturday
-        if ($date->isSaturday() && $day >= ($daysInMonth - 6)) {
-            $lastSaturday = $day;
-        }
-    }
-      // Total holidays (all Sundays + last Saturday)
-       $totalHolidays = count($sundays) + ($lastSaturday ? 1 : 0);
-        return view('student.attendances.search-student-attendances', compact('get_student_detail', 'months', 'days', 'month', 'year', 'daysInMonth','sundays', 'lastSaturday','totalPresentHours','totalPresentDays','totalAbsentDays','totalLeaveDays','totalHalfDay','totalHolidays'));
+        return view('student.attendances.search-student-attendances', compact('get_student_detail', 'months', 'days', 'month', 'year', 'daysInMonth', 'sundays', 'lastSaturday', 'totalPresentHours', 'totalPresentDays', 'totalAbsentDays', 'totalLeaveDays', 'totalHalfDay', 'totalHolidays'));
     }
 }
