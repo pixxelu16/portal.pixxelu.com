@@ -11,6 +11,35 @@
       <p><?php echo e(Session::get('unsuccess')); ?></p>
    </div>
    <?php endif; ?>
+    <!--start four boxes studens fees-->
+    <div class="boxes-wrapper">
+      <div class="box">
+         <h3>Total Fees</h3>
+         <p>Rs <?php echo e(number_format($all_students_total_fees)); ?></p>
+      </div>
+      <div class="box">
+         <h3><span style="color: green;">Paid Fees</span></h3>
+         <p>Rs <?php echo e(number_format($all_students_paid_fees)); ?></p>
+      </div>
+      <div class="box">
+         <h3><span style="color: red;">Pending Fees</span></h3>
+         <!--calculate pending fees-->
+         <?php
+         $all_students_pending_fees = $all_students_total_fees - $all_students_paid_fees;
+         ?> 
+         <p>Rs <?php echo e(number_format($all_students_pending_fees,  0, '.', ',')); ?></p>
+      </div>
+      <div class="box">
+         <!--paid monthly fees-->
+         <h3><span style="color: green;">Paid Fees This Month</span></h3>
+         <p>Rs <?php echo e(number_format($current_month_paid_fees,  0, '.', ',')); ?></p>
+         <div class="p-flex">
+            <p><strong style="color: green;">Online:-</strong> Rs <?php echo e(number_format($payment_type_online,  0, '.', ',')); ?></p>
+            <p><strong style="color: green;">Cash:-</strong> Rs <?php echo e(number_format($payment_type_cash,  0, '.', ',')); ?></p>
+         </div>
+      </div>
+   </div>
+   <!--end four boxes studens fees-->
    <h2>All Students Listing</h2>
 </div>
 <div class="main-table">
@@ -40,7 +69,7 @@
             src="<?php echo e(url('public/admin/images/csv-file.svg')); ?>"></a>
          <a href="<?php echo e(url('admin/all-students-trash-list')); ?>" class="export"><img
             src="<?php echo e(url('public/admin/images/trash.svg')); ?>"></a>
-          <a href="<?php echo e(url('admin/add-student-previous-fees')); ?>" class="add-pervious"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add Previous Fees</a>
+         <!-- <a href="<?php echo e(url('admin/add-student-previous-fees')); ?>" class="add-pervious"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add Previous Fees</a> -->
       </div>
    </div>
    <div class="scrolling-data-table">
@@ -49,7 +78,7 @@
             <thead>
                <tr class="">
                   <th>S. No</th>
-                  <th>Student ID</th>
+                  <th>Registration ID</th>
                   <th>Image</th>
                   <th>Name</th>
                   <th>Phone No</th>
@@ -65,24 +94,24 @@
             </thead>
             <tbody>
                <?php 
-               $count = 1;
-               use Carbon\Carbon;
-               $currentMonth = Carbon::now()->month;
-               $currentYear = Carbon::now()->year;
+                  $count = 1;
+                  use Carbon\Carbon;
+                  $currentMonth = Carbon::now()->month;
+                  $currentYear = Carbon::now()->year;
                ?>
                <?php $__currentLoopData = $get_students_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-               <?php 
-               $total_fees = $student->total_fees;
-               $pay_fees = 0;
-               ?>
-               <?php if(isset($student->student_fees_detail)): ?>
-               <?php $__currentLoopData = $student->student_fees_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fees): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-               <?php 
-               $total_fees = $student->total_fees;
-               $pay_fees += $fees['user_fees'];
-               $submissionMonths[] = Carbon::parse($fees['submission_date'])->month;
-               ?>
-               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
+                  <?php 
+                     $total_fees = $student->total_fees;
+                     $pay_fees = 0;
+                     ?>
+                     <?php if(isset($student->student_fees_detail)): ?>
+                  <?php $__currentLoopData = $student->student_fees_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fees): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                     <?php 
+                        $total_fees = $student->total_fees;
+                        $pay_fees += $fees['user_fees'];
+                        $submissionMonths[] = Carbon::parse($fees['submission_date'])->month;
+                     ?>
+                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
                <?php endif; ?>                 
                <tr>
                   <td><?php echo e($count++); ?></td>
@@ -164,6 +193,7 @@
                      $isOverdue = false;
                      $lastPaymentDate = null;
                      $noPayment = true;
+                     $payment_completed = false;
 
                      if (isset($student->student_fees_detail)) {
                      foreach ($student->student_fees_detail as $fees) {
@@ -177,6 +207,7 @@
                         break;
                      }
                      }
+
                      //Check if the last payment date is more than 45 days ago
                      if ($lastPaymentDate && $lastPaymentDate->diffInDays(Carbon::now()) > 45) {
                          $isOverdue = true;
@@ -186,16 +217,23 @@
                      } 
 
                      //check user total fees
-                     if (isset($student->total_fees)) {
+                     if (!empty($student->total_fees) && $student->total_fees !== 0)  {
                         $noPayment = false;
                      }
+
+                  //check user fees completed or not
+                  if (isset($student->total_fees) && $student->total_fees == $pay_fees) {
+                     $payment_completed = true;
+                  }
                   ?>
-                  <?php if($noPayment): ?>
+                  <?php if($noPayment == true): ?>
                   <td>-</td>
                   <?php elseif($isOverdue): ?>
                   <td class="yellow-color"><span>Overdue</span></td>
                   <?php elseif($isPending): ?>
                   <td class="red-color"><span>Pending</span></td>
+                  <?php elseif($payment_completed): ?>
+                  <td class="ligth-green-color"><span>Fees Complete</span></td>
                   <?php else: ?>
                   <td class="green-color"><span>Paid</span></td>
                   <?php endif; ?>

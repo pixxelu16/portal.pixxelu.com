@@ -79,9 +79,7 @@ class DashboardController extends Controller
             $query->whereBetween('submission_date', [$startOfMonth, $endOfMonth]);
         }])
         ->get();
-
-
-       //echo "<pre>"; print_r($get_student_list->toArray());exit;
+        
         //Get total students list acc to course  
         $is_total_students = User::where('user_status', 'Active')->where('user_type', 'Student')->count();
         $is_web_designing_students = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Web Designing')->count();

@@ -11,6 +11,35 @@
       <p>{{ Session::get('unsuccess') }}</p>
    </div>
    @endif
+    <!--start four boxes studens fees-->
+    <div class="boxes-wrapper">
+      <div class="box">
+         <h3>Total Fees</h3>
+         <p>Rs {{ number_format($all_students_total_fees) }}</p>
+      </div>
+      <div class="box">
+         <h3><span style="color: green;">Paid Fees</span></h3>
+         <p>Rs {{ number_format($all_students_paid_fees) }}</p>
+      </div>
+      <div class="box">
+         <h3><span style="color: red;">Pending Fees</span></h3>
+         <!--calculate pending fees-->
+         @php
+         $all_students_pending_fees = $all_students_total_fees - $all_students_paid_fees;
+         @endphp 
+         <p>Rs {{ number_format($all_students_pending_fees,  0, '.', ',') }}</p>
+      </div>
+      <div class="box">
+         <!--paid monthly fees-->
+         <h3><span style="color: green;">Paid Fees This Month</span></h3>
+         <p>Rs {{  number_format($current_month_paid_fees,  0, '.', ',') }}</p>
+         <div class="p-flex">
+            <p><strong style="color: green;">Online:-</strong> Rs {{ number_format($payment_type_online,  0, '.', ',') }}</p>
+            <p><strong style="color: green;">Cash:-</strong> Rs {{ number_format($payment_type_cash,  0, '.', ',') }}</p>
+         </div>
+      </div>
+   </div>
+   <!--end four boxes studens fees-->
    <h2>All Students Listing</h2>
 </div>
 <div class="main-table">
@@ -40,7 +69,7 @@
             src="{{ url('public/admin/images/csv-file.svg') }}"></a>
          <a href="{{ url('admin/all-students-trash-list') }}" class="export"><img
             src="{{ url('public/admin/images/trash.svg') }}"></a>
-          <a href="{{ url('admin/add-student-previous-fees') }}" class="add-pervious"><img src="{{ url('public/admin/images/pluse.svg') }}">Add Previous Fees</a>
+         <!-- <a href="{{ url('admin/add-student-previous-fees') }}" class="add-pervious"><img src="{{ url('public/admin/images/pluse.svg') }}">Add Previous Fees</a> -->
       </div>
    </div>
    <div class="scrolling-data-table">
@@ -49,7 +78,7 @@
             <thead>
                <tr class="">
                   <th>S. No</th>
-                  <th>Student ID</th>
+                  <th>Registration ID</th>
                   <th>Image</th>
                   <th>Name</th>
                   <th>Phone No</th>

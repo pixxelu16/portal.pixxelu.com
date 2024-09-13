@@ -49,17 +49,17 @@
    </div>
    <div class="scrolling-data-table">
       <div class="card-body">
-         <table id="example1" class="rwd-table cloud-path">
+      <table id="example1" class="rwd-table cloud-path">
             <thead>
-               <tr  class="sticky">
+               <tr class="">
                   <th>S. No</th>
-                  <th>Student ID</th>
+                  <th>Registration ID</th>
                   <th>Image</th>
                   <th>Name</th>
                   <th>Phone No</th>
                   <th>Joining Date</th>
                   <th>Course</th>
-                  <th>Course Duration</th>             
+                  <th>Course Duration</th>
                   <th>Total Fees</th>
                   <th>Last Paid Fees</th>
                   <th>Pending Fees</th>
@@ -69,129 +69,161 @@
             </thead>
             <tbody>
                <?php 
-               $count = 1;
-               use Carbon\Carbon;
-               $currentMonth = Carbon::now()->month;
-               $currentYear = Carbon::now()->year;
+                  $count = 1;
+                  use Carbon\Carbon;
+                  $currentMonth = Carbon::now()->month;
+                  $currentYear = Carbon::now()->year;
                ?>
-
-               <?php $__currentLoopData = $get_students_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-               <?php 
-               $total_fees = $student->total_fees;
-               $pay_fees = 0;
-               ?>
-
-               <?php if(isset($student->student_fees_detail)): ?> 
-               <?php $__currentLoopData = $student->student_fees_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fees): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-               
-               <?php 
-               $total_fees = $student->total_fees;
-               $pay_fees  += $fees['user_fees'];
-               $submissionMonths[] = Carbon::parse($fees['submission_date'])->month;
-               ?>
-
-               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
-               <?php endif; ?>     
+               <?php $__currentLoopData = $get_students_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                  <?php 
+                     $total_fees = $student->total_fees;
+                     $pay_fees = 0;
+                     ?>
+                     <?php if(isset($student->student_fees_detail)): ?>
+                  <?php $__currentLoopData = $student->student_fees_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fees): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                     <?php 
+                        $total_fees = $student->total_fees;
+                        $pay_fees += $fees['user_fees'];
+                        $submissionMonths[] = Carbon::parse($fees['submission_date'])->month;
+                     ?>
+                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
+               <?php endif; ?>                 
                <tr>
                   <td><?php echo e($count++); ?></td>
                   <td><?php echo e($student->id); ?> </td>
                   <td data-th="Image">
                      <?php if($student->user_pic): ?>
-                     <div class="user-image"> <img src = "<?php echo e(url('public/uploads/users/'. $student->user_pic)); ?>" alt=""></div>
-                     <?php endif; ?> 
+                     <div class="user-image"> <img src="<?php echo e(url('public/uploads/users/' . $student->user_pic)); ?>" alt="">
+                     <?php else: ?>
+                     <img src="<?php echo e(url('public/uploads/users/default_user.png')); ?>" alt="">
+                     </div>
+                     <?php endif; ?>                           
                   </td>
                   <td>
-                     <span onclick="openNav()"><a href="#" class="student-link" data-student_id="<?php echo e($student->id); ?>"><?php echo e($student->name); ?></a></span>
+                     <span onclick="openNav()"><a href="#" class="student-link"
+                        data-student_id="<?php echo e($student->id); ?>"><?php echo e($student->name); ?></a></span>
                   </td>
-                  <!-- <td><a href="<?php echo e(url('admin/single-student-detail/' . $student->id)); ?>"><?php echo e($student->name); ?></a></td> -->
                   <td>
                      <?php if($student->student_phone_no): ?>
-                        <a href="https://wa.me/<?php echo e(str_replace(['+', '-', ' '], '', $student->student_phone_no)); ?>" target="_blank">
-                              <?php echo e(substr($student->student_phone_no, 0, 5)); ?>-<?php echo e(substr($student->student_phone_no, 5)); ?>
+                     <a href="https://wa.me/<?php echo e(str_replace(['+', '-', ' '], '', $student->student_phone_no)); ?>"
+                        target="_blank">
+                     <?php echo e(substr($student->student_phone_no, 0, 5)); ?>-<?php echo e(substr($student->student_phone_no, 5)); ?>
 
-                        </a>
+                     </a>
                      <?php else: ?>
-                       -
+                     -
                      <?php endif; ?>
                   </td>
                   <td><?php echo e(\Carbon\Carbon::parse($student->course_joining_date)->format('d M Y')); ?></td>
-                  <?php if($student->course_type == 'Full Stack Development'): ?> 
-                    <td class="lights-blue-color"><span>Full Stack Development</span></td>
+                  <?php if($student->course_type == 'Full Stack Development'): ?>
+                  <td class="lights-blue-color"><span>Full Stack Development</span></td>
                   <?php elseif($student->course_type == 'PHP Development'): ?>
-                    <td class="lights-green-color"><span>PHP Development</span></td>
+                  <td class="lights-green-color"><span>PHP Development</span></td>
                   <?php elseif($student->course_type == 'Web Development'): ?>
-                    <td class="light-yellow-color"><span>Web Development</span></td>
+                  <td class="light-yellow-color"><span>Web Development</span></td>
                   <?php elseif($student->course_type == 'Web Designing'): ?>
-                    <td class="light-pink-color"><span>Web Designing</span></td>
+                  <td class="light-pink-color"><span>Web Designing</span></td>
                   <?php elseif($student->course_type == 'Graphic Designing'): ?>
-                    <td class="light-cyan-color"><span>Graphic Designing</span></td>
+                  <td class="light-cyan-color"><span>Graphic Designing</span></td>
                   <?php else: ?>
-                    <td></td>
+                  <td></td>
                   <?php endif; ?>
                   <td><?php echo e($student->course_duration); ?></td>
+                  <?php if($student->total_fees): ?>
                   <td>
                      Rs <?php echo e(number_format($student->total_fees)); ?>
 
                      <div class="box-pay">
-                        <button type="button" class="pay-fes-buton student_pay_fees" data-student_id="<?php echo e($student->id); ?>" data-toggle="modal" data-target="#myModal">Pay Fee</button>
+                        <button type="button" class="pay-fes-buton student_pay_fees"
+                           data-student_id="<?php echo e($student->id); ?>" data-toggle="modal" data-target="#myModal">Pay
+                        Fee</button>
                      </div>
                   </td>
+                  <?php else: ?>
+                  <td>N/A</td>
+                  <?php endif; ?>
                   <td>
-                  <?php if(isset($student->student_fees_detail)): ?>
-                     <?php $last_record = $student->student_fees_detail->last(); ?>
+                     <?php if(isset($student->student_fees_detail)): ?>
+                     <?php      $last_record = $student->student_fees_detail->last(); ?>
                      <?php if($last_record): ?>
-                        Rs <?php echo e(number_format($last_record->user_fees)); ?><br>
-                        <span class="date-tbl"><?php echo e(Carbon::parse($last_record->submission_date)->format('d M Y')); ?></span>  
+                     Rs <?php echo e(number_format($last_record->user_fees)); ?><br>
+                     <span class="date-tbl"><?php echo e(Carbon::parse($last_record->submission_date)->format('d M Y')); ?></span>
                      <?php else: ?>
-                     0<br>
+                     -<br>
                      <?php endif; ?>
                      <?php endif; ?>
                   </td>
-                  <td>Rs <?php echo e(number_format($total_fees - $pay_fees)); ?></td>
+                  <td>
+                  <?php if($pay_fees == 0): ?>
+                     -
+                  <?php else: ?>
+                     Rs <?php echo e(number_format($total_fees - $pay_fees)); ?>
+
+                  <?php endif; ?>
+               </td>
+
                   <?php
-                  $isPaid = false;
-                  $isPending = false;
-                  $isOverdue = false;
-                  $lastPaymentDate = null;
+                     $isPaid = false;
+                     $isPending = false;
+                     $isOverdue = false;
+                     $lastPaymentDate = null;
+                     $noPayment = true;
+                     $payment_completed = false;
 
-                  if (isset($student->student_fees_detail)) {
+                     if (isset($student->student_fees_detail)) {
                      foreach ($student->student_fees_detail as $fees) {
-                        $submissionMonth = Carbon::parse($fees['submission_date'])->format('m');
-                        $submissionYear = Carbon::parse($fees['submission_date'])->format('Y');
-                        $lastPaymentDate = Carbon::parse($fees['submission_date']);
+                     $submissionMonth = Carbon::parse($fees['submission_date'])->format('m');
+                     $submissionYear = Carbon::parse($fees['submission_date'])->format('Y');
+                     $lastPaymentDate = Carbon::parse($fees['submission_date']);
 
-                        //Check if the fees for the current month and year are paid
-                        if ($submissionMonth == $currentMonth && $submissionYear == $currentYear && !is_null($fees['user_fees'])) {
-                              $isPaid = true;
-                              break;
-                        }
+                     //Check if the fees for the current month and year are paid
+                     if ($submissionMonth == $currentMonth && $submissionYear == $currentYear && !is_null($fees['user_fees'])) {
+                        $isPaid = true;
+                        break;
+                     }
                      }
 
-                     // Check if the last payment date is more than 45 days ago
+                     //Check if the last payment date is more than 45 days ago
                      if ($lastPaymentDate && $lastPaymentDate->diffInDays(Carbon::now()) > 45) {
-                        $isOverdue = true;
-                     } else {
-                        $isPending = !$isPaid;
+                         $isOverdue = true;
+                        } else {
+                         $isPending = !$isPaid;
+                        }
+                     } 
+
+                     //check user total fees
+                     if (!empty($student->total_fees) && $student->total_fees !== 0)  {
+                        $noPayment = false;
                      }
+
+                  //check user fees completed or not
+                  if (isset($student->total_fees) && $student->total_fees == $pay_fees) {
+                     $payment_completed = true;
                   }
                   ?>
-
-                  <?php if($isOverdue): ?>
+                  <?php if($noPayment == true): ?>
+                  <td>-</td>
+                  <?php elseif($isOverdue): ?>
                   <td class="yellow-color"><span>Overdue</span></td>
                   <?php elseif($isPending): ?>
                   <td class="red-color"><span>Pending</span></td>
+                  <?php elseif($payment_completed): ?>
+                  <td class="ligth-green-color"><span>Fees Complete</span></td>
                   <?php else: ?>
                   <td class="green-color"><span>Paid</span></td>
                   <?php endif; ?>
                   <td>
-                  <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle action-fee-design" type="button" data-bs-toggle="dropdown" aria-expanded="false"> <img src="<?php echo e(url('public/admin/images/ellips.svg')); ?>" alt="ellips" /> </button>
+                     <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle action-fee-design" type="button"
+                           data-bs-toggle="dropdown" aria-expanded="false"> <img
+                           src="<?php echo e(url('public/admin/images/ellips.svg')); ?>" alt="ellips" /> </button>
                         <ul class="dropdown-menu pay-fees-submit">
                            <form class="drop-don-list">
-                              <li> 
+                              <li>
                                  <!-- <a href="<?php echo e(url('admin/single-student-detail', $student->id)); ?>"><img src="<?php echo e(url('public/admin/images/ico-1.png')); ?>">View Student Detail</a> -->
                               </li>
-                              <li><a href="<?php echo e(url('admin/edit-student', $student->id)); ?>"><img src="<?php echo e(url('public/admin/images/ico-4.png')); ?>">Edit</a></li>
+                              <li><a href="<?php echo e(url('admin/edit-student', $student->id)); ?>"><img
+                                 src="<?php echo e(url('public/admin/images/ico-4.png')); ?>">Edit</a></li>
                               <!-- <li><button type="submit" class="is_trash_student_record" data-id="<?php echo e($student->id); ?>"><img src="<?php echo e(url('public/admin/images/ico-5.png')); ?>">Trash</button></li> -->
                               <li class="student_trash_record" data-student_id="<?php echo e($student->id); ?>">
                                  <img src="<?php echo e(url('public/admin/images/ico-5.png')); ?>" alt="Trash Icon"> Trash
