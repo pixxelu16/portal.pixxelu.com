@@ -15,6 +15,40 @@
    <div class ="search-header">
    <h2>Search Attendances</h2>
    </div>
+    <!--start four boxes studens fees-->
+    <div class="boxes-wrapper">
+       <div class="box">
+
+		 <h3>Working Hours</h3>
+       <p>{{ number_format($totalPresentHours, 2) }} Hrs</p>
+      </div>
+      <div class="box">
+         <h3>Present</h3>
+          <p>{{ $totalPresentDays }}</p>
+      </div>
+      <div class="box">
+         <h3><span style="color: green;">Absent</span></h3>
+		    <p>{{ $totalAbsentDays }}</p>
+      </div>
+     <div class="box">
+         <h3><span style="color: green;">Leave</span></h3>
+		  <p>{{ $totalLeaveDays }}</p>
+      </div>
+	     <div class="box">
+         <h3><span style="color: green;">Half Day </span></h3>
+          <p>{{ $totalHalfDay }}</p>
+      </div>
+      <div class="box">
+        <h3><span style="color: green;">Holidays</span></h3>
+        <p>{{ $totalHolidays }}</p>
+    </div>
+    <div class="box">
+        <h3><span style="color: green;">Total Days in Month</span></h3>
+        <p>{{ $daysInMonth }}</p>
+    </div>
+ 
+   </div>
+   <!--end four boxes studens fees-->
 </div>
 <form action="{{ url('student/search-attendance') }}" method="GET">
    <!--start search filter-->

@@ -14,6 +14,40 @@
    <div class ="search-header">
    <h2>Attendance Listing</h2>
    </div>
+   <!--start four boxes studens fees-->
+   <div class="boxes-wrapper">
+       <div class="box">
+
+		 <h3>Working Hours</h3>
+       <p><?php echo e(number_format($totalPresentHours, 2)); ?> Hrs</p>
+      </div>
+      <div class="box">
+         <h3>Present</h3>
+          <p><?php echo e($totalPresentDays); ?></p>
+      </div>
+      <div class="box">
+         <h3><span style="color: green;">Absent</span></h3>
+		    <p><?php echo e($totalAbsentDays); ?></p>
+      </div>
+     <div class="box">
+         <h3><span style="color: green;">Leave</span></h3>
+		  <p><?php echo e($totalLeaveDays); ?></p>
+      </div>
+	     <div class="box">
+         <h3><span style="color: green;">Half Day </span></h3>
+          <p><?php echo e($totalHalfDay); ?></p>
+      </div>
+      <div class="box">
+        <h3><span style="color: green;">Holidays</span></h3>
+        <p><?php echo e($totalHolidays); ?></p>
+    </div>
+    <div class="box">
+        <h3><span style="color: green;">Total Days in Month</span></h3>
+        <p><?php echo e($daysInMonth); ?></p>
+    </div>
+ 
+   </div>
+   <!--end four boxes studens fees-->
 </div>
 <form action="<?php echo e(url('student/search-attendance')); ?>" method="GET">
    <!--start search filter-->
@@ -61,6 +95,7 @@
 <div class="row">
    <div class="col-lg-12">
       <div class="table-responsive">
+      
          <table class="table table-striped custom-table table-nowrap mb-0">
          <thead>
             <tr>
