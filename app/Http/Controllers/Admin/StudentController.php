@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User; 
-use App\Models\StudentFees;  
+use App\Models\User;
+use App\Models\StudentFees;
 use App\Models\StudentAssignAccessories;
 use App\Models\StudentDamageAccessories;
 use App\Models\EmployeeAssignAccessories;
@@ -17,18 +17,30 @@ use Carbon\Carbon;
 use DateTime;
 
 class StudentController extends Controller
-{ 
+{
     //Function for Get all students list
     public function all_students() {
+        //Get the start and end dates for the current month
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+
         //Get students details
         $get_students_detail = User::where('user_type', 'Student')->where('user_status', 'Active')->orderBy('id', 'DESC')->with('student_fees_detail')->get();
-       //echo "<pre>"; print_r($get_students_detail->toArray());exit;
+       
         //Get all students total fees and all paid fees 
         $all_students_total_fees = User::where('user_status', 'Active')->sum('total_fees');
-        $all_students_paid_fees = StudentFees::where('user_status', 'Active')->sum('user_fees');  
-            return view('admin.students.all-students-list', compact('get_students_detail','all_students_total_fees','all_students_paid_fees'));
-    }  
-    
+        $all_students_paid_fees = StudentFees::where('user_status', 'Active')->sum('user_fees');
+        
+        //Get total current month paid fees
+        $current_month_paid_fees = StudentFees::where('user_status', 'Active')->whereBetween('submission_date', [$startOfMonth, $endOfMonth])->sum('user_fees');
+
+        //Get payment types online or cash
+        $payment_type_online = StudentFees::where('user_status', 'Active')->where('payment_type','online')->whereBetween('submission_date', [$startOfMonth, $endOfMonth])->sum('user_fees');
+        $payment_type_cash = StudentFees::where('user_status', 'Active')->where('payment_type','cash')->whereBetween('submission_date', [$startOfMonth, $endOfMonth])->sum('user_fees');
+
+        return view('admin.students.all-students-list', compact('get_students_detail', 'all_students_total_fees', 'all_students_paid_fees','current_month_paid_fees','payment_type_online','payment_type_cash'));
+    }
+
     //Function for add new student
     public function add_student() {
         return view('admin.students.add-new-student');
@@ -38,79 +50,79 @@ class StudentController extends Controller
     public function submit_student(Request $request) {
         //Check if the email already exists
         $is_email_exists = User::where('email', $request->email)->exists();
-        if($is_email_exists) {
+        if ($is_email_exists) {
             return back()->with('unsuccess', 'Email is already taken, Please try with a new email.');
-        }    
-            //Check if user image exists or not
-            $filename = 'default_user.png';
-            if ($request->hasFile('image')) {
-                $file = $request->file('image');
-                $extension = $file->getClientOriginalExtension();
-                $filename = time() . '.' . $extension;
-                $file->move(public_path('uploads/users'), $filename);
-            }
-   
-                //Check if qualification exist or not
-                $qualification = '';
-                if($request->has('qualification')) {
-                    //Convert array to string
-                    $qualification = implode(',', $request->input('qualification'));
-                }
+        }
+        //Check if user image exists or not
+        $filename = 'default_user.png';
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->move(public_path('uploads/users'), $filename);
+        }
 
-                    //Calculation course joining date
-                    $course_joining_date = Carbon::parse($request->course_joining_date);
-                    $course_completion_date = $course_joining_date->add($request->course_duration);
-                    //Format the completion date
-                    $course_completion_date_formatted = $course_completion_date->format('Y-m-d');
-                       
-                    //Create student
-                    $create_student = User::create([
-                        'name' => $request->first_name . " " . $request->last_name,
-                        'first_name' => $request->first_name,
-                        'last_name' => $request->last_name,
-                        'dob' => $request->dob,
-                        'gender' => $request->gender,
-                        'father_name' => $request->father_name,
-                        'father_phone_no' => $request->father_phone_no,
-                        'aadhaar_no' => $request->aadhaar_no,
-                        'email' => $request->email,
-                        'password' => Hash::make($request['password']),
-                        'student_phone_no' => $request->student_phone_no,
-                        'marital_status' => $request->marital_status,
-                        'category' => $request->category,
-                        'address' => $request->address,
-                        'district' => $request->district,
-                        'state' => $request->state,
-                        'pin_code' => $request->pin_code,
-                        'qualification' => $qualification,
-                        'course_type' => $request->course_type,
-                        'course_duration' => $request->course_duration,
-                        'course_joining_date' => $request->course_joining_date,
-                        'course_complession_date' => $course_completion_date_formatted,
-                        'batch_timing' => $request->batch_timing,
-                        'total_fees' => $request->total_fees,
-                        'user_status' => 'Active',
-                        'user_type' => 'Student',
-                        'user_pic' => $filename,
-                    ]); 
+        //Check if qualification exist or not
+        $qualification = '';
+        if ($request->has('qualification')) {
+            //Convert array to string
+            $qualification = implode(',', $request->input('qualification'));
+        }
 
-                    //Check if student record created or not
-                    if ($create_student) {
-                        return back()->with('success', 'Student record created successfully.');
-                    } else {
-                        return back()->with('unsuccess', 'Oops, something went wrong.');
-                    }
+        //Calculation course joining date
+        $course_joining_date = Carbon::parse($request->course_joining_date);
+        $course_completion_date = $course_joining_date->add($request->course_duration);
+        //Format the completion date
+        $course_completion_date_formatted = $course_completion_date->format('Y-m-d');
+
+        //Create student
+        $create_student = User::create([
+            'name' => $request->first_name . " " . $request->last_name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'dob' => $request->dob,
+            'gender' => $request->gender,
+            'father_name' => $request->father_name,
+            'father_phone_no' => $request->father_phone_no,
+            'aadhaar_no' => $request->aadhaar_no,
+            'email' => $request->email,
+            'password' => Hash::make($request['password']),
+            'student_phone_no' => $request->student_phone_no,
+            'marital_status' => $request->marital_status,
+            'category' => $request->category,
+            'address' => $request->address,
+            'district' => $request->district,
+            'state' => $request->state,
+            'pin_code' => $request->pin_code,
+            'qualification' => $qualification,
+            'course_type' => $request->course_type,
+            'course_duration' => $request->course_duration,
+            'course_joining_date' => $request->course_joining_date,
+            'course_complession_date' => $course_completion_date_formatted,
+            'batch_timing' => $request->batch_timing,
+            'total_fees' => $request->total_fees,
+            'user_status' => 'Active',
+            'user_type' => 'Student',
+            'user_pic' => $filename,
+        ]);
+
+        //Check if student record created or not
+        if ($create_student) {
+            return back()->with('success', 'Student record created successfully.');
+        } else {
+            return back()->with('unsuccess', 'Oops, something went wrong.');
+        }
     }
 
     //Function for edit student
     public function edit_student($id) {
         $student = User::find($id);
         //Check if the status is active after update
-        if($student->user_status === 'Active') {
+        if ($student->user_status === 'Active') {
             //delete trash record and restore record
             Trash::where('user_id', $id)->delete();
         }
-        
+
         return view('admin.students.edit-student', compact('student'));
     }
 
@@ -118,146 +130,146 @@ class StudentController extends Controller
     public function update_student(Request $request, $id) {
         //Check if user image is exit or not
         $filename = 'default_user.png';
-        if($request->hasFile('image')) {
+        if ($request->hasFile('image')) {
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
-            $file->move(public_path('uploads/users'), $filename);            
+            $file->move(public_path('uploads/users'), $filename);
             //Check if qualification exist or not
             $qualification = '';
-            if($request->has('qualification')) {
+            if ($request->has('qualification')) {
                 //Convert array to string
                 $qualification = implode(',', $request->input('qualification'));
             }
-                //Check if the course joining date and course duration exists or not 
-                if($request->has('course_joining_date') && $request->has('course_duration')) {
-                    //Calculation course joining date
-                    $course_joining_date = Carbon::parse($request->course_joining_date);
-                    $course_completion_date = $course_joining_date->add($request->course_duration);
-                    //Format the completion date
-                    $course_completion_date_formatted = $course_completion_date->format('Y-m-d');
-                    //Update student record with image
-                    $update_student = User::where('id', $id)->update([
-                        'course_complession_date' => $course_completion_date_formatted,
-                    ]);
-                }
+            //Check if the course joining date and course duration exists or not 
+            if ($request->has('course_joining_date') && $request->has('course_duration')) {
+                //Calculation course joining date
+                $course_joining_date = Carbon::parse($request->course_joining_date);
+                $course_completion_date = $course_joining_date->add($request->course_duration);
+                //Format the completion date
+                $course_completion_date_formatted = $course_completion_date->format('Y-m-d');
                 //Update student record with image
                 $update_student = User::where('id', $id)->update([
-                    'name' => $request->first_name." ".$request->last_name,
-                    'first_name' =>$request->first_name,
-                    'last_name' =>$request->last_name,
-                    'email' => $request->email,
-                    'dob' =>$request->dob,
-                    'gender' =>$request->gender,
-                    'father_name' =>$request->father_name,
-                    'father_phone_no' =>$request->father_phone_no,
-                    'aadhaar_no' =>$request->aadhaar_no,
-                    'student_phone_no' =>$request->student_phone_no,
-                    'marital_status' =>$request->marital_status,
-                    'category' =>$request->category,
-                    'address' =>$request->address,
-                    'district' =>$request->district,
-                    'state' =>$request->state,
-                    'pin_code' =>$request->pin_code,
-                    'qualification' => $qualification,
-                    'course_type' =>$request->course_type,
-                    'course_duration' =>$request->course_duration,
-                    'course_joining_date' =>$request->course_joining_date,
-                    'batch_timing' =>$request->batch_timing,
-                    'total_fees' =>$request->total_fees,
-                    'user_status' =>$request->user_status,
-                    'user_type' =>'Student',
-                    'user_pic' =>$filename,
+                    'course_complession_date' => $course_completion_date_formatted,
                 ]);
+            }
+            //Update student record with image
+            $update_student = User::where('id', $id)->update([
+                'name' => $request->first_name . " " . $request->last_name,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'dob' => $request->dob,
+                'gender' => $request->gender,
+                'father_name' => $request->father_name,
+                'father_phone_no' => $request->father_phone_no,
+                'aadhaar_no' => $request->aadhaar_no,
+                'student_phone_no' => $request->student_phone_no,
+                'marital_status' => $request->marital_status,
+                'category' => $request->category,
+                'address' => $request->address,
+                'district' => $request->district,
+                'state' => $request->state,
+                'pin_code' => $request->pin_code,
+                'qualification' => $qualification,
+                'course_type' => $request->course_type,
+                'course_duration' => $request->course_duration,
+                'course_joining_date' => $request->course_joining_date,
+                'batch_timing' => $request->batch_timing,
+                'total_fees' => $request->total_fees,
+                'user_status' => $request->user_status,
+                'user_type' => 'Student',
+                'user_pic' => $filename,
+            ]);
 
-                //Check if student record created or not
-                if($update_student){
-                    return back()->with('success', 'Student record updated successfully.');
-                } else {
-                    return back()->with('unsuccess', 'Opps something went wrong.');
-                }
+            //Check if student record created or not
+            if ($update_student) {
+                return back()->with('success', 'Student record updated successfully.');
+            } else {
+                return back()->with('unsuccess', 'Opps something went wrong.');
+            }
         } else {
-                //Check if qualification exist or not
-                $qualification = '';
-                if($request->has('qualification')) {
-                    //Convert array to string
-                    $qualification = implode(',', $request->input('qualification'));
-                }
-                    //Check if the course joining date and course duration exists or not 
-                    if($request->has('course_joining_date') && $request->has('course_duration')) {
-                        //Calculation course joining date
-                        $course_joining_date = Carbon::parse($request->course_joining_date);
-                        $course_completion_date = $course_joining_date->add($request->course_duration);
-                        //Format the completion date
-                        $course_completion_date_formatted = $course_completion_date->format('Y-m-d');
-                        //Update student record without image
-                        $update_student = User::where('id', $id)->update([
-                        'course_complession_date' => $course_completion_date_formatted,
-                        ]);
-                    }
-                    //Update student record without image
-                    $update_student = User::where('id', $id)->update([
-                        'name' => $request->first_name." ".$request->last_name,
-                        'first_name' =>$request->first_name,
-                        'last_name' =>$request->last_name,
-                        'email' => $request->email,
-                        'dob' =>$request->dob,
-                        'gender' =>$request->gender,
-                        'father_name' =>$request->father_name,
-                        'father_phone_no' =>$request->father_phone_no,
-                        'aadhaar_no' =>$request->aadhaar_no,
-                        'student_phone_no' =>$request->student_phone_no,
-                        'marital_status' =>$request->marital_status,
-                        'category' =>$request->category,
-                        'address' =>$request->address,
-                        'district' =>$request->district,
-                        'state' =>$request->state,
-                        'pin_code' =>$request->pin_code,
-                        'qualification' => $qualification,
-                        'course_type' =>$request->course_type,
-                        'course_duration' =>$request->course_duration,
-                        'course_joining_date' =>$request->course_joining_date,
-                        'batch_timing' =>$request->batch_timing,
-                        'total_fees' =>$request->total_fees,
-                        'user_status' =>$request->user_status,
-                        'user_type' =>'Student',
-                    ]);
+            //Check if qualification exist or not
+            $qualification = '';
+            if ($request->has('qualification')) {
+                //Convert array to string
+                $qualification = implode(',', $request->input('qualification'));
+            }
+            //Check if the course joining date and course duration exists or not 
+            if ($request->has('course_joining_date') && $request->has('course_duration')) {
+                //Calculation course joining date
+                $course_joining_date = Carbon::parse($request->course_joining_date);
+                $course_completion_date = $course_joining_date->add($request->course_duration);
+                //Format the completion date
+                $course_completion_date_formatted = $course_completion_date->format('Y-m-d');
+                //Update student record without image
+                $update_student = User::where('id', $id)->update([
+                    'course_complession_date' => $course_completion_date_formatted,
+                ]);
+            }
+            //Update student record without image
+            $update_student = User::where('id', $id)->update([
+                'name' => $request->first_name . " " . $request->last_name,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'dob' => $request->dob,
+                'gender' => $request->gender,
+                'father_name' => $request->father_name,
+                'father_phone_no' => $request->father_phone_no,
+                'aadhaar_no' => $request->aadhaar_no,
+                'student_phone_no' => $request->student_phone_no,
+                'marital_status' => $request->marital_status,
+                'category' => $request->category,
+                'address' => $request->address,
+                'district' => $request->district,
+                'state' => $request->state,
+                'pin_code' => $request->pin_code,
+                'qualification' => $qualification,
+                'course_type' => $request->course_type,
+                'course_duration' => $request->course_duration,
+                'course_joining_date' => $request->course_joining_date,
+                'batch_timing' => $request->batch_timing,
+                'total_fees' => $request->total_fees,
+                'user_status' => $request->user_status,
+                'user_type' => 'Student',
+            ]);
 
-                    //Check if student record created or not
-                    if($update_student){
-                        return back()->with('success', 'Student record updated successfully.');
-                    } else {
-                        return back()->with('unsuccess', 'Opps something went wrong.');
-                    }
+            //Check if student record created or not
+            if ($update_student) {
+                return back()->with('success', 'Student record updated successfully.');
+            } else {
+                return back()->with('unsuccess', 'Opps something went wrong.');
+            }
         }
     }
-    
+
     //Function for student submit fees
-    public function submit_student_fees(Request $request) {
+    public function submit_student_fees(Request $request)  {
         //Get current date and calculate end date
         $now = Carbon::now();
         $newDate = $now->copy()->addDays(30);
-        
+
         //Create student fees    
         $is_create_student_fees = StudentFees::create([
-            'user_id' =>$request->student_id, 
-            'user_fees' =>$request->fees_amount, 
-            'is_down_payment' =>$request->first_payment_type,   
-            'payment_type' =>$request->payment_type,  
-            'submission_date' =>$now,
-            'end_date' =>$newDate,
+            'user_id' => $request->student_id,
+            'user_fees' => $request->fees_amount,
+            'is_down_payment' => $request->first_payment_type,
+            'payment_type' => $request->payment_type,
+            'submission_date' => $now,
+            'end_date' => $newDate,
         ]);
         //Check if student submit fees created or not
-        if($is_create_student_fees) {
+        if ($is_create_student_fees) {
             echo '<p style="color:green;">Student fees submitted successfully.</p>';
             echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
         } else {
             echo '<p style="color:red;">Opps something went wrong.</p>';
-        }       
+        }
     }
 
     //Function for add previous student fees 
-    public function add_previous_fees(){
+    public function add_previous_fees()   {
         $get_student_details = User::where('user_type', 'Student')->get();
         return view('admin.students.add-student-previous-fees', compact('get_student_details'));
     }
@@ -265,20 +277,20 @@ class StudentController extends Controller
     //Function for submit previous student fees
     public function submit_previous_fees(Request $request) {
         //Get last date submission
-        $submission_date = Carbon::parse($request->submission_date);  
-        $end_date = $submission_date->copy()->addDays(30);  
+        $submission_date = Carbon::parse($request->submission_date);
+        $end_date = $submission_date->copy()->addDays(30);
 
         //Create student fees    
         $is_create_student_fees = StudentFees::create([
-            'user_id' =>$request->previous_student_id,
-            'user_fees' =>$request->amount,   
-            'payment_type' =>$request->payment_type,
+            'user_id' => $request->previous_student_id,
+            'user_fees' => $request->amount,
+            'payment_type' => $request->payment_type,
             'submission_date' => $submission_date,
-            'end_date' =>$end_date,
+            'end_date' => $end_date,
         ]);
 
         //Check if previous student fees exists or not
-        if($is_create_student_fees){
+        if ($is_create_student_fees) {
             return back()->with('success', 'Add student previous fees successfully.');
         } else {
             return back()->with('unsuccess', 'Opps something went wrong.');
@@ -286,24 +298,24 @@ class StudentController extends Controller
     }
 
     //Function for view single student list
-    public function single_student_detail(Request $request) {
+    public function single_student_detail(Request $request)  {
         $studentId = $request->input('studentId');
         //Get student detail
         $get_student_detail = User::where([['id', '=', $studentId], ['user_type', '=', 'Student']])
             ->where('user_status', 'Active')
             ->with('student_fees_detail', 'student_assign_accessories')
             ->first();
-    
+
         //Get student damage accessories 
-        $get_student_damage_accessories = StudentDamageAccessories::where('user_id', $studentId)->get(); 
-    
+        $get_student_damage_accessories = StudentDamageAccessories::where('user_id', $studentId)->get();
+
         $course_duration = $get_student_detail->course_duration;
         $course_joining_date = Carbon::parse($get_student_detail->course_joining_date);
-    
+
         //Get course joining date
         $start_date = $course_joining_date->copy();
         $end_date = $course_joining_date->copy();
-    
+
         //Calculate the end date acc course duration
         if ($course_duration == '1 Month') {
             $end_date->addMonth();
@@ -316,279 +328,300 @@ class StudentController extends Controller
         } elseif ($course_duration == '2 Year') {
             $end_date->addYears(2);
         } else {
-            $end_date->addYear(); 
+            $end_date->addYear();
         }
-    
-        ?>    
-       <div class="all-student">
-        <div class="contanier">
-            <div class="main-student">
-                <div class="section-name">
-                    <div class="name">
-                    <div class="profile-image-popup">
-                     <img src="<?php echo url('public/uploads/users/' . $get_student_detail->user_pic); ?>" alt="Student Picture">
-                    </div>
-                    <h3><?php echo $get_student_detail->name ?></h3>
-                    <p><?php echo $get_student_detail->course_type ?></p>
-                    <p><?php echo $get_student_detail->email ?></p>
-                    <p><?php echo substr($get_student_detail->student_phone_no, 0, 5) . '-' . substr($get_student_detail->student_phone_no, 5) ?></span></p>
-                    <p><span>Joining Date:-</span><?php echo \Carbon\Carbon::parse($get_student_detail->course_joining_date)->format('d M Y') ?></p>
-                    </div>
-                    <div class="info">
-                    <h4>information</h4>
-                    </div>
-                    <div class="detail">
-                    <p><em>registration no: </em><span><?php echo $get_student_detail->id ?></span></p>
-                    <p><em>father's name:</em><span><?php echo $get_student_detail->father_name ? $get_student_detail->father_name : '-'; ?></span></p>
-                    <p><em>father's phone no: </em><span><?php echo substr($get_student_detail->father_phone_no, 0, 5) . '-' . substr($get_student_detail->father_phone_no, 5) ?></span></p>
-                    <p><em>batch timing:</em><span><?php echo $get_student_detail->batch_timing ? $get_student_detail->batch_timing : '-'; ?></span></p>
-                    <p><em>date of birth:</em><span><?php echo \Carbon\Carbon::parse($get_student_detail->dob)->format('d M Y') ?></span></p>
-                    <p><em>sex:</em><span><?php echo $get_student_detail->gender ? $get_student_detail->gender : '-'; ?></span></p>
-                    <p><em>category: </em><span><?php echo $get_student_detail->category ? $get_student_detail->category : '-'; ?></span></p>
-                    <p><em>Aadhar card no: </em><span><?php echo $get_student_detail->aadhaar_no ? $get_student_detail->aadhaar_no : '-'; ?></span></p>
-                    <p><em>current address: </em><span><?php echo $get_student_detail->address . ', ' . $get_student_detail->district . ', ' . $get_student_detail->state . ', ' . $get_student_detail->pin_code; ?></span></p>
-                    </div>
-                </div>
-                <!--start students all tables-->
-                <div class="table-all">
-                    <!--start students monthly fees table-->
-                    <!--start students monthly fees table-->
-<div class="table-qualification">
-    <label>Monthly Fees details</label>
-    <div id="table-scroll" class="table-scroll first-table">
-        <table id="main-table" class="main-table">
-            <thead>
-                <tr class="sticky">
-                    <th>Sr.No.</th>
-                    <th>Name Of Month</th>
-                    <th class="small">Amount</th>
-                </tr>
-            </thead>
-            <tbody class="scroll">
-                <?php if ($get_student_detail) : ?>
-                    <?php
-                    $count = 1;
-                    $totalFees = $get_student_detail['total_fees'];
-                    $paidFees = 0;
-                    $currentDate = new \DateTime($start_date);
-                    $endDate = new \DateTime($end_date);
-                    ?>
-                    <?php while ($currentDate < $endDate) : ?>
-                        <?php
-                        $monthlyFees = 0;
-                        // Loop through student fees details to sum all payments for the current month
-                        foreach ($get_student_detail['student_fees_detail'] as $fee) {
-                            $submissionDate = new \DateTime($fee['submission_date']);
-                            if ($submissionDate->format('m-Y') == $currentDate->format('m-Y')) {
-                                $monthlyFees += $fee['user_fees'];
-                                $paidFees += $fee['user_fees'];
-                            }
-                        }
-                        ?>
-                        <tr>
-                            <td><?php echo $count++ ?>.</td>
-                            <td><?php echo $currentDate->format('M Y') ?></td>
-                            <td>
-                                <?php if (count($get_student_detail['student_fees_detail']) > 0): 
-                                    if($monthlyFees > 0){?>
-                                    <strong>Paid Fees:
-                                        <?php echo number_format($monthlyFees, 0); ?>
-                                    </strong>
-                                    <?php } else {
-                                        echo number_format($monthlyFees, 0);
-                                    }?>
-                                    <?php foreach ($get_student_detail['student_fees_detail'] as $fee): ?>
-                                        <?php
-                                            $submissionDate = new \DateTime($fee['submission_date']);
-                                            if ($submissionDate->format('m-Y') == $currentDate->format('m-Y')):
-                                        ?>
-                                            <span class="total-paid-payment">
-                                                <em>(<?php echo $fee['user_fees']; ?> / <?php echo $fee['payment_type']; ?>)</em>
-                                                <button class="btn btn-primary btn-sm edit-btn" 
-                                                    data-fee-id="<?php echo $fee['id']; ?>" 
-                                                    data-fee-month="<?php echo $fee['submission_date']; ?>">
-                                                <img src="<?php echo url('public/admin/images/edite-icon.svg'); ?>" alt="Edit Icon">
-                                            </button>
-                                            </span><br>
-                                        <?php endif; ?>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    -
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                        <?php
-                        $currentDate->modify('+1 month');
-                        ?>
-                    <?php endwhile; ?>
-                <?php endif; ?>
-            </tbody>
-            <tfoot>
-                <tr class="tfooter">
-                    <td class="space" colspan="2"><span style="color: black;">Total Fees:</span></td>
-                    <td><strong><?php echo number_format($totalFees, 0) ?></strong></td>
-                </tr>
-                <tr class="tfooter">
-                    <td class="space" colspan="2"><span style="color: green;">Total Paid Fees:</span></td>
-                    <td><strong style="color: green;"><?php echo number_format($paidFees, 0) ?></strong></td>
-                </tr>
-                <tr class="tfooter">
-                    <td class="space" colspan="2"><span style="color: red;">Remaining Fees:</span></td>
-                    <td><strong style="color: red;"><?php echo number_format($totalFees - $paidFees, 0) ?></strong></td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-</div>
-<!--end students monthly fees table-->
 
-                    <!--end students monthly fees table-->
-                    <!--start student assign accessoriess table-->
-                    <?php if($get_student_detail['student_assign_accessories']->count() > 0): ?>
-                    <div class="table-qualification">
-                    <label>Assign Accessories details</label>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Sr.No.</th>
-                                <th>Keyboard</th>
-                                <th>Mouse</th>
-                                <th>Assign Accessories Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if ($get_student_detail && !empty($get_student_detail['student_assign_accessories'])) : ?>
-                            <?php
-                                $count = 1;
-                                ?>
-                            <?php foreach ($get_student_detail['student_assign_accessories'] as $accessories) : ?>
-                            <tr>
-                                <td><?php echo $count++ ?>.</td>
-                                <td><?php echo $accessories['keyboard_assigned'] ?></td>
-                                <td><?php echo $accessories['mouse_assigned'] ?></td>
-                                <td><?= (new DateTime($accessories['created_at']))->format('d M Y') ?></td>
-                            </tr>
-                            <?php endforeach; ?>
-                            <?php else : ?>
-                            <tr>
-                                <td colspan="4">No accessories assigned to this student.</td>
-                            </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+        ?>
+        <div class="all-student">
+            <div class="contanier">
+                <div class="main-student">
+                    <div class="section-name">
+                        <div class="name">
+                            <div class="profile-image-popup">
+                                <img src="<?php echo url('public/uploads/users/' . $get_student_detail->user_pic); ?>"
+                                    alt="Student Picture">
+                            </div>
+                            <h3><?php echo $get_student_detail->name ?></h3>
+                            <p><?php echo $get_student_detail->course_type ?></p>
+                            <p><?php echo $get_student_detail->email ?></p>
+                            <p><?php echo substr($get_student_detail->student_phone_no, 0, 5) . '-' . substr($get_student_detail->student_phone_no, 5) ?></span>
+                            </p>
+                            <p><span>Joining
+                                    Date:-</span><?php echo \Carbon\Carbon::parse($get_student_detail->course_joining_date)->format('d M Y') ?>
+                            </p>
+                        </div>
+                        <div class="info">
+                            <h4>information</h4>
+                        </div>
+                        <div class="detail">
+                            <p><em>registration no: </em><span><?php echo $get_student_detail->id ?></span></p>
+                            <p><em>father's name:</em><span><?php echo $get_student_detail->father_name ? $get_student_detail->father_name : '-'; ?></span></p>
+                            <p><em>father's phone no:</em><span><?php echo substr($get_student_detail->father_phone_no, 0, 5) . '-' . substr($get_student_detail->father_phone_no, 5) ?></span></p>
+                            <p><em>batch timing:</em><span><?php echo $get_student_detail->batch_timing ? $get_student_detail->batch_timing : '-'; ?></span></p>
+                            <p><em>date of birth:</em><span><?php echo \Carbon\Carbon::parse($get_student_detail->dob)->format('d M Y') ?></span></p>
+                            <p><em>sex:</em><span><?php echo $get_student_detail->gender ? $get_student_detail->gender : '-'; ?></span></p>
+                            <p><em>category:</em><span><?php echo $get_student_detail->category ? $get_student_detail->category : '-'; ?></span></p>
+                            <p><em>Aadhar card no:</em><span><?php echo $get_student_detail->aadhaar_no ? $get_student_detail->aadhaar_no : '-'; ?></span></p>
+                            <p><em>current address:</em><span><?php echo $get_student_detail->address . ', ' . $get_student_detail->district . ', ' . $get_student_detail->state . ', ' . $get_student_detail->pin_code; ?></span></p>
+                        </div>
                     </div>
-                    <?php endif; ?>
-                    <!--end student assign accessoriess table-->
-                    <!--start student damage accessoriess table-->
-                    <?php if($get_student_damage_accessories->count() > 0): ?>
-                    <div class="table-qualification">
-                    <label>Damage Accessories details</label>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Sr.No.</th>
-                                <th>Keyboard</th>
-                                <th>Mouse</th>
-                                <th>Damage Accessories Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if ($get_student_damage_accessories) : ?>
-                            <?php
-                                $count = 1;
-                                ?>
-                            <?php foreach ($get_student_damage_accessories as $damage_accessories) : ?>
-                            <tr>
-                                <td><?php echo $count++ ?>.</td>
-                                <td><?php echo $damage_accessories['keyboard_damaged'] ?></td>
-                                <td><?php echo $damage_accessories['mouse_damaged'] ?></td>
-                                <td><?= (new DateTime($damage_accessories['created_at']))->format('d M Y') ?></td>
-                            </tr>
-                            <?php endforeach; ?>
-                            <?php else : ?>
-                            <tr>
-                                <td colspan="4">No damage accessories assigned to this student.</td>
-                            </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+                    <!--start students all tables-->
+                    <div class="table-all">
+                        <!--start students monthly fees table-->
+                        <div class="table-qualification">
+                            <label>Monthly Fees details</label>
+                            <div id="table-scroll" class="table-scroll first-table">
+                                <table id="main-table" class="main-table">
+                                    <thead>
+                                        <tr class="sticky">
+                                            <th>Sr.No.</th>
+                                            <th>Name Of Month</th>
+                                            <th>Payment Type</th>
+                                            <th class="small">Total Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="scroll">
+                                        <?php if ($get_student_detail): ?>
+                                            <?php
+                                            $count = 1;
+                                            $totalFees = $get_student_detail['total_fees'];
+                                            $paidFees = 0;
+                                            $currentDate = new \DateTime($start_date);
+                                            $endDate = new \DateTime($end_date);
+                                            ?>
+                                            <?php while ($currentDate < $endDate): ?>
+                                                <?php
+                                                $monthlyFees = 0;
+                                                //sum all payments for the current month
+                                                foreach ($get_student_detail['student_fees_detail'] as $fee) {
+                                                    $submissionDate = new \DateTime($fee['submission_date']);
+                                                    if ($submissionDate->format('m-Y') == $currentDate->format('m-Y')) {
+                                                        $monthlyFees += $fee['user_fees'];
+                                                        $paidFees += $fee['user_fees'];
+                                                    }
+                                                }
+                                                ?>
+                                                <tr>
+                                                    <td><?php echo $count++ ?>.</td>
+                                                    <td><?php echo $currentDate->format('M Y') ?></td>
+                                                    <td>
+                                                        <?php
+                                                        $feePaidForMonth = false;
+                                                        foreach ($get_student_detail['student_fees_detail'] as $fee):
+                                                            $submissionDate = new \DateTime($fee['submission_date']);
+                                                            //Check if the current month's fee exists
+                                                            if ($submissionDate->format('m-Y') === $currentDate->format('m-Y')):
+                                                                $feePaidForMonth = true;
+                                                                ?>
+                                                                <span class="total-paid-payment">
+                                                                    <em>(<?php echo $fee['user_fees']; ?> /
+                                                                        <?php echo $fee['payment_type']; ?>)</em>
+                                                                    <button class="btn btn-primary btn-sm edit-btn"
+                                                                        data-fee-id="<?php echo $fee['id']; ?>"
+                                                                        data-fee-month="<?php echo $fee['submission_date']; ?>">
+                                                                        <img src="<?php echo url('public/admin/images/edite-icon.svg'); ?>"
+                                                                            alt="Edit Icon">
+                                                                    </button>
+                                                                </span><br>
+                                                                <?php
+                                                            endif;
+                                                        endforeach;
+                                                        //If no fee is paid for the current month
+                                                        if (!$feePaidForMonth):
+                                                            ?>
+                                                            -
+                                                        <?php endif; ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php if (count($get_student_detail['student_fees_detail']) > 0): ?>
+                                                            <?php if ($monthlyFees > 0): ?>
+                                                                <?php echo number_format($monthlyFees, 0); ?>
+                                                            <?php else: ?>
+                                                                -
+                                                            <?php endif; ?>
+                                                        <?php else: ?>
+                                                            <!--If no fee records exist-->
+                                                            -
+                                                        <?php endif; ?>
+                                                    </td>
+                                                </tr>
+                                                <?php
+                                                $currentDate->modify('+1 month');
+                                                ?>
+                                            <?php endwhile; ?>
+                                        <?php endif; ?>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="tfooter">
+                                            <td class="space" colspan="3"><span style="color: black;">Total Fees:</span></td>
+                                            <td><strong><?php echo 'Rs.' . number_format($totalFees, 0) ?></strong></td>
+                                        </tr>
+                                        <tr class="tfooter">
+                                            <td class="space" colspan="3"><span style="color: green;">Total Paid Fees:</span>
+                                            </td>
+                                            <td><strong style="color: green;"><?php echo 'Rs. ' . number_format($paidFees, 0) ?></strong>
+                                            </td>
+                                        </tr>
+                                        <tr class="tfooter">
+                                            <td class="space" colspan="3"><span style="color: red;">Remaining Fees:</span></td>
+                                            <td><strong
+                                                    style="color: red;"><?php echo 'Rs. ' . number_format($totalFees - $paidFees, 0) ?></strong>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <!--end students monthly fees table-->
+                        <!--start student assign accessoriess table-->
+                        <?php if ($get_student_detail['student_assign_accessories']->count() > 0): ?>
+                            <div class="table-qualification">
+                                <label>Assign Accessories details</label>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Sr.No.</th>
+                                            <th>Keyboard</th>
+                                            <th>Mouse</th>
+                                            <th>Assign Accessories Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php if ($get_student_detail && !empty($get_student_detail['student_assign_accessories'])): ?>
+                                            <?php
+                                            $count = 1;
+                                            ?>
+                                            <?php foreach ($get_student_detail['student_assign_accessories'] as $accessories): ?>
+                                                <tr>
+                                                    <td><?php echo $count++ ?>.</td>
+                                                    <td><?php echo $accessories['keyboard_assigned'] ?></td>
+                                                    <td><?php echo $accessories['mouse_assigned'] ?></td>
+                                                    <td><?= (new DateTime($accessories['created_at']))->format('d M Y') ?>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <tr>
+                                                <td colspan="4">No accessories assigned to this student.</td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
+                        <!--end student assign accessoriess table-->
+                        <!--start student damage accessoriess table-->
+                        <?php if ($get_student_damage_accessories->count() > 0): ?>
+                            <div class="table-qualification">
+                                <label>Damage Accessories details</label>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Sr.No.</th>
+                                            <th>Keyboard</th>
+                                            <th>Mouse</th>
+                                            <th>Damage Accessories Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php if ($get_student_damage_accessories): ?>
+                                            <?php
+                                            $count = 1;
+                                            ?>
+                                            <?php foreach ($get_student_damage_accessories as $damage_accessories): ?>
+                                                <tr>
+                                                    <td><?php echo $count++ ?>.</td>
+                                                    <td><?php echo $damage_accessories['keyboard_damaged'] ?></td>
+                                                    <td><?php echo $damage_accessories['mouse_damaged'] ?></td>
+                                                    <td><?= (new DateTime($damage_accessories['created_at']))->format('d M Y') ?>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <tr>
+                                                <td colspan="4">No damage accessories assigned to this student.
+                                                </td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
+                        <!--end student damage accessoriess table-->
                     </div>
-                    <?php endif; ?>
-                    <!--end student damage accessoriess table-->
+                    <!--end students all tables-->
                 </div>
-                <!--end students all tables-->
             </div>
-        </div>
         </div>
         <!--start student edit pay fees model-->
         <div class="modal fade pay-modals" id="editFeeModal" role="dialog">
-          <div class="modal-dialog">
-            <div class="modal-content edit-pay">
-            <div class="modal-header-damage">
-            <h4 class="modal-title">pay fees</h4>
-               <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-               <div class="modal-body">
-                <form id="editFeeForm" method="POST">
-                    <input type="hidden" id="fee_id" name="fee_id">
-                    <input type="hidden" id="fee_month" name="fee_month">
-                    <div class="form-group">
-                        <label for="user_fees">Fees Amount</label>
-                        <input type="text" id="user_fees" name="user_fees" class="form-control" required > 
+            <div class="modal-dialog">
+                <div class="modal-content edit-pay">
+                    <div class="modal-header-damage">
+                        <h4 class="modal-title">pay fees</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
-                    <div class="user_fee_responce"></div>
-                    <select name="payment_type" id="payment_type">
-                        <option value="">Payment Type</option>
-                        <option value="online">Online</option>
-                        <option value="cash">Cash</option>
-                    </select>
-                    <div class="button-save is_update_student_fees"><button type="submit" class="disable-submit">Update</button></div>
-                    <div class="loader com_ajax_loader" style="display:none;">
-                        <img src="<?php echo url('public/admin/images/200w.gif'); ?>">
+                    <div class="modal-body">
+                        <form id="editFeeForm" method="POST">
+                            <input type="hidden" id="fee_id" name="fee_id">
+                            <input type="hidden" id="fee_month" name="fee_month">
+                            <div class="form-group">
+                                <label for="user_fees">Fees Amount</label>
+                                <input type="text" id="user_fees" name="user_fees" class="form-control" required>
+                            </div>
+                            <div class="user_fee_responce"></div>
+                            <select name="payment_type" id="payment_type">
+                                <option value="">Payment Type</option>
+                                <option value="online">Online</option>
+                                <option value="cash">Cash</option>
+                            </select>
+                            <div class="button-save is_update_student_fees"><button type="submit"
+                                    class="disable-submit">Update</button></div>
+                            <div class="loader com_ajax_loader" style="display:none;">
+                                <img src="<?php echo url('public/admin/images/200w.gif'); ?>">
+                            </div>
+                        </form>
+                        <div class="student_update_fee_responce"></div>
                     </div>
-                    </form>
-                    <div class="student_update_fee_responce"></div>
-               </div>
+                </div>
             </div>
-          </div>
         </div>
-      <!--end student edit pay fees model-->
+        <!--end student edit pay fees model-->
         </div>
         </div>
         <script>
-        $(document).ready(function() {
-            $('#user_fees').on('input', function() {
-                this.value = this.value.replace(/\D/g, '');
+            $(document).ready(function () {
+                $('#user_fees').on('input', function () {
+                    this.value = this.value.replace(/\D/g, '');
+                });
             });
-        });
         </script>
         <?php
     }
-
     //Function for update student fees
-    public function update_student_feess(Request $request){
+    public function update_student_feess(Request $request) {
         //Get ajax request
         $fee_id = $request->input('fee_id');
         $fee_month = $request->input('fee_month');
         //Update record
         $is_update_student_fees = StudentFees::where('id', $fee_id)->where('submission_date', $fee_month)->update([
-            'user_fees' =>$request->user_fees,  
-            'payment_type' =>$request->payment_type,  
+            'user_fees' => $request->user_fees,
+            'payment_type' => $request->payment_type,
         ]);
 
         //Check if student submit fees updatd or not
-        if($is_update_student_fees) {
+        if ($is_update_student_fees) {
             echo '<p style="color:green;">Student fees updated successfully.</p>';
             echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
         } else {
             echo '<p style="color:red;">Opps something went wrong.</p>';
-        }  
+        }
     }
 
     //Function for edit single student fees
-    public function edit_student_fees($id){
+    public function edit_student_fees($id) {
         $student_fees_detail = StudentFees::find($id);
-            return view('admin.students.edit-student-fees', compact('student_fees_detail'));
+        return view('admin.students.edit-student-fees', compact('student_fees_detail'));
     }
 
     // //Function for update student fees
@@ -654,7 +687,7 @@ class StudentController extends Controller
             echo '<p style="color:red;">Failed to create student assign accessories.</p>';
         }
     }
-     
+
     //Function for student edit assign accessories
     // public function edit_student_assign_accessories($id) {
     //     $student_accessories_detail = StudentAssignAccessories::find($id);
@@ -698,8 +731,8 @@ class StudentController extends Controller
         $courseType = $request->segment(count($request->segments()));
 
         //Get search student detail
-        $get_students_detail = User::where('user_type', 'Student')->where('user_status', 'Active')->where('course_type', $courseType)->orderBy('id', 'DESC')->with('student_fees_detail')->get();                                   
-        return view('admin.students.search-students-list', compact('get_students_detail','all_students_total_fees','all_students_paid_fees'));
+        $get_students_detail = User::where('user_type', 'Student')->where('user_status', 'Active')->where('course_type', $courseType)->orderBy('id', 'DESC')->with('student_fees_detail')->get();
+        return view('admin.students.search-students-list', compact('get_students_detail', 'all_students_total_fees', 'all_students_paid_fees'));
     }
 
     //Function for search stundet fees accor status
@@ -707,25 +740,25 @@ class StudentController extends Controller
         //Get the current month and year
         $currentMonth = Carbon::now()->month;
         $currentYear = Carbon::now()->year;
-        
+
         //Get all students total fees and all paid fees
         $all_students_total_fees = User::where('user_status', 'Active')->sum('total_fees');
         $all_students_paid_fees = StudentFees::where('user_status', 'Active')->sum('user_fees');
-        
+
         //Get the last segment from the URL
         $fees_status = $request->segment(count($request->segments()));
-        
+
         //Calculate the dates for pending and overdue statuses
         $pendingStartDate = Carbon::now()->subDays(44)->format('Y-m-d');
         $pendingEndDate = Carbon::now()->subDays(32)->format('Y-m-d');
         $overdueDate = Carbon::now()->subDays(45)->format('Y-m-d');
-        
+
         //Get Current month Paid student list
         $get_paid_students = StudentFees::where('user_status', 'Active')
             ->whereMonth('submission_date', $currentMonth)
             ->whereYear('submission_date', $currentYear)
             ->get();
-        
+
         //Get Students id in array
         $student_ids = [];
         foreach ($get_paid_students as $student_fees_status) {
@@ -733,7 +766,7 @@ class StudentController extends Controller
                 $student_ids[] = $student_fees_status->student_current_fees_detail->id;
             }
         }
-        
+
         //Check if student is Paid
         if ($fees_status == 'Paid') {
             $get_students_list = User::where('user_type', 'Student')
@@ -742,7 +775,7 @@ class StudentController extends Controller
                 ->with('student_fees_detail')
                 ->get();
         }
-        
+
         //Check if student is Pending
         if ($fees_status == 'Pending') {
             $get_students_list = User::where('user_type', 'Student')
@@ -752,10 +785,10 @@ class StudentController extends Controller
                     $query->whereHas('student_fees_detail', function ($query) use ($pendingStartDate, $pendingEndDate) {
                         $query->whereBetween('submission_date', [$pendingStartDate, $pendingEndDate]);
                     })
-                    ->orWhereDoesntHave('student_fees_detail');
+                        ->orWhereDoesntHave('student_fees_detail');
                 })
                 ->with('student_fees_detail')
-                ->get();            
+                ->get();
             //Check if any student not paid fees
             $get_students_list->each(function ($student) {
                 $student->status = 'Pending';
@@ -770,7 +803,7 @@ class StudentController extends Controller
                 ->whereDoesntHave('student_fees_detail', function ($query) use ($overdueDate) {
                     $query->where('submission_date', '>=', $overdueDate);
                 })
-                ->where(function($query) use ($pendingStartDate) {
+                ->where(function ($query) use ($pendingStartDate) {
                     $query->whereHas('student_fees_detail', function ($query) use ($pendingStartDate) {
                         $query->where('submission_date', '<', $pendingStartDate);
                     });
@@ -778,7 +811,7 @@ class StudentController extends Controller
                 ->with('student_fees_detail')
                 ->get();
         }
-        
+
         return view('admin.students.search-students-fees-list', compact('get_students_list', 'all_students_total_fees', 'all_students_paid_fees'));
     }
 
@@ -793,12 +826,12 @@ class StudentController extends Controller
             'user_id' => $student_id,
         ]);
         //Check if student record is trash or not
-        if($trash) {
+        if ($trash) {
             User::where('id', $student_id)->update([
-                'user_status' =>$request->status,
+                'user_status' => $request->status,
             ]);
             StudentFees::where('user_id', $student_id)->update([
-                'user_status' =>$request->status,
+                'user_status' => $request->status,
             ]);
             echo '<p style="color:green;">Student record trashed successfully.</p>';
             echo '<script> setTimeout(function () { window.location.reload(); }, 3000); </script>';
@@ -810,11 +843,11 @@ class StudentController extends Controller
     //Function for delete student
     public function delete_student(Request $request) {
         //Get student id through ajax
-        $id = $request->id;  
+        $id = $request->id;
         $delete_student = User::find($id)->delete();
 
         //Check if student deleted or not
-        if($delete_student){
+        if ($delete_student) {
             Trash::where('user_id', $id)->delete();
             StudentFees::where('user_id', $id)->delete();
             StudentAssignAccessories::where('user_id', $id)->delete();
@@ -822,34 +855,34 @@ class StudentController extends Controller
             EmployeeAssignAccessories::where('employee_id', $id)->delete();
             EmployeeDamageAccessories::where('employee_id', $id)->delete();
             return back()->with('success', 'Student record deleted successfully.');
-         } else {
+        } else {
             return back()->with('unsuccess', 'Opps something went wrong.');
         }
     }
-    
+
     //Function for get all trash students list
     public function all_trash_students_list() {
-       //Get current month
-       $currentMonth = Carbon::now()->month;
-       $get_students_detail = User::where('user_type', 'Student')->whereIn('user_status', ['Completed', 'Leave'])->orderBy('id', 'DESC')->with('student_fees_detail')->get();
-       //Get all students total fees and all paid fees
-       $all_students_total_fees = User::sum('total_fees');
-       $all_students_paid_fees = StudentFees::sum('user_fees');  
-           return view('admin.students.all-students-trash-list', compact('get_students_detail','all_students_total_fees','all_students_paid_fees'));
+        //Get current month
+        $currentMonth = Carbon::now()->month;
+        $get_students_detail = User::where('user_type', 'Student')->whereIn('user_status', ['Completed', 'Leave'])->orderBy('id', 'DESC')->with('student_fees_detail')->get();
+        //Get all students total fees and all paid fees
+        $all_students_total_fees = User::sum('total_fees');
+        $all_students_paid_fees = StudentFees::sum('user_fees');
+        return view('admin.students.all-students-trash-list', compact('get_students_detail', 'all_students_total_fees', 'all_students_paid_fees'));
     }
 
     //Function for showing all stocks list
     public function all_stocks_list() {
-        $all_stocks_list = Stock::orderBy('ID', 'DESC')->get();     
+        $all_stocks_list = Stock::orderBy('ID', 'DESC')->get();
         //Calculate total damaged keyboards and mouse
         $total_keyboard_damaged = StudentDamageAccessories::sum('keyboard_damage') + EmployeeDamageAccessories::sum('keyboard_damage');
         $total_mouse_damaged = StudentDamageAccessories::sum('mouse_damage') + EmployeeDamageAccessories::sum('mouse_damage');
 
-        return view('admin.stocks.all-stocks-list', compact('all_stocks_list','total_keyboard_damaged','total_mouse_damaged'));
+        return view('admin.stocks.all-stocks-list', compact('all_stocks_list', 'total_keyboard_damaged', 'total_mouse_damaged'));
     }
 
     //Function for add new stock
-    public function add_new_stock() {
+    public function add_new_stock(){
         return view('admin.stocks.add-new-stock');
     }
 
@@ -857,12 +890,12 @@ class StudentController extends Controller
     // public function submit_stock(Request $request) {
     //     // Fetch stock record
     //     $stock = Stock::first();
-    
+
     //     if ($stock) {
     //         // Calculate total assigned keyboards and mice
     //         $totalKeyboardAssigned = StudentAssignAccessories::sum('keyboard_assigned');
     //         $totalMouseAssigned = StudentAssignAccessories::sum('mouse_assigned');
-    
+
     //         // Check conditions for stock availability
     //         if ($totalKeyboardAssigned <= $stock->total_keyboard_stock && $totalMouseAssigned <= $stock->total_mouse_stock) {
     //             // Update existing stock
@@ -871,7 +904,7 @@ class StudentController extends Controller
     //             $stock->assign_keyboard = $totalKeyboardAssigned;
     //             $stock->assign_mouse = $totalMouseAssigned;
     //             $stock->save();
-    
+
     //             return back()->with('success', 'Stocks updated successfully.');
     //         } else {
     //             return back()->with('unsuccess', 'Stock not available.');
@@ -880,7 +913,7 @@ class StudentController extends Controller
     //         // Calculate total assigned keyboards and mouse
     //         $totalKeyboardAssigned = StudentAssignAccessories::sum('keyboard_assigned');
     //         $totalMouseAssigned = StudentAssignAccessories::sum('mouse_assigned');
-    
+
     //         // Create new stock record
     //         $newStock = Stock::create([
     //             'total_keyboard_stock' => $request->total_keyboard_stock,
@@ -888,16 +921,16 @@ class StudentController extends Controller
     //             'assign_keyboard' => $totalKeyboardAssigned,
     //             'assign_mouse' => $totalMouseAssigned,
     //         ]);
-    
+
     //         return back()->with('success', 'Stocks created successfully.');
     //     }
     // }
 
     //Function for student damage accessories
-    public function submit_student_damage_accessories(Request $request) {
+    public function submit_student_damage_accessories(Request $request)  {
         //Create student damage accessories
         $is_create_student_damage_acessories = StudentDamageAccessories::create([
-            'user_id' => $request->student_id, 
+            'user_id' => $request->student_id,
             'keyboard_damage' => $request->keyboard_damage,
             'mouse_damage' => $request->mouse_damage,
             'remark' => $request->remark,
@@ -910,7 +943,7 @@ class StudentController extends Controller
         } else {
             echo '<p style="color:red;">Opps something went wrong.</p>';
         }
-    }    
+    }
 }
 
 
