@@ -20,25 +20,18 @@ class StudentController extends Controller
 {
     //Function for Get all students list
     public function all_students() {
-        //Get the start and end dates for the current month
-        $startOfMonth = Carbon::now()->startOfMonth();
-        $endOfMonth = Carbon::now()->endOfMonth();
-
         //Get students details
         $get_students_detail = User::where('user_type', 'Student')->where('user_status', 'Active')->orderBy('id', 'DESC')->with('student_fees_detail')->get();
        
-        //Get all students total fees and all paid fees 
-        $all_students_total_fees = User::where('user_status', 'Active')->sum('total_fees');
-        $all_students_paid_fees = StudentFees::where('user_status', 'Active')->sum('user_fees');
-        
-        //Get total current month paid fees
-        $current_month_paid_fees = StudentFees::where('user_status', 'Active')->whereBetween('submission_date', [$startOfMonth, $endOfMonth])->sum('user_fees');
+        //Get total students list acc to course  
+        $is_total_students = User::where('user_status', 'Active')->where('user_type', 'Student')->count();
+        $is_web_designing_students = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Web Designing')->count();
+        $is_web_development_students = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Web Development')->count();
+        $is_full_stack_development = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Full Stack Development')->count();
+        $is_php = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Php Development')->count();
+        $is_graphic = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Graphic')->count();
 
-        //Get payment types online or cash
-        $payment_type_online = StudentFees::where('user_status', 'Active')->where('payment_type','online')->whereBetween('submission_date', [$startOfMonth, $endOfMonth])->sum('user_fees');
-        $payment_type_cash = StudentFees::where('user_status', 'Active')->where('payment_type','cash')->whereBetween('submission_date', [$startOfMonth, $endOfMonth])->sum('user_fees');
-
-        return view('admin.students.all-students-list', compact('get_students_detail', 'all_students_total_fees', 'all_students_paid_fees','current_month_paid_fees','payment_type_online','payment_type_cash'));
+        return view('admin.students.all-students-list', compact('get_students_detail', 'is_total_students', 'is_web_designing_students','is_web_development_students','is_full_stack_development','is_php','is_graphic'));
     }
 
     //Function for add new student

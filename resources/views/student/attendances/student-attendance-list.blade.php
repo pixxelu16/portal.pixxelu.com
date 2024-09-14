@@ -16,7 +16,7 @@
       <h2>Attendance Listing</h2>
    </div>
    <!--start four boxes studens fees-->
-   <div class="boxes-wrapper">
+   <div class="boxes-wrapper-student-attendance">
       <div class="box">
          <h3>Working Hours</h3>
          <p>{{ number_format($totalPresentHours, 2) }} Hrs</p>
@@ -179,8 +179,7 @@
                      @elseif ($attendance->attendance_status == 'half_day')
                      <img src="{{ url('public/admin/images/half_day_leave.svg') }}" alt="Half Day">
                      @endif
-                     @else ($attendance->attendance_status == 'absent')
-                     <img src="{{ url('public/admin/images/absent_icon.svg') }}" alt="Absent">
+                     @else 
                      @endif
                      @endif
                   </td>
