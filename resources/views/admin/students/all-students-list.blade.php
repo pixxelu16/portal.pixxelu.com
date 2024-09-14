@@ -11,35 +11,34 @@
       <p>{{ Session::get('unsuccess') }}</p>
    </div>
    @endif
-    <!--start four boxes studens fees-->
-    <div class="boxes-wrapper">
+   <!--start six boxes students information-->
+   <div class="boxes-wrapperers">
       <div class="box">
-         <h3>Total Fees</h3>
-         <p>Rs {{ number_format($all_students_total_fees) }}</p>
+         <h3>Total Students</h3>
+         <p>{{ $is_total_students }}</p>
       </div>
       <div class="box">
-         <h3><span style="color: green;">Paid Fees</span></h3>
-         <p>Rs {{ number_format($all_students_paid_fees) }}</p>
+         <h3>Web Designing</h3>
+         <p>{{ $is_web_designing_students }}</p>
       </div>
       <div class="box">
-         <h3><span style="color: red;">Pending Fees</span></h3>
-         <!--calculate pending fees-->
-         @php
-         $all_students_pending_fees = $all_students_total_fees - $all_students_paid_fees;
-         @endphp 
-         <p>Rs {{ number_format($all_students_pending_fees,  0, '.', ',') }}</p>
+         <h3>Web Development</h3>
+         <p>{{ $is_web_development_students }}</p>
       </div>
       <div class="box">
-         <!--paid monthly fees-->
-         <h3><span style="color: green;">Paid Fees This Month</span></h3>
-         <p>Rs {{  number_format($current_month_paid_fees,  0, '.', ',') }}</p>
-         <div class="p-flex">
-            <p><strong style="color: green;">Online:-</strong> Rs {{ number_format($payment_type_online,  0, '.', ',') }}</p>
-            <p><strong style="color: green;">Cash:-</strong> Rs {{ number_format($payment_type_cash,  0, '.', ',') }}</p>
-         </div>
+         <h3>Php Development</h3>
+         <p>{{ $is_php }}</p>
+      </div>
+      <div class="box">
+         <h3>Full Stack Development</h3>
+         <p>{{ $is_full_stack_development }}</p>
+      </div>
+      <div class="box">
+         <h3>Graphic</h3>
+         <p>{{ $is_graphic }}</p>
       </div>
    </div>
-   <!--end four boxes studens fees-->
+   <!--end six boxes students information-->
    <h2>All Students Listing</h2>
 </div>
 <div class="main-table">

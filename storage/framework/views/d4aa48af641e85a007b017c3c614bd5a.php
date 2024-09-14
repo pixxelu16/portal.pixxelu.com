@@ -181,8 +181,7 @@
                      <?php elseif($attendance->attendance_status == 'half_day'): ?>
                      <img src="<?php echo e(url('public/admin/images/half_day_leave.svg')); ?>" alt="Half Day">
                      <?php endif; ?>
-                     <?php else: ?>
-                     <img src="<?php echo e(url('public/admin/images/absent_icon.svg')); ?>" alt="Absent">
+                     <?php else: ?> 
                      <?php endif; ?>
                      <?php endif; ?>
                   </td>
