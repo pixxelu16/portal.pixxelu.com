@@ -3449,6 +3449,25 @@ td.ligth-green-color span {
     padding: 3px 10px;
 }
 
+.boxes-wrapper-student-attendance {
+    display: flex;
+    gap: 5px;
+    height: 100%;
+    width: 100%;
+}
+
+.boxes-wrapper-student-attendance .box {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+    min-height: 120px;
+    width: 132px;
+}
+
 /*end student attendances css*/
 
 
