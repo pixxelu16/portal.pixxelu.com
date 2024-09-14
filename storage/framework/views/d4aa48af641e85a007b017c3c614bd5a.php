@@ -12,37 +12,38 @@
    </div>
    <?php endif; ?>
    <div class ="search-header">
-      <h2>Attendance Listing</h2>
+      <h2>Attendance Listing</h2>  
    </div>
    <!--start four boxes studens fees-->
-   <div class="boxes-wrapper">
-      <div class="box">
+   <div class="boxes-wrapper-student-attendance">
+      <div class="box"> 
+      <img src="<?php echo e(url('public/admin/images/working_hours.svg')); ?>" alt="Working Hours">
          <h3>Working Hours</h3>
-         <p><?php echo e(number_format($totalPresentHours, 2)); ?> Hrs</p>
+         <p><?php echo e(number_format($total_present_hours, 2)); ?> Hrs</p>
       </div>
       <div class="box">
    
          <img src="<?php echo e(url('public/admin/images/present_icon.svg')); ?>" alt="Present">
          <h3>Presents</h3>
-         <p><?php echo e($totalPresentDays); ?></p>
+         <p><?php echo e($total_present_days); ?></p>
       </div>
       <div class="box">
          <img src="<?php echo e(url('public/admin/images/absent_icon.svg')); ?>" alt="Absent">
          <h3>Absent</h3>
-         <p><?php echo e($totalAbsentDays); ?></p>
+         <p><?php echo e($total_absent_days); ?></p>
       </div>
       <div class="box"> 
       <img src="<?php echo e(url('public/admin/images/leave_icon.svg')); ?>" alt="Leave">
       <h3>Leave</h3>
-         <p><?php echo e($totalLeaveDays); ?></p>
+         <p><?php echo e($total_leave_days); ?></p>
       </div>
       <div class="box">
         <img src="<?php echo e(url('public/admin/images/half_day_leave.svg')); ?>" alt="Half Day">
-         <p><?php echo e($totalHalfDay); ?></p>
+         <p><?php echo e($total_half_day); ?></p>
       </div>
       <div class="box">
         <img src="<?php echo e(url('public/admin/images/holiday.svg')); ?>" alt="Holidays">
-         <p><?php echo e($totalHolidays); ?></p>
+         <p><?php echo e($total_holidays); ?></p>
       </div>
       <div class="box">
          <img src="<?php echo e(url('public/admin/images/total_days_in_month.svg')); ?>" alt="daysInMonth">
