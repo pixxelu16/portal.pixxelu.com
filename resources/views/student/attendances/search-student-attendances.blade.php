@@ -16,35 +16,63 @@
       <h2>Search Attendances</h2>
    </div>
    <!--start four boxes studens fees-->
-   <div class="boxes-wrapper">
+   <div class="boxes-wrapper-student-attendance">
+   <div class="box-1">
       <div class="box">
+         <img src="{{ url('public/admin/images/working_hours.svg') }}" alt="Working Hours">
          <h3>Working Hours</h3>
-         <p>{{ number_format($totalPresentHours, 2) }} Hrs</p>
+         <p>{{ number_format($total_present_hours, 2) }} Hrs</p>
       </div>
+	  </div>
+   <div class="box-1">
       <div class="box">
-         <h3>Present</h3>
-         <p>{{ $totalPresentDays }}</p>
+   
+       <img src="{{ url('public/admin/images/present_icon.svg') }}" alt="Present">
+         <h3>Presents</h3>
+         <p>{{ $total_present_days }}</p>
       </div>
+	  </div>
+	     <div class="box-1">
+
       <div class="box">
-         <h3><span style="color: green;">Absent</span></h3>
-         <p>{{ $totalAbsentDays }}</p>
+          <img src="{{ url('public/admin/images/absent_icon.svg') }}" alt="Absent">
+         <h3>Absent</h3>
+         <p>{{ $total_absent_days }}</p>
       </div>
-      <div class="box">
-         <h3><span style="color: green;">Leave</span></h3>
-         <p>{{ $totalLeaveDays }}</p>
+	  </div>
+	  
+	     <div class="box-1">
+
+      <div class="box"> 
+      <img src="{{ url('public/admin/images/leave_icon.svg') }}" alt="Leave">
+      <h3>Leave</h3>
+         <p>{{ $total_leave_days }}</p>
       </div>
+	  </div>
+	     <div class="box-1">
+
       <div class="box">
-         <h3><span style="color: green;">Half Day </span></h3>
-         <p>{{ $totalHalfDay }}</p>
+	   <h3>Half Day</h3>
+        <img src="{{ url('public/admin/images/half_day_leave.svg') }}" alt="Half Day">
+         <p>{{ $total_half_day }}</p>
       </div>
+	  </div>
+	     <div class="box-1">
+
       <div class="box">
-         <h3><span style="color: green;">Holidays</span></h3>
-         <p>{{ $totalHolidays }}</p>
+	     <h3>Holidays</h3>
+          <img src="{{ url('public/admin/images/holiday.svg') }}" alt="Holidays">
+         <p>{{ $total_holidays }}</p>
       </div>
+	  </div>
+	     <div class="box-1">
+
       <div class="box">
-         <h3><span style="color: green;">Total Days in Month</span></h3>
+	    <h3>Days in month</h3>
+         <img src="{{ url('public/admin/images/total_days_in_month.svg') }}" alt="daysInMonth">
          <p>{{ $daysInMonth }}</p>
       </div>
+   </div>
    </div>
    <!--end four boxes studens fees-->
 </div>
