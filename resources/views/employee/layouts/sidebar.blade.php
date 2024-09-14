@@ -12,6 +12,12 @@
             <span class="link-name">Dashboard</span>
             </a>
          </li>
+         <li class="{{ request()->is('employee/employee-attendance-list') ? 'active' : '' }}">
+            <a href="{{ url('employee/employee-attendance-list') }}">
+               <img src="{{ url('public/admin/images/attendance.svg') }}" alt="attendance" />
+               <span class="link-name">Attendance</span>
+            </a>
+         </li>
          <!-- <li class="{{ request()->is('employee/attendance') ? 'active' : '' }}">
             <a href="aatendance.html">
                <img src="{{ url('public/admin/images/attendance.svg') }}" alt="attendance" />

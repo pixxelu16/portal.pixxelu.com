@@ -17,27 +17,25 @@
 <div class="main-table">
    <div class="data-table-listing">
       <div class="btn-pixxelu">
-       <!-- Filter by Inquiry Status -->
-<select name="inquery_status" id="search_inquery_status_list" class="search-student-list">
-    <option value="" disabled selected>Select Inquiry Status</option>
-    <option value="Active">Active</option>
-    <option value="Office_Visited">Office Visited</option>
-    <option value="Closed">Closed</option>
-    <option value="Converted">Converted</option>
-</select>
-
-<!-- Filter by Course Type -->
-<select name="course_type" id="search_inquery_course_type_list" class="search-student-list">
-    <option value="" disabled selected>Select Course Type</option>
-    <option value="PHP Development">PHP Development</option> 
-    <option value="Web Development">Web Development</option>
-    <option value="Digital Marketing">Digital Marketing</option>
-    <option value="Web Designing">Web Designing</option>
-    <option value="Graphic Designing">Graphic Designing</option>
-    <option value="Full Stack Development">Full Stack Development</option>
-</select>
-
-
+         <!-- Filter by Inquiry Status -->
+         <select name="inquery_status" id="search_inquery_status_list" class="search-student-list">
+            <option value="" disabled selected>Select Inquiry Status</option>
+            <option value="Active">Active</option>
+            <option value="Office_Visited">Office Visited</option>
+            <option value="Closed">Closed</option>
+            <option value="Converted">Converted</option>
+         </select>
+         <!-- Filter by Course Type -->
+         <select name="course_type" id="search_inquery_course_type_list" class="search-student-list">
+            <option value="" disabled selected>Select Course Type</option>
+            <option value="PHP Development">PHP Development</option>
+            <option value="Web Development">Web Development</option>
+            <option value="Digital Marketing">Digital Marketing</option>
+            <option value="Web Designing">Web Designing</option>
+            <option value="Graphic Designing">Graphic Designing</option>
+            <option value="Full Stack Development">Full Stack Development</option>
+         </select>
+         <a href="{{ url('admin/export-inqueries') }}" class="export"><img src="{{ url('public/admin/images/csv-file.svg') }}"></a>
          <a href="{{ url('admin/all-converted-inqueries-list') }}">All Converted Inqueries</a>
          <a href="{{ url('admin/add-new-inquery') }}"><img src="{{ url('public/admin/images/pluse.svg') }}">Add New Inquery</a>
       </div>
@@ -92,7 +90,6 @@
                   @else
                   <td>-</td>
                   @endif
-
                   @if($list->status == 'Active') 
                   <td class="green-color"><span>Active</span></td>
                   @elseif($list->status == 'Office_Visited') 

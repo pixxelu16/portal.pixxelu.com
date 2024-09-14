@@ -2,18 +2,18 @@
 <!--=== Coding by CodingLab | www.codinglabweb.com === -->
 <html lang="en">
    <head>
-      <meta name="csrf-token" content="{{ csrf_token() }}">
+      <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <!----======== CSS ======== -->
-      <link rel="stylesheet" href="{{ url('public/admin/css/style.css') }}">
-      <link rel="stylesheet" href="{{ url('public/admin/css/styles.css') }}">
-      <link rel="stylesheet" href="{{ url('public/admin/css/dark-mode.css') }}">
-      <link rel="stylesheet" href="{{ url('public/admin/css/mobile.css') }}">
-      <link rel="stylesheet" href="{{ url('public/admin/css/bootstrap.min.css') }}">
-      <link rel="stylesheet" href="{{ url('public/admin/css/table-custom.css') }}">
-      <link rel="icon" href="{{ url('public/Group-23.svg') }}" type="image/x-icon">
+      <link rel="stylesheet" href="<?php echo e(url('public/admin/css/style.css')); ?>">
+      <link rel="stylesheet" href="<?php echo e(url('public/admin/css/styles.css')); ?>">
+      <link rel="stylesheet" href="<?php echo e(url('public/admin/css/dark-mode.css')); ?>">
+      <link rel="stylesheet" href="<?php echo e(url('public/admin/css/mobile.css')); ?>">
+      <link rel="stylesheet" href="<?php echo e(url('public/admin/css/bootstrap.min.css')); ?>">
+      <link rel="stylesheet" href="<?php echo e(url('public/admin/css/table-custom.css')); ?>">
+      <link rel="icon" href="<?php echo e(url('public/Group-23.svg')); ?>" type="image/x-icon">
       <!-- SweetAlert2 CSS -->
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
       <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
@@ -34,10 +34,10 @@
       <title>Pixxelu Employee Portal</title>
    </head>
    <body>
-      @include('employee.layouts.sidebar')
+      <?php echo $__env->make('employee.layouts.sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
       <section class="dashboard">
-         @include('employee.layouts.top-bar')
-         @yield('content')
+         <?php echo $__env->make('employee.layouts.top-bar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+         <?php echo $__env->yieldContent('content'); ?>
          <div class="footer-code">
             <div class="copyright-code">
                <span>© 2014-2024 Pixxelu. All rights reserved</span>
@@ -45,14 +45,14 @@
          </div>
       </section>
       <script>
-         var base_url = '{{ url("/") }}'; 
+         var base_url = '<?php echo e(url("/")); ?>'; 
       </script>  
-      <script src="{{ url('public/admin/js/employee-custom-ajax.js') }}"></script>  
-      <script src="{{ url('public/admin/js/custom-ajax.js') }}"></script>
-      <script src="{{ url('public/admin/js/script.js') }}"></script>
-      <script src="{{ url('public/admin/js/custom-script.js') }}"></script>
-      <script src="{{ url('public/admin/js/bootstrap.min.js') }}"></script>
-      <script src="{{ url('public/admin/js/bootstrap.bundle.min.js') }}"></script>
+      <script src="<?php echo e(url('public/admin/js/employee-custom-ajax.js')); ?>"></script>  
+      <script src="<?php echo e(url('public/admin/js/custom-ajax.js')); ?>"></script>
+      <script src="<?php echo e(url('public/admin/js/script.js')); ?>"></script>
+      <script src="<?php echo e(url('public/admin/js/custom-script.js')); ?>"></script>
+      <script src="<?php echo e(url('public/admin/js/bootstrap.min.js')); ?>"></script>
+      <script src="<?php echo e(url('public/admin/js/bootstrap.bundle.min.js')); ?>"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
       <script src="https://use.fontawesome.com/774c27057f.js"></script>
       <!-- <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script> -->
@@ -70,4 +70,4 @@
          });
       </script>
    </body>
-</html>
+</html><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/employee/layouts/master.blade.php ENDPATH**/ ?>
