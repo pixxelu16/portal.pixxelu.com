@@ -3363,12 +3363,13 @@ td.yellow-color span {
 	display: block ruby;
 }
 
-.duration {
+.student-attendance-duration {
 	display: block ruby;
 	text-align: center;
 	font-size: 10px;
 	color: #196f19;
 }
+
 .search-header {
 	height: 40px;
 }
@@ -3449,23 +3450,47 @@ td.ligth-green-color span {
     padding: 3px 10px;
 }
 
-.boxes-wrapper-student-attendance {
-    display: flex;
-    gap: 5px;
-    height: 100%;
-    width: 100%;
+.student-attendance-header {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 10px;
+	gap: 10px;
 }
 
-.boxes-wrapper-student-attendance .box {
-    flex: 1;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    text-align: center;
-    background-color: #f9f9f9;
-    box-sizing: border-box;
-    min-height: 120px;
-    width: 132px;
+.student-attendance-header .box {
+	text-align: center;
+	padding: 5px 0px;
+	border-radius: 14px;
+	background-color: #fff;
+	box-shadow: 6px 6px 54px 0px rgba(0, 0, 0, 0.05);
+	min-height: 10px;
+	display: inline-block;
+}
+
+.student-attendance-header .box img {
+	margin-bottom: 15px;
+	width: 20px;
+	text-align: center;
+	margin: 0;
+}
+
+.student-attendance-header .box h3 {
+	font-size: 13px;
+	font-weight: 600;
+	margin: 0;
+	text-align: center;
+}
+
+.student-attendance-header .box p {
+	margin: 5px 0 0 0;
+	color: #737373;
+	font-size: 14px;
+	font-weight: 400;
+	text-align: center;
+}
+
+.row.search-student-attendance {
+	padding: 10px;
 }
 
 /*end student attendances css*/
