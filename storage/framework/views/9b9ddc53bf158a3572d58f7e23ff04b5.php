@@ -17,7 +17,7 @@
 <div class="main-table">
    <div class="data-table-listing">
       <div class="btn-pixxelu">
-         <!-- Filter by Inquiry Status -->
+         <!--start filter by inquiry acc status-->
          <select name="inquery_status" id="search_inquery_status_list" class="search-student-list">
             <option value="" disabled selected>Select Inquiry Status</option>
             <option value="Active">Active</option>
@@ -25,7 +25,8 @@
             <option value="Closed">Closed</option>
             <option value="Converted">Converted</option>
          </select>
-         <!-- Filter by Course Type -->
+         <!--end filter by inquiry acc status-->
+         <!--start filter by acco course type-->
          <select name="course_type" id="search_inquery_course_type_list" class="search-student-list">
             <option value="" disabled selected>Select Course Type</option>
             <option value="PHP Development">PHP Development</option>
@@ -35,7 +36,7 @@
             <option value="Graphic Designing">Graphic Designing</option>
             <option value="Full Stack Development">Full Stack Development</option>
          </select>
-         <a href="<?php echo e(url('admin/export-inqueries')); ?>" class="export"><img src="<?php echo e(url('public/admin/images/csv-file.svg')); ?>"></a>
+         <!--end filter by acc course type-->
          <a href="<?php echo e(url('admin/all-converted-inqueries-list')); ?>">All Converted Inqueries</a>
          <a href="<?php echo e(url('admin/add-new-inquery')); ?>"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add New Inquery</a>
       </div>
@@ -51,7 +52,6 @@
                   <th>Address</th>
                   <th>Course Type</th>
                   <th>Inqury Date</th>
-                  <th>Priority</th>
                   <th>Status</th>
                   <th>Action</th>
                </tr>
@@ -81,18 +81,9 @@
                   <td></td>
                   <?php endif; ?>
                   <td><?php echo e(\Carbon\Carbon::parse($list->created_at)->format('d M Y')); ?></td>
-                  <?php if($list->priority == 'hot'): ?> 
-                  <td class="priority-hot"><span>Hot</span></td>
-                  <?php elseif($list->priority == 'cold'): ?>
-                  <td class="priority-cold"><span>Cold</span></td>
-                  <?php elseif($list->priority == 'warm'): ?>
-                  <td class="priority-warm"><span>Warm</span></td>
-                  <?php else: ?>
-                  <td>-</td>
-                  <?php endif; ?>
                   <?php if($list->status == 'Active'): ?> 
                   <td class="green-color"><span>Active</span></td>
-                  <?php elseif($list->status == 'Office_Visited'): ?> 
+                  <?php elseif($list->status == 'Office_Visited'): ?>
                   <td class="pink-color"><span>Office Visited</span></td>
                   <?php elseif($list->status == 'Closed'): ?>
                   <td class="red-color"><span>Closed</span></td>
@@ -117,4 +108,4 @@
    </div>
 </div>
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/admin/inquery/all-inqueries-list.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/admin/inquery/search-inqueries-course-type.blade.php ENDPATH**/ ?>

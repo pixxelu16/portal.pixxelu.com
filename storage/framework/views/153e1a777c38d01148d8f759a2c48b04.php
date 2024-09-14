@@ -12,10 +12,10 @@
    </div>
    <?php endif; ?>
    <div class ="search-header">
-      <h2>Search Attendances</h2>
+      <h2>Attendance Listing</h2>  
    </div>
-    <!--start four boxes studens fees-->
-    <div class="boxes-wrapper student-attendance-header">
+   <!--start four boxes studens fees-->
+   <div class="boxes-wrapper student-attendance-header">
          <div class="box">
             <img src="<?php echo e(url('public/admin/images/working_hours.svg')); ?>" alt="Working Hours">
             <h3>Working Hours</h3>
@@ -68,7 +68,7 @@
             <select class="select floating" name="month">
                <option value="">Select Month</option>
                <?php $__currentLoopData = $months; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $name): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-               <option value="<?php echo e($key); ?>" <?php echo e(request()->input('month') == $key ? 'selected' : ''); ?>>
+               <option value="<?php echo e($key); ?>" <?php echo e(\Carbon\Carbon::now()->month === $key ? 'selected' : ''); ?>>
                <?php echo e($name); ?>
 
                </option>
@@ -91,7 +91,7 @@
       </div>
       <div class="col-sm-6 col-md-3">
          <div class="d-grid">
-            <input type="submit" class="btn btn-success" value="Search" />   
+            <input type="submit" class="btn btn-success" value="Search" />     
          </div>
       </div>
    </div>
@@ -154,8 +154,8 @@
                   $punchOut = null;
                   $formattedDuration = null;
                   if ($attendance) {
-                  $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
-                  $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
+                     $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
+                     $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
                      if ($punchOut) {
                      $duration = $punchIn->diff($punchOut);
                      $hours = $duration->h;
@@ -184,7 +184,7 @@
                      <?php elseif($attendance->attendance_status == 'half_day'): ?>
                      <img src="<?php echo e(url('public/admin/images/half_day_leave.svg')); ?>" alt="Half Day">
                      <?php endif; ?>
-                     <?php else: ?>
+                     <?php else: ?> 
                      <?php endif; ?>
                      <?php endif; ?>
                   </td>
@@ -201,4 +201,4 @@
    </div>
 </div>
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('student.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/student/attendances/search-student-attendances.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('student.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/employee/attendances/employee-attendance-list.blade.php ENDPATH**/ ?>

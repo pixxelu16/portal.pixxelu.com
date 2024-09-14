@@ -13,10 +13,10 @@
    </div>
    @endif
    <div class ="search-header">
-      <h2>Search Attendances</h2>
+      <h2>Attendance Listing</h2>  
    </div>
-    <!--start four boxes studens fees-->
-    <div class="boxes-wrapper student-attendance-header">
+   <!--start four boxes studens fees-->
+   <div class="boxes-wrapper student-attendance-header">
          <div class="box">
             <img src="{{ url('public/admin/images/working_hours.svg') }}" alt="Working Hours">
             <h3>Working Hours</h3>
@@ -69,7 +69,7 @@
             <select class="select floating" name="month">
                <option value="">Select Month</option>
                @foreach ($months as $key => $name)
-               <option value="{{ $key }}" {{ request()->input('month') == $key ? 'selected' : '' }}>
+               <option value="{{ $key }}" {{ \Carbon\Carbon::now()->month === $key ? 'selected' : '' }}>
                {{ $name }}
                </option>
                @endforeach
@@ -90,7 +90,7 @@
       </div>
       <div class="col-sm-6 col-md-3">
          <div class="d-grid">
-            <input type="submit" class="btn btn-success" value="Search" />   
+            <input type="submit" class="btn btn-success" value="Search" />     
          </div>
       </div>
    </div>
@@ -152,8 +152,8 @@
                   $punchOut = null;
                   $formattedDuration = null;
                   if ($attendance) {
-                  $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
-                  $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
+                     $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
+                     $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
                      if ($punchOut) {
                      $duration = $punchIn->diff($punchOut);
                      $hours = $duration->h;
@@ -182,7 +182,7 @@
                      @elseif ($attendance->attendance_status == 'half_day')
                      <img src="{{ url('public/admin/images/half_day_leave.svg') }}" alt="Half Day">
                      @endif
-                     @else
+                     @else 
                      @endif
                      @endif
                   </td>

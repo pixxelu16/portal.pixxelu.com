@@ -158,7 +158,6 @@ Route::group(['middleware' => 'auth'], function() {
         //inqueries search acc status list
         Route::get('admin/search-inquery/{any}', [App\Http\Controllers\Admin\InqueryController::class, 'search_inquery_status_list'])->name('admin.search.inquery.status.list');
         Route::get('admin/search-inquery-course-type/{any}', [App\Http\Controllers\Admin\InqueryController::class, 'search_inquery_course_type_list'])->name('admin.search.inquery.course.list');
-        
         Route::get('admin/add-new-inquery', [App\Http\Controllers\Admin\InqueryController::class, 'add_inquery']);
         Route::post('admin/submit-inquery', [App\Http\Controllers\Admin\InqueryController::class, 'submit_inquery'])->name('admin.submit.inquery');
         Route::get('admin/all-inqueries-list', [App\Http\Controllers\Admin\InqueryController::class, 'all_inqueries'])->name('admin.students.list');
@@ -166,6 +165,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('admin/edit-inquery/{id}', [App\Http\Controllers\Admin\InqueryController::class, 'edit_inquery'])->name('admin.edit.success');
         Route::post('admin/update-inquery/{id}', [App\Http\Controllers\Admin\InqueryController::class, 'update_inquery'])->name('admin.update.inquery');
         Route::get('admin/delete-inquery/{id}', [App\Http\Controllers\Admin\InqueryController::class, 'delete_inquery']);
+        //export inqueries
+        Route::get('admin/export-inqueries', [App\Http\Controllers\Inquery\ExportInqueryController::class, 'export_inqueries']);        
         //stocks 
         Route::get('admin/all-stocks-list', [App\Http\Controllers\Admin\StudentController::class, 'all_stocks_list']);
         Route::get('admin/add-new-stock', [App\Http\Controllers\Admin\StudentController::class, 'add_new_stock']);
@@ -190,13 +191,19 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('student/profile', [App\Http\Controllers\Student\ProfileController::class, 'edit_profile']);
         Route::post('student/update-profile/{id}', [App\Http\Controllers\Student\ProfileController::class, 'update_profile'])->name('student.update.profile');
         Route::get('student/change-password', [App\Http\Controllers\Student\ProfileController::class, 'changed_password']);
-        Route::post('student/submit-change-password/{id}', [App\Http\Controllers\Student\ProfileController::class, 'submit_changed_password'])->name('student.changed.password');          
+        Route::post('student/submit-change-password/{id}', [App\Http\Controllers\Student\ProfileController::class, 'submit_changed_password'])->name('student.changed.password');  
+        
     });
 
     //Employee Only 
     Route::group(['middleware' => 'Employee'], function() {  
         //Employee dashboard
         Route::get('employee/dashboard', [App\Http\Controllers\Employee\DashboardController::class, 'employee_detail']); 
+         //employee attendance 
+         Route::get('employee/employee-attendance-list', [App\Http\Controllers\Employee\AttendanceController::class, 'employee_attendance_list']);
+         Route::get('employee/search-attendance', [App\Http\Controllers\Employee\AttendanceController::class, 'search_employee_attendance_list'])->name('employee.search.attendance');
+         Route::post('employee/submit-punch-in-attendance', [App\Http\Controllers\Employee\AttendanceController::class, 'submit_employee_punch_in_attendance'])->name('employee.submit.puch.in.attendance');
+         Route::post('employee/update-punch-out-attendance', [App\Http\Controllers\Employee\AttendanceController::class, 'update_employee_punch_out_attendance'])->name('employee.update.puch.out.attendance');
         //profile
         Route::get('employee/profile', [App\Http\Controllers\Employee\ProfileController::class, 'edit_profile']);
         Route::post('employee/update-profile/{id}', [App\Http\Controllers\Employee\ProfileController::class, 'update_profile'])->name('employee.update.profile');
