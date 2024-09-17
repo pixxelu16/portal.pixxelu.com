@@ -12,7 +12,7 @@
    </div>
    <?php endif; ?>
    <div class ="search-header">
-      <h2>Attendance Listing</h2>
+      <h2>Search Attendances</h2>
    </div>
    <!--start six boxes employee attendance-->
    <div class="boxes-wrapper student-attendance-header">
@@ -68,7 +68,7 @@
             <select class="select floating" name="month">
                <option value="">Select Month</option>
                <?php $__currentLoopData = $months; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $name): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-               <option value="<?php echo e($key); ?>" <?php echo e(\Carbon\Carbon::now()->month === $key ? 'selected' : ''); ?>>
+               <option value="<?php echo e($key); ?>" <?php echo e(request()->input('month') == $key ? 'selected' : ''); ?>>
                <?php echo e($name); ?>
 
                </option>
@@ -76,16 +76,20 @@
             </select>
          </div>
       </div>
+      <?php
+      $currentYear = date('Y');
+      $startYear = 2023; 
+      ?>
       <div class="col-sm-6 col-md-3">
          <div class="input-block mb-3 form-focus select-focus">
             <select class="select floating" name="year">
-               <option value="">Select Year</option>
-               <?php for($i = date('Y'); $i >= 2023; $i--): ?>
-               <option value="<?php echo e($i); ?>" <?php echo e($i == date('Y') ? 'selected' : ''); ?>>
-               <?php echo e($i); ?>
+                  <option value="">Select Year</option>
+                  <?php for($i = $currentYear; $i >= $startYear; $i--): ?>
+                     <option value="<?php echo e($i); ?>" <?php echo e(request()->input('year') == $i ? 'selected' : ''); ?>>
+                        <?php echo e($i); ?>
 
-               </option>
-               <?php endfor; ?>
+                     </option>
+                  <?php endfor; ?>
             </select>
          </div>
       </div>
@@ -164,7 +168,6 @@
                      $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
                      }
                   }
-                  
                   $isSunday = in_array($day, $sundays);
                   $isLastSaturday = $day == $lastSaturday;
                   ?>
@@ -203,4 +206,4 @@
    </div>
 </div>
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('employee.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/employee/attendances/employee-attendance-list.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('employee.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/employee/attendances/search-employee-attendances.blade.php ENDPATH**/ ?>

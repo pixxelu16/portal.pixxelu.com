@@ -52,6 +52,7 @@
                   <th>Course Type</th>
                   <th>Inqury Date</th>
                   <th>Priority</th>
+                  <th>Total Fees</th>
                   <th>Status</th>
                   <th>Action</th>
                </tr>
@@ -90,6 +91,7 @@
                   <?php else: ?>
                   <td>-</td>
                   <?php endif; ?>
+                  <td><?php echo e($list->total_fees); ?> </td>
                   <?php if($list->status == 'Active'): ?> 
                   <td class="green-color"><span>Active</span></td>
                   <?php elseif($list->status == 'Office_Visited'): ?> 

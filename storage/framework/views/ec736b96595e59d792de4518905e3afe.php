@@ -52,6 +52,12 @@
                </select>
                </div> -->
          </div>
+         <div class="form-group display-column">
+            <div class="form-design dob">
+               <label for="total_fees">Total Fees</label>
+               <input type="text" id="total_fees" name="total_fees" value="<?php echo e(old('total_fees')); ?>"  placeholder="Enter Total Fees">
+            </div>
+            </div>
          <div class="form-button">
             <div class="back-button">
                <input type="submit" class="btn btn-success" name="submit" value="Submit">

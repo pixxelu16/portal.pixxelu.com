@@ -39,7 +39,7 @@
          <div class="form-group display-column">
             <div class="form-design mail">
                <label for="course_type">Course</label>
-               <select class="form-control" name="course_type" id="Course Type">
+               <select class="form-control" name="course_type" id="course_type">
                   <option value ="" disabled selected>Select Course Type</option>
                   <option value="Web Designing" <?php if($inquery->course_type == 'Web Designing'): ?> selected <?php endif; ?>>Web Designing</option>
                   <option value="Web Development"<?php if($inquery->course_type == 'Web Development'): ?> selected <?php endif; ?>>Web Development</option>
@@ -48,7 +48,7 @@
                   <option value="Graphic" <?php if($inquery->course_type == 'Graphic'): ?> selected <?php endif; ?>>Graphic</option>
                   <option value="Full Stack Development" <?php if($inquery->course_type == 'Full Stack Development'): ?> selected <?php endif; ?>>Full Stack Development</option>
                </select>
-            </div> 
+            </div>
             <div class="form-design fees">
                <label for="status">Priority</label>
                <select class="form-control" name="priority" id="User Status">
@@ -59,6 +59,12 @@
                </select>
             </div>
             <div class="form-design fees">
+               <label for="total_fees">Total Fees</label>
+               <input type="text" id="total_fees" name="total_fees" value="<?php echo e($inquery->total_fees); ?>" placeholder="Enter Total Fees">
+            </div>
+         </div>
+         <div class="form-group display-column">
+            <div class="form-design mail">
                <label for="status">Status</label>
                <select class="form-control" name="status" id="User Status">
                   <option value ="" disabled selected>Select Status Type</option>

@@ -146,6 +146,8 @@
                   <td class="light-yellow-color"><span>Web Development</span></td>
                   @elseif($student->course_type == 'Web Designing')
                   <td class="light-pink-color"><span>Web Designing</span></td>
+                  @elseif($student->course_type == 'Digital Marketing')
+                  <td class="light-pink-color"><span>Digital Marketing</span></td>
                   @elseif($student->course_type == 'Graphic Designing')
                   <td class="light-cyan-color"><span>Graphic Designing</span></td>
                   @else

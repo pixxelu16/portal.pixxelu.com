@@ -21,10 +21,10 @@ use Carbon\Carbon;
          </div>
          <div class="student-attendance">
             <div class="box-pay">
-               <button type="button" class="student-punch-in-buton student_punch_in_attendances" data-employee_id="<?php echo e($get_employee_detail->id); ?>" data-employee_name="<?php echo e($get_employee_detail->name); ?>" data-toggle="modal" data-target="#punchInModel">Punch in
+               <button type="button" class="student-punch-in-buton employeet_punch_in_attendances" data-employee_id="<?php echo e($get_employee_detail->id); ?>" data-employee_name="<?php echo e($get_employee_detail->name); ?>" data-toggle="modal" data-target="#punchInModel">Punch in
             </div>
             <div class="box-pay">
-               <button type="button" class="student-punch-out-buton student_punch_out_attendance" data-employee_id="<?php echo e($get_employee_detail->id); ?>" data-employee_name="<?php echo e($get_employee_detail->name); ?>" data-toggle="modal" data-target="#punchOutModel">Punch Out
+               <button type="button" class="student-punch-out-buton employee_punch_out_attendance" data-employee_id="<?php echo e($get_employee_detail->id); ?>" data-employee_name="<?php echo e($get_employee_detail->name); ?>" data-toggle="modal" data-target="#punchOutModel">Punch Out
             </div>
          </div>
          <h3><?php echo e($get_employee_detail->name ?? '-'); ?></h3>
@@ -238,20 +238,20 @@ use Carbon\Carbon;
             <div class="modal-dialog" role="document">
                <div class="modal-content">
                   <div class="modal-header">
-                     <h5 class="modal-title">Punch Out Of <span class="student_attendance_name"></h5>
+                     <h5 class="modal-title">Punch Out Of <span class="employee_attendances"></h5>
                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                      <span aria-hidden="true">&times;</span>
                      </button>
                   </div>
                   <div class="modal-body">
-                     <form action="#" id="student_punch_out_attendance" method="POST">
-                        <input type="hidden" id="model_punch_out_student_id" name="employee_id" value="" />
+                     <form action="#" id="employee_punch_out_attendance" method="POST">
+                        <input type="hidden" id="model_punch_out_employee_id" name="employee_id" value="" />
                         <div class="form-group">
                            <label for="punchOutTime">Punch Out Time <span class="text-danger">*</span></label>
                            <input type="time" class="form-control" name="punch_out_time" id="punch_out_time">
                         </div>
                         <div class="modal-footer">
-                           <button type="submit" class="btn btn-primary is_create_student_punch_out_attendance">Submit</button>
+                           <button type="submit" class="btn btn-primary is_update_employee_punch_out_attendance">Submit</button>
                         </div>
                      </form>
                      <div class="loader com_ajax_loader" style="display:none;">

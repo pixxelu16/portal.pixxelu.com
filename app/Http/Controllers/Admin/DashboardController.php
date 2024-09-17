@@ -67,7 +67,7 @@ class DashboardController extends Controller
         $payment_type_cash = StudentFees::where('user_status', 'Active')->where('payment_type','cash')->whereBetween('submission_date', [$startOfMonth, $endOfMonth])->sum('user_fees');
       
         //Get total current month paid fees
-        $current_month_paid_fees = StudentFees::where('user_status', 'Active')->whereBetween('submission_date', [$startOfMonth, $endOfMonth])->sum('user_fees');
+        $current_month_paid_fees = StudentFees::orderBy('ID', 'DESC')->where('user_status', 'Active')->whereBetween('submission_date', [$startOfMonth, $endOfMonth])->sum('user_fees');
 
         //Get student fees detail list
         $get_student_list = User::orderBy('ID', 'DESC')

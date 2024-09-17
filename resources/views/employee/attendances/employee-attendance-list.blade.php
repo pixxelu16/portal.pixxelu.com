@@ -1,4 +1,4 @@
-@extends('student.layouts.master')
+@extends('employee.layouts.master')
 @section('content')
 <div class="space-remove"></div>
 <div class="title-subheading">
@@ -13,49 +13,49 @@
    </div>
    @endif
    <div class ="search-header">
-      <h2>Attendance Listing</h2>  
+      <h2>Attendance Listing</h2>
    </div>
-   <!--start four boxes studens fees-->
+   <!--start six boxes employee attendance-->
    <div class="boxes-wrapper student-attendance-header">
-         <div class="box">
-            <img src="{{ url('public/admin/images/working_hours.svg') }}" alt="Working Hours">
-            <h3>Working Hours</h3>
-            <p>{{ number_format($total_present_hours, 2) }} Hrs</p>
+      <div class="box">
+         <img src="{{ url('public/admin/images/working_hours.svg') }}" alt="Working Hours">
+         <h3>Working Hours</h3>
+         <p>{{ number_format($total_present_hours, 2) }} Hrs</p>
       </div>
-         <div class="box">
-            <img src="{{ url('public/admin/images/present_icon.svg') }}" alt="Present">
-            <h3>Presents</h3>
-            <p>{{ $total_present_days }}</p>
-         </div>
-         <div class="box">
-            <img src="{{ url('public/admin/images/absent_icon.svg') }}" alt="Absent">
-            <h3>Absent</h3>
-            <p>{{ $total_absent_days }}</p>
-         </div>
-         <div class="box">
-            <img src="{{ url('public/admin/images/leave_icon.svg') }}" alt="Leave">
-            <h3>Leave</h3>
-            <p>{{ $total_leave_days }}</p>
-         </div>
-         <div class="box">
-            <img src="{{ url('public/admin/images/half_day_leave.svg') }}" alt="Half Day">
-            <h3>Half Day</h3>
-            <p>{{ $total_half_day }}</p>
-         </div>
-         <div class="box">
-            <img src="{{ url('public/admin/images/holiday.svg') }}" alt="Holidays">
-            <h3>Holidays</h3>
-            <p>{{ $total_holidays }}</p>
-         </div>
-         <div class="box">
-            <img src="{{ url('public/admin/images/total_days_in_month.svg') }}" alt="daysInMonth">
-            <h3>Days in month</h3>
-            <p>{{ $daysInMonth }}</p>
-         </div>
+      <div class="box">
+         <img src="{{ url('public/admin/images/present_icon.svg') }}" alt="Present">
+         <h3>Presents</h3>
+         <p>{{ $total_present_days }}</p>
+      </div>
+      <div class="box">
+         <img src="{{ url('public/admin/images/absent_icon.svg') }}" alt="Absent">
+         <h3>Absents</h3>
+         <p>{{ $total_absent_days }}</p>
+      </div>
+      <div class="box">
+         <img src="{{ url('public/admin/images/leave_icon.svg') }}" alt="Leave">
+         <h3>Leaves</h3>
+         <p>{{ $total_leave_days }}</p>
+      </div>
+      <div class="box">
+         <img src="{{ url('public/admin/images/half_day_leave.svg') }}" alt="Half Day">
+         <h3>Half Days</h3>
+         <p>{{ $total_half_day }}</p>
+      </div>
+      <div class="box">
+         <img src="{{ url('public/admin/images/holiday.svg') }}" alt="Holidays">
+         <h3>Holidays</h3>
+         <p>{{ $total_holidays }}</p>
+      </div>
+      <div class="box">
+         <img src="{{ url('public/admin/images/total_days_in_month.svg') }}" alt="daysInMonth">
+         <h3>Days in month</h3>
+         <p>{{ $daysInMonth }}</p>
+      </div>
    </div>
-   <!--end four boxes studens fees-->
+   <!--end six boxes employee attendance-->
 </div>
-<form action="{{ url('student/search-attendance') }}" method="GET">
+<form action="{{ url('employee/search-attendance') }}" method="GET">
    <!--start search filter-->
    <div class="row search-student-attendance">
       <!-- <div class="col-sm-6 col-md-3">
@@ -103,11 +103,11 @@
             <thead>
                <tr>
                   <th>Sr No.</th>
-                  <th>Registration ID</th>
+                  <th>Employee ID</th>
                   <th>Image</th>
                   <th>Name</th>
-                  <th>Batch</th>
-                  <th>Batch Timing</th>
+                  <th>Shift</th>
+                  <th>Shift Type</th>
                   @foreach ($days as $day)
                   @php
                   $date = \Carbon\Carbon::create($year, $month, $day);
@@ -126,31 +126,32 @@
                @php
                $count = 1;
                @endphp
-               @forelse ($get_student_detail as $student)
+               @forelse ($get_employee_detail as $employee)
                <tr>
                   <td>{{ $count++ }}.</td>
-                  <td>{{ $student->id }}</td>
+                  <td>{{ $employee->unique_employee_id }}</td>
                   <td data-th="Image">
-                     @if($student->user_pic)
+                     @if($employee->user_pic)
                      <div class="user-image">
-                        <img src="{{ url('public/uploads/users/'. $student->user_pic) }}" alt="">
+                        <img src="{{ url('public/uploads/employees/'. $employee->user_pic) }}" alt="">
                      </div>
                      @else
-                     <img src="{{ url('public/uploads/users/default_user.png') }}" alt="">
+                     <img src="{{ url('public/uploads/employees/default_user.png') }}" alt="">
                      @endif
                   </td>
-                  <td>{{ $student->name }}</td>
-                  <td>{{ $student['student_attendance_detail']['0']['batch'] ?? '-'}}</td>
-                  <td class="batch-time">{{ $student['student_attendance_detail'][0]['batch_time'] ?? '-'}}</td>
+                  <td class="batch-time">{{ $employee->name }}</td>
+                  <td>{{ $employee['employees_attendance_detail']['0']['sift'] ?? '-'}}</td>
+                  <td class="batch-time">{{ $employee['employees_attendance_detail'][0]['sift_type'] ?? '-'}}</td>
                   @foreach ($days as $day)
                   @php
                   $date = \Carbon\Carbon::create($year, $month, $day)->format('Y-m-d');
-                  $attendance = $student->student_attendance_detail->first(function ($att) use ($date) {
+                  $attendance = $employee->employees_attendance_detail->first(function ($att) use ($date) {
                   return \Carbon\Carbon::parse($att->created_at)->format('Y-m-d') === $date;
                   });
                   $punchIn = null;
                   $punchOut = null;
                   $formattedDuration = null;
+
                   if ($attendance) {
                      $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
                      $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
@@ -161,6 +162,7 @@
                      $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
                      }
                   }
+                  
                   $isSunday = in_array($day, $sundays);
                   $isLastSaturday = $day == $lastSaturday;
                   @endphp
@@ -190,7 +192,7 @@
                </tr>
                @empty
                <tr>
-                  <td colspan="{{ count($days) + 6 }}" class="text-center">No Student found</td>
+                  <td colspan="{{ count($days) + 6 }}" class="text-center">No Employee found</td>
                </tr>
                @endforelse
             </tbody>
