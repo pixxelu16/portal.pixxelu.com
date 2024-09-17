@@ -58,10 +58,11 @@ class InqueryController extends Controller
 
         //Create inquery
         $is_create_inquery = Inquery::create([
-            'name' => $request->name,
+            'name' => $request->name, 
             'mobile' => $request->mobile,
             'address' => $request->address,
             'course_type' => $request->course_type,
+            'total_fees' => $request->total_fees,
             'status' => 'Active',
         ]);
 
@@ -96,6 +97,7 @@ class InqueryController extends Controller
             'address' => $request->address,
             'course_type' => $request->course_type,
             'priority' => $request->priority,
+            'total_fees' => $request->total_fees,
             'status' => $request->status,
         ]);
 
@@ -117,6 +119,7 @@ class InqueryController extends Controller
                     'address' => $request->address,
                     'course_type' => $request->course_type,
                     'priority' => $request->priority,
+                    'total_fees' => $request->total_fees,
                     'user_status' => 'Active',
                     'user_type' => 'Student',
                     'user_pic' => $filename

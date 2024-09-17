@@ -29,6 +29,8 @@ class AttendanceController extends Controller
                 }
             ])->get();
 
+        //echo "<pre>"; print_r($get_employee_detail->toArray());exit();
+
         //Get attendance details
         $total_present_hours = 0;
         $total_present_days = 0;
@@ -111,15 +113,15 @@ class AttendanceController extends Controller
         return view('employee.attendances.employee-attendance-list', compact('get_employee_detail', 'months', 'days', 'month', 'year', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays', 'daysInMonth'));
     }
 
-    //Function for submit student punch in attendance
+    //Function for submit employee punch in attendance
     public function submit_employee_punch_in_attendance(Request $request) {
         //Define your office Wi-Fi IP address or range
         // $office_wifi_ip = '192.168.29.35';          
-        //Get the current student's IP address
-        // $student_ip = $request->ip(); 
+        //Get the current employee's IP address
+        // $employee_ip = $request->ip(); 
 
-        //Check if the student's IP matches the office Wi-Fi IP
-        // if ($student_ip !== $office_wifi_ip) {
+        //Check if the employee's IP matches the office Wi-Fi IP
+        // if ($employee_ip !== $office_wifi_ip) {
         //     echo '<p style="color:red;">You are not connected to the office Wi-Fi. Please connect to the office network and try again.</p>';
         //     echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
         //     return; 
@@ -196,7 +198,7 @@ class AttendanceController extends Controller
     }
 
     //search employee attendance list
-    public function search_student_attendance_list(Request $request) {
+    public function search_employee_attendance_list(Request $request) {
         //Get auth login id
         $is_login_id = Auth::user()->id;
 
@@ -204,11 +206,11 @@ class AttendanceController extends Controller
         $month = $request->month;
         $year = $request->year;
 
-        //Get student details 
-        $get_student_detail = User::where('user_type', 'Student')
+        //Get employee details 
+        $get_employee_detail = User::where('user_type', 'Employee')
             ->where('user_status', 'Active')->where('id', $is_login_id)
             ->with([
-                'student_attendance_detail' => function ($query) use ($month, $year) {
+                'employees_attendance_detail' => function ($query) use ($month, $year) {
                     $query->whereYear('created_at', $year)
                         ->whereMonth('created_at', $month);
                 }
@@ -226,8 +228,8 @@ class AttendanceController extends Controller
         $currentYear = Carbon::now()->year;
 
         //Calculate totals
-        foreach ($get_student_detail as $student) {
-            foreach ($student->student_attendance_detail as $attendance) {
+        foreach ($get_employee_detail as $employee) {
+            foreach ($employee->employees_attendance_detail as $attendance) {
                 //Get punch in and outs
                 $punchIn = Carbon::parse($attendance->punch_in_time);
                 $punchOut = $attendance->punch_out_time ? Carbon::parse($attendance->punch_out_time) : null;
@@ -293,6 +295,6 @@ class AttendanceController extends Controller
         //Get total holidays all Sundays and last Saturday
         $total_holidays = count($sundays) + ($lastSaturday ? 1 : 0);
 
-        return view('student.attendances.search-student-attendances', compact('get_student_detail', 'months', 'days', 'month', 'year', 'daysInMonth', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays'));
+        return view('employee.attendances.search-employee-attendances', compact('get_employee_detail', 'months', 'days', 'month', 'year', 'daysInMonth', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays'));
     }
 }
