@@ -3,9 +3,9 @@
 use Carbon\Carbon;
 ?>
 <div class="space-remove"></div>
-<div class="title-subheading">
+<!-- <div class="title-subheading">
    <h2>Personal Details</h2>
-</div>
+</div> -->
 <div class="main-single-student">
    <div class="name-user">
       <div class="student-name">
@@ -16,7 +16,7 @@ use Carbon\Carbon;
             <?php if(isset($get_employee_detail->user_pic)): ?>
             <img src="<?php echo e(url('public/uploads/employees/'. $get_employee_detail->user_pic)); ?>" alt="">
             <?php else: ?>
-            <img src="<?php echo e(url('public/uploads/users/default_user.png')); ?>" alt="">
+            <img src="<?php echo e(url('public/uploads/employees/default_user.png')); ?>" alt="">
             <?php endif; ?>
          </div>
          <div class="student-attendance">
@@ -41,7 +41,7 @@ use Carbon\Carbon;
          <h4>Information</h4>
       </div>
       <div class="detail-info">
-         <p><em>Registration No: </em><span><?php echo e($get_employee_detail->unique_employee_id); ?></span></p>
+         <p><em>Employee ID: </em><span><?php echo e($get_employee_detail->unique_employee_id); ?></span></p>
          <p><em>Date of Birth:</em><span><?php echo e(($get_employee_detail->dob) ? Carbon::parse($get_employee_detail->dob)->format('d M Y') : '-'); ?></span></p>
          <p><em>Sex: </em><span><?php echo e($get_employee_detail->gender ?? '-'); ?></span></p>
          <p><em>Category: </em><span><?php echo e($get_employee_detail->category ?? '-'); ?></span></p>
@@ -132,7 +132,7 @@ use Carbon\Carbon;
                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                <?php else: ?>
                <tr>
-                  <td colspan="4">No accessories assigned to this employee.</td>
+                  <td colspan="4">No accessories assigned.</td>
                </tr>
                <?php endif; ?>
             </tbody>
@@ -164,7 +164,7 @@ use Carbon\Carbon;
                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                <?php else: ?>
                <tr>
-                  <td colspan="4">No damaged accessories recorded for this employee.</td>
+                  <td colspan="4">No damaged accessories.</td>
                </tr>
                <?php endif; ?>
             </tbody>

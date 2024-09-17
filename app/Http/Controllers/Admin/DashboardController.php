@@ -67,19 +67,22 @@ class DashboardController extends Controller
         $payment_type_cash = StudentFees::where('user_status', 'Active')->where('payment_type','cash')->whereBetween('submission_date', [$startOfMonth, $endOfMonth])->sum('user_fees');
       
         //Get total current month paid fees
-        $current_month_paid_fees = StudentFees::orderBy('ID', 'DESC')->where('user_status', 'Active')->whereBetween('submission_date', [$startOfMonth, $endOfMonth])->sum('user_fees');
+        $current_month_paid_fees = StudentFees::where('user_status', 'Active')->whereBetween('submission_date', [$startOfMonth, $endOfMonth])->sum('user_fees');
 
         //Get student fees detail list
-        $get_student_list = User::orderBy('ID', 'DESC')
-        ->where('user_status', 'Active')
+        $get_student_list = User::where('user_status', 'Active')
         ->whereHas('student_fees_detail', function ($query) use ($startOfMonth, $endOfMonth) {
             $query->whereBetween('submission_date', [$startOfMonth, $endOfMonth]);
         })
         ->with(['student_fees_detail' => function ($query) use ($startOfMonth, $endOfMonth) {
-            $query->whereBetween('submission_date', [$startOfMonth, $endOfMonth]);
+            $query->whereBetween('submission_date', [$startOfMonth, $endOfMonth])
+                  ->orderBy('submission_date', 'desc'); 
         }])
-        ->get();
-        
+        ->get()
+        ->sortByDesc(function ($user) {
+            return $user->student_fees_detail->first()->submission_date ?? null;
+        });
+             
         //Get total students list acc to course  
         $is_total_students = User::where('user_status', 'Active')->where('user_type', 'Student')->count();
         $is_web_designing_students = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Web Designing')->count();
