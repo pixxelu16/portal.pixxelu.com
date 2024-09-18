@@ -12,7 +12,7 @@
       <p>{{ Session::get('unsuccess') }}</p>
    </div>
    @endif
-   <h2>All Students Listing</h2>
+   <h2>All Students Fees Listing</h2>
 </div>
 <div class="main-table">
    <div class="data-table-listing">
@@ -31,20 +31,17 @@
             <option value="Web Designing">Web Designing</option>
             <option value="Web Development">Web Development</option>
             <option value="PHP Development">PHP Development</option>
-            <option value="Graphic">Graphic</option>
+            <option value="Digital Marketing">Digital Marketing</option>
             <option value="Full Stack Development">Full Stack Development</option>
+            <option value="Graphic">Graphic</option>
          </select>
-         <!--filter student acc to course-->
-         <a href="{{ url('admin/add-new-student') }}"><img src="{{ url('public/admin/images/pluse.svg') }}">Add New Student</a>
+         <!--end filter student acc to course-->
          <!--export students monthly paid fees list -->
-         <a href="{{ route('admin.export.paid.fees') }}" class="export">
-         <img src="{{ url('public/admin/images/csv-file.svg') }}">Paid 
-         </a>
+         <a href="{{ route('admin.export.paid.fees') }}" class="export"><img src="{{ url('public/admin/images/csv-file.svg') }}">Paid</a>
          <!--export students monthly pending fees list -->
-         <a href="{{ route('admin.export.pending.fees') }}" class="export">
-         <img src="{{ url('public/admin/images/csv-file.svg') }}">Pending
-         </a>
+         <a href="{{ route('admin.export.pending.fees') }}" class="export"><img src="{{ url('public/admin/images/csv-file.svg') }}">Pending</a>
          <a href="{{ url('admin/all-students-trash-list') }}" class="export"><img src="{{ url('public/admin/images/trash.svg') }}"></a>
+         <a href="{{ url('admin/add-new-student') }}"><img src="{{ url('public/admin/images/pluse.svg') }}">Add New Student</a>
          <!--<a href="{{ url('admin/add-student-previous-fees') }}" class="add-pervious"><img src="{{ url('public/admin/images/pluse.svg') }}">Add Previous Fees</a>-->
       </div>
    </div>
@@ -75,7 +72,7 @@
                   $currentMonth = Carbon::now()->month;
                   $currentYear = Carbon::now()->year;
                @endphp
-               @foreach($get_students_detail as $student)
+               @foreach($get_students_list as $student)
                   @php 
                      $total_fees = $student->total_fees;
                      $pay_fees = 0;
@@ -121,6 +118,8 @@
                   <td class="lights-green-color"><span>PHP Development</span></td>
                   @elseif($student->course_type == 'Web Development')
                   <td class="light-yellow-color"><span>Web Development</span></td>
+                  @elseif($student->course_type == 'Digital Marketing')
+                  <td class="light-organge-color"><span>Digital Marketing</span></td>
                   @elseif($student->course_type == 'Web Designing')
                   <td class="light-pink-color"><span>Web Designing</span></td>
                   @elseif($student->course_type == 'Graphic Designing')

@@ -11,7 +11,7 @@
       <p><?php echo e(Session::get('unsuccess')); ?></p>
    </div>
    <?php endif; ?>
-   <h2>All Trash Students List</h2>
+   <h2>All Students Trash List</h2>
 </div>
 <div class="main-table">
    <div class="data-table-listing">
@@ -72,7 +72,10 @@
                      <div class="user-image"> <img src = "<?php echo e(url('public/uploads/users/'. $student->user_pic)); ?>" alt=""></div>
                      <?php endif; ?> 
                   </td>
-                  <td><?php echo e($student->name); ?></td>
+                  <td>
+                     <span onclick="openNav()"><a href="#" class="student-link"
+                        data-student_id="<?php echo e($student->id); ?>"><?php echo e($student->name); ?></a></span>
+                  </td>
                   <td><a href="https://wa.me/<?php echo e(str_replace(['+', '-', ' '], '', $student->student_phone_no)); ?>" target="_blank"><?php echo e(substr($student->student_phone_no, 0, 5)); ?>-<?php echo e(substr($student->student_phone_no, 5)); ?></a></td>
                   <td><?php echo e(\Carbon\Carbon::parse($student->course_joining_date)->format('d M Y')); ?></td>
                   <?php if($student->course_type == 'Full Stack Development'): ?> 
@@ -83,12 +86,15 @@
                   <td class="light-yellow-color"><span>Web Development</span></td>
                   <?php elseif($student->course_type == 'Web Designing'): ?>
                   <td class="light-pink-color"><span>Web Designing</span></td>
+                  <?php elseif($student->course_type == 'Digital Marketing'): ?>
+                  <td class="light-organge-color"><span>Digital Marketing</span></td>
                   <?php elseif($student->course_type == 'Graphic Designing'): ?>
                   <td class="light-cyan-color"><span>Graphic Designing</span></td>
                   <?php else: ?>
                   <td></td>
                   <?php endif; ?>
-                  <td><?php echo e($student->course_duration); ?></td>
+                  <td><?php echo e($student->course_duration ?? '-'); ?></td>
+                  <?php if($student->total_fees): ?>
                   <td>
                      Rs <?php echo e(number_format($student->total_fees)); ?>
 
@@ -96,8 +102,11 @@
                         <button type="button" class="pay-fes-buton student_pay_fees" data-student_id="<?php echo e($student->id); ?>" data-toggle="modal" data-target="#myModal">Pay Fee</button>
                         </div> -->
                   </td>
+                  <?php else: ?>
+                  <td>-</td>
+                  <?php endif; ?>
                   <td>
-                     <?php if(isset($student->student_fees_detail)): ?>
+                     <?php if(isset($student->student_fees_detail) && count($student->student_fees_detail) > 0): ?>
                      <?php
                      $get_last_submit_fees = collect($student->student_fees_detail)->sortByDesc(function ($fee) {
                      });
@@ -107,10 +116,18 @@
                      <?php if($lastPaidFee): ?>
                      Rs <?php echo e(number_format($lastPaidFee['user_fees'])); ?><br>
                      <span class="date-tbl"><?php echo e(Carbon::parse($lastPaidFee['submission_date'])->format('d M Y')); ?></span>
+                     <?php else: ?>
+                     -
                      <?php endif; ?>
+                     <?php else: ?>
+                     -
                      <?php endif; ?>
                   </td>
+                  <?php if($pay_fees): ?>
                   <td>Rs <?php echo e(number_format($total_fees - $pay_fees)); ?></td>
+                  <?php else: ?>
+                  <td>-</td>
+                  <?php endif; ?>
                   <?php if($student->user_status == 'Active'): ?> 
                   <td class="green-color"><span>Active</span></td>
                   <?php elseif($student->user_status == 'Pending'): ?>
@@ -161,61 +178,7 @@
             </tbody>
          </table>
       </div>
-      <!--start student pay fees model--> 
-      <div class="modal fade pay-modal" id="myModal" role="dialog">
-         <div class="modal-dialog">
-            <div class="modal-content">
-               <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title">Pay Fees</h4>
-               </div>
-               <div class="modal-body">
-                  <form action="#" id="is_create_student_fee" Method="POST">
-                     <input id="model_student_id" type="hidden" value="" name="student_id">
-                     <input type="text" id="fees_amount" name="fees_amount" placeholder="Amount"/>                     
-                     <select name="payment_type" id="payment_type">
-                        <option value="">Payment Type</option>
-                        <option value="online">Online</option>
-                        <option value="cash">Cash</option>
-                     </select>
-                     <select name="first_payment_type" id="first_payment_type">
-                        <option value="">First Payment Type</option>
-                        <option value="down_payment">Down Payment</option>
-                        <option value="monthly">Monthly</option>
-                     </select>
-                     <div class="button-save"><button type="submit" class="disable-submit">Save</button></div>
-                  </form>
-                  <div class="loader com_ajax_loader" style="display:none;">
-                     <img src="<?php echo e(url('public/admin/images/200w.gif')); ?>" /> 
-                  </div>
-               </div>
-               <div class="student_fee_responce"></div>
-            </div>
-         </div>
-      </div>
-      <!--end student pay fees model--> 
    </div>
 </div>
-<div id="myNav" class="overlay hide">
-   <div class="overlay-content">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <div class="loader com_ajax_loaders" style="display: none;">
-         <img src="<?php echo e(url('public/admin/images/index.svg')); ?>" />
-      </div>
-      <div class="student_detail_response"></div>
-   </div>
-</div>
-<script>
-   function openNav() {
-      document.getElementById("myNav").style.width = "68%";
-      document.querySelector('.overlay').classList.remove('hide');
-      document.querySelector('.loader').style.display = "block"; 
-   }
-   function closeNav() {
-      document.getElementById("myNav").style.width = "0%";
-      document.querySelector('.overlay').classList.add('hide');
-      document.querySelector('.loader').style.display = "none"; 
-   }
-</script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/admin/students/all-students-trash-list.blade.php ENDPATH**/ ?>

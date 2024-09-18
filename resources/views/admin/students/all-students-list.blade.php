@@ -34,6 +34,10 @@
          <p>{{ $is_full_stack_development }}</p>
       </div>
       <div class="box">
+         <h3>Digital Marketing</h3>
+         <p>{{ $digital_marketing }}</p>
+      </div>
+      <div class="box">
          <h3>Graphic</h3>
          <p>{{ $is_graphic }}</p>
       </div>
@@ -58,16 +62,14 @@
             <option value="Web Designing">Web Designing</option>
             <option value="Web Development">Web Development</option>
             <option value="PHP Development">PHP Development</option>
-            <option value="Graphic">Graphic</option>
+            <option value="Digital Marketing">Digital Marketing</option>
             <option value="Full Stack Development">Full Stack Development</option>
+            <option value="Graphic">Graphic</option>
          </select>
          <!--end filter student status acc course-->
-         <a href="{{ url('admin/add-new-student') }}"><img src="{{ url('public/admin/images/pluse.svg') }}">Add New
-         Student</a>
-         <a href="{{ url('admin/export-student') }}" class="export"><img
-            src="{{ url('public/admin/images/csv-file.svg') }}"></a>
-         <a href="{{ url('admin/all-students-trash-list') }}" class="export"><img
-            src="{{ url('public/admin/images/trash.svg') }}"></a>
+         <a href="{{ url('admin/export-student') }}" class="export"><img src="{{ url('public/admin/images/csv-file.svg') }}"></a>
+         <a href="{{ url('admin/all-students-trash-list') }}" class="export"><img src="{{ url('public/admin/images/trash.svg') }}"></a>
+         <a href="{{ url('admin/add-new-student') }}"><img src="{{ url('public/admin/images/pluse.svg') }}">Add New Student</a>
          <!-- <a href="{{ url('admin/add-student-previous-fees') }}" class="add-pervious"><img src="{{ url('public/admin/images/pluse.svg') }}">Add Previous Fees</a> -->
       </div>
    </div>
@@ -147,7 +149,7 @@
                   @elseif($student->course_type == 'Web Designing')
                   <td class="light-pink-color"><span>Web Designing</span></td>
                   @elseif($student->course_type == 'Digital Marketing')
-                  <td class="light-pink-color"><span>Digital Marketing</span></td>
+                  <td class="light-organge-color"><span>Digital Marketing</span></td>
                   @elseif($student->course_type == 'Graphic Designing')
                   <td class="light-cyan-color"><span>Graphic Designing</span></td>
                   @else

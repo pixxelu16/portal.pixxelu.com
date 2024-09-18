@@ -30,8 +30,9 @@ class StudentController extends Controller
         $is_full_stack_development = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Full Stack Development')->count();
         $is_php = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Php Development')->count();
         $is_graphic = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Graphic')->count();
+        $digital_marketing = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Digital Marketing')->count();
 
-        return view('admin.students.all-students-list', compact('get_students_detail', 'is_total_students', 'is_web_designing_students','is_web_development_students','is_full_stack_development','is_php','is_graphic'));
+        return view('admin.students.all-students-list', compact('get_students_detail', 'is_total_students', 'is_web_designing_students','is_web_development_students','is_full_stack_development','is_php','is_graphic','digital_marketing'));
     }
 
     //Function for add new student

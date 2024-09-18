@@ -105,7 +105,7 @@ class InqueryController extends Controller
         if ($is_update_inquery) {
             if ($request->status === 'Converted') {
                 //Default image
-                $filename = 'default_user.png';
+                $filename = 'default_user.png';	
                 //Get current day
                 $now = Carbon::now();
                 //Check if inquery is craeted or not
@@ -122,7 +122,7 @@ class InqueryController extends Controller
                     'total_fees' => $request->total_fees,
                     'user_status' => 'Active',
                     'user_type' => 'Student',
-                    'user_pic' => $filename
+                    'user_pic' => $filename,
                 ]);
             }
             //Show success massage

@@ -69,6 +69,10 @@
          <p><?php echo e($is_full_stack_development); ?></p>
       </div>
       <div class="box">
+         <h3>Digital Marketing</h3>
+         <p><?php echo e($digital_marketing); ?></p>
+      </div>
+      <div class="box">
          <h3>Graphic</h3>
          <p><?php echo e($is_graphic); ?></p>
       </div>
@@ -115,7 +119,7 @@
             <thead>
                <tr class="sticky">
                   <th>S. No</th>
-                  <th>Student ID</th>
+                  <th>Registration ID</th>
                   <th>Image</th>
                   <th>Name</th>
                   <th>Phone No</th>
@@ -152,7 +156,7 @@
 
                      </a>
                      <?php else: ?>
-                     No phone number available
+                     -
                      <?php endif; ?>
                   </td>
                   <td><?php echo e(\Carbon\Carbon::parse($student->course_joining_date)->format('d M Y')); ?></td>
@@ -164,10 +168,12 @@
                   <td class="light-yellow-color"><span>Web Development</span></td>
                   <?php elseif($student->course_type == 'Web Designing'): ?>
                   <td class="light-pink-color"><span>Web Designing</span></td>
+                  <?php elseif($student->course_type == 'Digital Marketing'): ?>
+                  <td class="light-organge-color"><span>Digital Marketing</span></td>
                   <?php elseif($student->course_type == 'Graphic Designing'): ?>
                   <td class="light-cyan-color"><span>Graphic Designing</span></td>
                   <?php else: ?>
-                  <td></td>
+                  <td>-</td>             
                   <?php endif; ?>
                   <td style="text-align:left;">
                   <?php
@@ -180,10 +186,11 @@
                      ?>
                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                   <!-- Display total fees after the loop -->
-                  Rs <?php echo e(number_format($total_fees)); ?>
+                  Rs <?php echo e(number_format($total_fees)); ?> <br>
+                  <!-- Display submission date, if it exists -->
+                    <?php echo e(\Carbon\Carbon::parse($student->student_fees_detail->first()->submission_date)->format('d M Y')); ?>
 
                </td>
-
                </tr>
                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </tbody>
