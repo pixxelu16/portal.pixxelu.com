@@ -12,7 +12,7 @@
       <p><?php echo e(Session::get('unsuccess')); ?></p>
    </div>
    <?php endif; ?>
-   <h2>All Students Listing</h2>
+   <h2>All Students Course Listing</h2>
 </div>
 <div class="main-table">
    <div class="data-table-listing">
@@ -31,13 +31,14 @@
             <option value="Web Designing">Web Designing</option>
             <option value="Web Development">Web Development</option>
             <option value="PHP Development">PHP Development</option>
-            <option value="Graphic">Graphic</option>
+            <option value="Digital Marketing">Digital Marketing</option>
             <option value="Full Stack Development">Full Stack Development</option>
+            <option value="Graphic">Graphic</option>
          </select>
          <!--end filter student acc course-->
-         <a href="<?php echo e(url('admin/add-new-student')); ?>"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add New Student</a>
          <a href="<?php echo e(url('admin/export-student')); ?>" class="export"><img src="<?php echo e(url('public/admin/images/csv-file.svg')); ?>"></a>
          <a href="<?php echo e(url('admin/all-students-trash-list')); ?>" class="export"><img src="<?php echo e(url('public/admin/images/trash.svg')); ?>"></a>
+         <a href="<?php echo e(url('admin/add-new-student')); ?>"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add New Student</a>
          <!--<a href="<?php echo e(url('admin/add-student-previous-fees')); ?>" class="add-pervious"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add Previous Fees</a>-->
       </div>
    </div>
@@ -117,6 +118,8 @@
                   <td class="light-yellow-color"><span>Web Development</span></td>
                   <?php elseif($student->course_type == 'Web Designing'): ?>
                   <td class="light-pink-color"><span>Web Designing</span></td>
+                  <?php elseif($student->course_type == 'Digital Marketing'): ?>
+                  <td class="light-organge-color"><span>Digital Marketing</span></td>
                   <?php elseif($student->course_type == 'Graphic Designing'): ?>
                   <td class="light-cyan-color"><span>Graphic Designing</span></td>
                   <?php else: ?>

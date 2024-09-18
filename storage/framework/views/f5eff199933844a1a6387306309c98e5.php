@@ -202,8 +202,46 @@
                </select>
             </div>
             <div class="form-design state">
-               <label for="state">State</label>
-               <input type="text" id="state" name="state" value="<?php echo e($student->state); ?>" placeholder="Enter State">
+            <label for="state">State</label>
+            <select name="state" class="form-control" id="state">
+               <option value="" disabled selected>Select State/UT</option>
+               <option value="Andhra Pradesh" <?php if($student->state == 'Andhra Pradesh'): ?> selected <?php endif; ?>>Andhra Pradesh</option>
+               <option value="Arunachal Pradesh" <?php if($student->state == 'Arunachal Pradesh'): ?> selected <?php endif; ?>>Arunachal Pradesh</option>
+               <option value="Assam" <?php if($student->state == 'Assam'): ?> selected <?php endif; ?>>Assam</option>
+               <option value="Bihar" <?php if($student->state == 'Bihar'): ?> selected <?php endif; ?>>Bihar</option>
+               <option value="Chhattisgarh" <?php if($student->state == 'Chhattisgarh'): ?> selected <?php endif; ?>>Chhattisgarh</option>
+               <option value="Goa" <?php if($student->state == 'Goa'): ?> selected <?php endif; ?>>Goa</option>
+               <option value="Gujarat" <?php if($student->state == 'Gujarat'): ?> selected <?php endif; ?>>Gujarat</option>
+               <option value="Haryana" <?php if($student->state == 'Haryana'): ?> selected <?php endif; ?>>Haryana</option>
+               <option value="Himachal Pradesh" <?php if($student->state == 'Himachal Pradesh'): ?> selected <?php endif; ?>>Himachal Pradesh</option>
+               <option value="Jharkhand" <?php if($student->state == 'Jharkhand'): ?> selected <?php endif; ?>>Jharkhand</option>
+               <option value="Karnataka" <?php if($student->state == 'Karnataka'): ?> selected <?php endif; ?>>Karnataka</option>
+               <option value="Kerala" <?php if($student->state == 'Kerala'): ?> selected <?php endif; ?>>Kerala</option>
+               <option value="Madhya Pradesh" <?php if($student->state == 'Madhya Pradesh'): ?> selected <?php endif; ?>>Madhya Pradesh</option>
+               <option value="Maharashtra" <?php if($student->state == 'Maharashtra'): ?> selected <?php endif; ?>>Maharashtra</option>
+               <option value="Manipur" <?php if($student->state == 'Manipur'): ?> selected <?php endif; ?>>Manipur</option>
+               <option value="Meghalaya" <?php if($student->state == 'Meghalaya'): ?> selected <?php endif; ?>>Meghalaya</option>
+               <option value="Mizoram" <?php if($student->state == 'Mizoram'): ?> selected <?php endif; ?>>Mizoram</option>
+               <option value="Nagaland" <?php if($student->state == 'Nagaland'): ?> selected <?php endif; ?>>Nagaland</option>
+               <option value="Odisha" <?php if($student->state == 'Odisha'): ?> selected <?php endif; ?>>Odisha</option>
+               <option value="Punjab" <?php if($student->state == 'Punjab'): ?> selected <?php endif; ?>>Punjab</option>
+               <option value="Rajasthan" <?php if($student->state == 'Rajasthan'): ?> selected <?php endif; ?>>Rajasthan</option>
+               <option value="Sikkim" <?php if($student->state == 'Sikkim'): ?> selected <?php endif; ?>>Sikkim</option>
+               <option value="Tamil Nadu" <?php if($student->state == 'Tamil Nadu'): ?> selected <?php endif; ?>>Tamil Nadu</option>
+               <option value="Telangana" <?php if($student->state == 'Telangana'): ?> selected <?php endif; ?>>Telangana</option>
+               <option value="Tripura" <?php if($student->state == 'Tripura'): ?> selected <?php endif; ?>>Tripura</option>
+               <option value="Uttar Pradesh" <?php if($student->state == 'Uttar Pradesh'): ?> selected <?php endif; ?>>Uttar Pradesh</option>
+               <option value="Uttarakhand" <?php if($student->state == 'Uttarakhand'): ?> selected <?php endif; ?>>Uttarakhand</option>
+               <option value="West Bengal" <?php if($student->state == 'West Bengal'): ?> selected <?php endif; ?>>West Bengal</option>
+               <option value="Andaman and Nicobar Islands" <?php if($student->state == 'Andaman and Nicobar Islands'): ?> selected <?php endif; ?>>Andaman and Nicobar Islands</option>
+               <option value="Chandigarh" <?php if($student->state == 'Chandigarh'): ?> selected <?php endif; ?>>Chandigarh</option>
+               <option value="Dadra and Nagar Haveli and Daman and Diu" <?php if($student->state == 'Dadra and Nagar Haveli and Daman and Diu'): ?> selected <?php endif; ?>>Dadra and Nagar Haveli and Daman and Diu</option>
+               <option value="Lakshadweep" <?php if($student->state == 'Lakshadweep'): ?> selected <?php endif; ?>>Lakshadweep</option>
+               <option value="Delhi" <?php if($student->state == 'Delhi'): ?> selected <?php endif; ?>>Delhi</option>
+               <option value="Puducherry" <?php if($student->state == 'Puducherry'): ?> selected <?php endif; ?>>Puducherry</option>
+               <option value="Ladakh" <?php if($student->state == 'Ladakh'): ?> selected <?php endif; ?>>Ladakh</option>
+               <option value="Jammu and Kashmir" <?php if($student->state == 'Jammu and Kashmir'): ?> selected <?php endif; ?>>Jammu and Kashmir</option>
+            </select>
             </div>
          </div>
          <div class="form-group display-column">
@@ -219,6 +257,7 @@
                   <option value="Web Development" <?php if($student->course_type == 'Web Development'): ?> selected <?php endif; ?>>Web Development</option>
                   <option value="PHP Development" <?php if($student->course_type == 'PHP Development'): ?> selected <?php endif; ?>>PHP Development</option>
                   <option value="Graphic" <?php if($student->course_type == 'Graphic'): ?> selected <?php endif; ?>>Graphic</option>
+                  <option value="Digital Marketing" <?php if($student->course_type == 'Digital Marketing'): ?> selected <?php endif; ?>>Digital Marketing</option>
                   <option value="Full Stack Development" <?php if($student->course_type == 'Full Stack Development'): ?> selected <?php endif; ?>>Full Stack Development</option>
                </select>
             </div>

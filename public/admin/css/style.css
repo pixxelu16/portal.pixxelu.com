@@ -678,7 +678,7 @@ td.green-color span {
     font-size: 12px;
     letter-spacing: 0.3px;
     font-weight: 600;
-    width: 60px;
+    width: 66px;
 	height: auto;
 	display: inline-block;
 	text-align: center;
@@ -2090,6 +2090,7 @@ table.dataTable thead .sorting_asc {
     margin-bottom: 10px;
     font-size: 18px;
     color: #333;
+    display: block ruby;   
 }
 
 .box p {

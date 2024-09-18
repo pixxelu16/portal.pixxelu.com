@@ -70,6 +70,10 @@
          <p>{{ $is_full_stack_development }}</p>
       </div>
       <div class="box">
+         <h3>Digital Marketing</h3>
+         <p>{{ $digital_marketing }}</p>
+      </div>
+      <div class="box">
          <h3>Graphic</h3>
          <p>{{ $is_graphic }}</p>
       </div>
@@ -116,7 +120,7 @@
             <thead>
                <tr class="sticky">
                   <th>S. No</th>
-                  <th>Student ID</th>
+                  <th>Registration ID</th>
                   <th>Image</th>
                   <th>Name</th>
                   <th>Phone No</th>
@@ -152,7 +156,7 @@
                      {{ substr($student->student_phone_no, 0, 5) }}-{{ substr($student->student_phone_no, 5) }}
                      </a>
                      @else
-                     No phone number available
+                     -
                      @endif
                   </td>
                   <td>{{ \Carbon\Carbon::parse($student->course_joining_date)->format('d M Y') }}</td>
@@ -164,10 +168,12 @@
                   <td class="light-yellow-color"><span>Web Development</span></td>
                   @elseif($student->course_type == 'Web Designing')
                   <td class="light-pink-color"><span>Web Designing</span></td>
+                  @elseif($student->course_type == 'Digital Marketing')
+                  <td class="light-organge-color"><span>Digital Marketing</span></td>
                   @elseif($student->course_type == 'Graphic Designing')
                   <td class="light-cyan-color"><span>Graphic Designing</span></td>
                   @else
-                  <td></td>
+                  <td>-</td>             
                   @endif
                   <td style="text-align:left;">
                   @php
@@ -180,9 +186,10 @@
                      @endphp
                   @endforeach
                   <!-- Display total fees after the loop -->
-                  Rs {{ number_format($total_fees) }}
+                  Rs {{ number_format($total_fees) }} <br>
+                  <!-- Display submission date, if it exists -->
+                    {{ \Carbon\Carbon::parse($student->student_fees_detail->first()->submission_date)->format('d M Y') }}
                </td>
-
                </tr>
                @endforeach
             </tbody>
