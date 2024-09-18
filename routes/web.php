@@ -156,7 +156,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('admin/search-students-fees-list/{any}', [App\Http\Controllers\Admin\StudentController::class, 'search_students_fees_list'])->name('admin.search.student.fees.list');
         //Students attendance list
         Route::get('admin/all-students-attendance-list', [App\Http\Controllers\Admin\StudentAttendanceController::class, 'all_students_attendance_list']);
-        Route::get('admin/search-attendance', [App\Http\Controllers\Admin\StudentAttendanceController::class, 'search_student_attendance_list'])->name('admin.search.attendance');
+        Route::get('admin/search-student-attendance', [App\Http\Controllers\Admin\StudentAttendanceController::class, 'search_student_attendance_list'])->name('admin.search.attendance');
         //inqueries deatils 
         //inqueries search acc status list
         Route::get('admin/search-inquery/{any}', [App\Http\Controllers\Admin\InqueryController::class, 'search_inquery_status_list'])->name('admin.search.inquery.status.list');

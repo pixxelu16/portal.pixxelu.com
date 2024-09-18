@@ -204,7 +204,7 @@
                   @elseif($payment_completed)
                   <td class="ligth-green-color"><span>Fees Complete</span></td>
                   @else
-                  <td class="green-color"><span>Paid</span></td>
+                  <td class="green-colors"><span>Paid</span></td>
                   @endif
                   <td>
                      <div class="dropdown">

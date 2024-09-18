@@ -36,7 +36,7 @@
             <option value="Full Stack Development">Full Stack Development</option>
          </select>
          <a href="<?php echo e(url('admin/export-inqueries')); ?>" class="export"><img src="<?php echo e(url('public/admin/images/csv-file.svg')); ?>"></a>
-         <a href="<?php echo e(url('admin/all-converted-inqueries-list')); ?>">All Converted Inqueries</a>
+         <a href="<?php echo e(url('admin/all-converted-inqueries-list')); ?>">Converted Inqueries</a>
          <a href="<?php echo e(url('admin/add-new-inquery')); ?>"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add New Inquery</a>
       </div>
    </div>
@@ -91,7 +91,8 @@
                   <?php else: ?>
                   <td>-</td>
                   <?php endif; ?>
-                  <td><?php echo e($list->total_fees); ?> </td>
+
+                  <td><?php echo e($list->total_fees ?? '-'); ?> </td>
                   <?php if($list->status == 'Active'): ?> 
                   <td class="green-color"><span>Active</span></td>
                   <?php elseif($list->status == 'Office_Visited'): ?> 

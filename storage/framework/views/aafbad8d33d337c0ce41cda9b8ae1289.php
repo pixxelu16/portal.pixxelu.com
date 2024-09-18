@@ -13,62 +13,62 @@
    </div>
    <?php endif; ?>
    <div class ="search-header">
-      <h2>Attendance Listing</h2>  
+      <h2>All Students Attendance Listing</h2>
    </div>
-   <!--start four boxes studens fees-->
+   <!--start student attendance boxes--->
    <div class="boxes-wrapper student-attendance-header">
-         <div class="box">
-            <img src="<?php echo e(url('public/admin/images/working_hours.svg')); ?>" alt="Working Hours">
-            <h3>Working Hours</h3>
-            <p><?php echo e(number_format($total_present_hours, 2)); ?> Hrs</p>
+      <div class="box">
+         <img src="<?php echo e(url('public/admin/images/working_hours.svg')); ?>" alt="Working Hours">
+         <h3>Working Hours</h3>
+         <p><?php echo e(number_format($total_present_hours, 2)); ?> Hrs</p>
       </div>
-         <div class="box">
-            <img src="<?php echo e(url('public/admin/images/present_icon.svg')); ?>" alt="Present">
-            <h3>Presents</h3>
-            <p><?php echo e($total_present_days); ?></p>
-         </div>
-         <div class="box">
-            <img src="<?php echo e(url('public/admin/images/absent_icon.svg')); ?>" alt="Absent">
-            <h3>Absent</h3>
-            <p><?php echo e($total_absent_days); ?></p>
-         </div>
-         <div class="box">
-            <img src="<?php echo e(url('public/admin/images/leave_icon.svg')); ?>" alt="Leave">
-            <h3>Leave</h3>
-            <p><?php echo e($total_leave_days); ?></p>
-         </div>
-         <div class="box">
-            <img src="<?php echo e(url('public/admin/images/half_day_leave.svg')); ?>" alt="Half Day">
-            <h3>Half Day</h3>
-            <p><?php echo e($total_half_day); ?></p>
-         </div>
-         <div class="box">
-            <img src="<?php echo e(url('public/admin/images/holiday.svg')); ?>" alt="Holidays">
-            <h3>Holidays</h3>
-            <p><?php echo e($total_holidays); ?></p>
-         </div>
-         <div class="box">
-            <img src="<?php echo e(url('public/admin/images/total_days_in_month.svg')); ?>" alt="daysInMonth">
-            <h3>Days in month</h3>
-            <p><?php echo e($daysInMonth); ?></p>
-         </div>
+      <div class="box">
+         <img src="<?php echo e(url('public/admin/images/present_icon.svg')); ?>" alt="Present">
+         <h3>Presents</h3>
+         <p><?php echo e($total_present_days); ?></p>
+      </div>
+      <div class="box">
+         <img src="<?php echo e(url('public/admin/images/absent_icon.svg')); ?>" alt="Absent">
+         <h3>Absent</h3>
+         <p><?php echo e($total_absent_days); ?></p>
+      </div>
+      <div class="box">
+         <img src="<?php echo e(url('public/admin/images/leave_icon.svg')); ?>" alt="Leave">
+         <h3>Leave</h3>
+         <p><?php echo e($total_leave_days); ?></p>
+      </div>
+      <div class="box">
+         <img src="<?php echo e(url('public/admin/images/half_day_leave.svg')); ?>" alt="Half Day">
+         <h3>Half Day</h3>
+         <p><?php echo e($total_half_day); ?></p>
+      </div>
+      <div class="box">
+         <img src="<?php echo e(url('public/admin/images/holiday.svg')); ?>" alt="Holidays">
+         <h3>Holidays</h3>
+         <p><?php echo e($total_holidays); ?></p>
+      </div>
+      <div class="box">
+         <img src="<?php echo e(url('public/admin/images/total_days_in_month.svg')); ?>" alt="daysInMonth">
+         <h3>Days in month</h3>
+         <p><?php echo e($daysInMonth); ?></p>
+      </div>
    </div>
-   <!--end four boxes studens fees-->
+   <!--end student attendance boxes--->
 </div>
-<form action="<?php echo e(url('admin/search-attendance')); ?>" method="GET">
-   <!--start search filter-->
+<!--start search filter-->
+<form action="<?php echo e(url('admin/search-student-attendance')); ?>" method="GET">
    <div class="row search-all-students-attendance">
       <div class="col-sm-6 col-md-3">
          <div class="input-block mb-3 form-focus">
-          <select class="select floating" name="student_name">
-            <option value="">Select Student Name</option>
-            <?php $__currentLoopData = $get_student_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <option value="<?php echo e($student->name); ?>"><?php echo e($student->name); ?></option>
+            <select class="select floating" name="student_name">
+               <option value="">Select Student Name</option>
+               <?php $__currentLoopData = $get_student_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+               <option value="<?php echo e($student->name); ?>">(<?php echo e($student->id); ?>) <?php echo e($student->name); ?></option>
                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
          </div>
-         </div>
-        <div class="col-sm-6 col-md-3">
+      </div>
+      <div class="col-sm-6 col-md-3">
          <div class="input-block mb-3 form-focus select-focus">
             <select class="select floating" name="month">
                <option value="">Select Month</option>
@@ -158,9 +158,11 @@
                   $punchIn = null;
                   $punchOut = null;
                   $formattedDuration = null;
+
                   if ($attendance) {
                      $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
                      $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
+                    
                      if ($punchOut) {
                      $duration = $punchIn->diff($punchOut);
                      $hours = $duration->h;
@@ -168,6 +170,7 @@
                      $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
                      }
                   }
+
                   $isSunday = in_array($day, $sundays);
                   $isLastSaturday = $day == $lastSaturday;
                   ?>
@@ -190,6 +193,7 @@
                      <img src="<?php echo e(url('public/admin/images/half_day_leave.svg')); ?>" alt="Half Day">
                      <?php endif; ?>
                      <?php else: ?> 
+                     <img src="<?php echo e(url('public/admin/images/absent_icon.svg')); ?>" alt="Absent">
                      <?php endif; ?>
                      <?php endif; ?>
                   </td>
