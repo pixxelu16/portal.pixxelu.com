@@ -62,6 +62,7 @@ class InqueryController extends Controller
             'mobile' => $request->mobile,
             'address' => $request->address,
             'course_type' => $request->course_type,
+            'priority' => $request->priority,
             'total_fees' => $request->total_fees,
             'status' => 'Active',
         ]);

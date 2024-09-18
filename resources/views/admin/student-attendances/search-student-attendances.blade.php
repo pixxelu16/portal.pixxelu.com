@@ -13,9 +13,9 @@
    </div>
    @endif
    <div class ="search-header">
-      <h2>Search Attendances</h2>
+      <h2>Search Student Attendance List</h2>
    </div>
-    <!--start four boxes studens fees-->
+    <!--start student attendance boxes--->
     <div class="boxes-wrapper student-attendance-header">
          <div class="box">
             <img src="{{ url('public/admin/images/working_hours.svg') }}" alt="Working Hours">
@@ -53,16 +53,16 @@
             <p>{{ $daysInMonth }}</p>
          </div>
    </div>
-   <!--end four boxes studens fees-->
+    <!--end student attendance boxes--->
 </div>
-<form action="{{ url('admin/search-attendance') }}" method="GET">
-   <!--start search filter-->
+<!--start search filter-->
+<form action="{{ url('admin/search-student-attendance') }}" method="GET">
    <div class="row search-all-students-attendance">
    <div class="col-sm-6 col-md-3">
          <div class="input-block mb-3 form-focus">
             <select class="select floating" name="student_name">
             <option value="">Select Student Name</option>
-                  @foreach ($get_student_name as $student)
+               @foreach ($get_student_name as $student)
                <option value="{{$student->name}}" {{request()->input('student_name') === $student->name ? 'selected="selected"' : ''}}>{{$student->name}}</option>
                @endforeach
             </select>
@@ -159,6 +159,7 @@
                   $punchIn = null;
                   $punchOut = null;
                   $formattedDuration = null;
+
                   if ($attendance) {
                   $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
                   $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
@@ -169,6 +170,7 @@
                      $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
                      }
                   }
+
                   $isSunday = in_array($day, $sundays);
                   $isLastSaturday = $day == $lastSaturday;
                   @endphp
@@ -198,7 +200,7 @@
                </tr>
                @empty
                <tr>
-                  <td colspan="{{ count($days) + 6 }}" class="text-center">No Student found</td>
+                  <td colspan="{{ count($days) + 6 }}" class="text-center">No Student Attendance found</td>
                </tr>
                @endforelse
             </tbody>

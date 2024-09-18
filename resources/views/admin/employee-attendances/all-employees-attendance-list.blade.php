@@ -13,9 +13,9 @@
    </div>
    @endif
    <div class ="search-header">
-      <h2>All Students Attendance Listing</h2>
+      <h2>All Employees Attendance Listing</h2>
    </div>
-   <!--start student attendance boxes--->
+   <!--start employee attendance boxes-->
    <div class="boxes-wrapper student-attendance-header">
       <div class="box">
          <img src="{{ url('public/admin/images/working_hours.svg') }}" alt="Working Hours">
@@ -53,17 +53,17 @@
          <p>{{ $daysInMonth }}</p>
       </div>
    </div>
-   <!--end student attendance boxes--->
+   <!--end employee attendance boxes-->
 </div>
 <!--start search filter-->
-<form action="{{ url('admin/search-student-attendance') }}" method="GET">
+<form action="{{ url('admin/search-employee-attendance') }}" method="GET">
    <div class="row search-all-students-attendance">
       <div class="col-sm-6 col-md-3">
          <div class="input-block mb-3 form-focus">
-            <select class="select floating" name="student_name">
-               <option value="">Select Student Name</option>
-               @foreach ($get_student_detail as $student)
-               <option value="{{ $student->name }}">({{ $student->id }}) {{ $student->name }}</option>
+            <select class="select floating" name="employee_name">
+               <option value="">Select Employee Name</option>
+               @foreach ($get_employee_detail as $employee)
+               <option value="{{ $employee->name }}">({{ $employee->unique_employee_id }}) {{ $employee->name }}</option>
                @endforeach
             </select>
          </div>
@@ -107,11 +107,11 @@
             <thead>
                <tr>
                   <th>Sr No.</th>
-                  <th>Registration ID</th>
+                  <th>Employee ID</th>
                   <th>Image</th>
                   <th>Name</th>
-                  <th>Batch</th>
-                  <th>Batch Timing</th>
+                  <th>Sift</th>
+                  <th>Sift Type</th>
                   @foreach ($days as $day)
                   @php
                   $date = \Carbon\Carbon::create($year, $month, $day);
@@ -130,26 +130,26 @@
                @php
                $count = 1;
                @endphp
-               @forelse ($get_student_detail as $student)
+               @forelse ($get_employee_detail as $employee)
                <tr>
                   <td>{{ $count++ }}.</td>
-                  <td>{{ $student->id }}</td>
+                  <td>{{ $employee->unique_employee_id }}</td>
                   <td data-th="Image">
-                     @if($student->user_pic)
+                     @if($employee->user_pic)
                      <div class="user-image">
-                        <img src="{{ url('public/uploads/users/'. $student->user_pic) }}" alt="">
+                        <img src="{{ url('public/uploads/employees/'. $employee->user_pic) }}" alt="">
                      </div>
                      @else
-                     <img src="{{ url('public/uploads/users/default_user.png') }}" alt="">
+                     <img src="{{ url('public/uploads/employees/default_user.png') }}" alt="">
                      @endif
                   </td>
-                  <td>{{ $student->name }}</td>
-                  <td>{{ $student['student_attendance_detail']['0']['batch'] ?? '-'}}</td>
-                  <td class="batch-time">{{ $student['student_attendance_detail'][0]['batch_time'] ?? '-'}}</td>
+                  <td>{{ $employee->name }}</td>
+                  <td>{{ $employee['employees_attendance_detail']['0']['sift'] ?? '-'}}</td>
+                  <td class="batch-time">{{ $employee['employees_attendance_detail'][0]['sift_type'] ?? '-'}}</td>
                   @foreach ($days as $day)
                   @php
                   $date = \Carbon\Carbon::create($year, $month, $day)->format('Y-m-d');
-                  $attendance = $student->student_attendance_detail->first(function ($att) use ($date) {
+                  $attendance = $employee->employees_attendance_detail->first(function ($att) use ($date) {
                   return \Carbon\Carbon::parse($att->created_at)->format('Y-m-d') === $date;
                   });
                   $punchIn = null;
@@ -159,15 +159,15 @@
                   if ($attendance) {
                      $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
                      $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
-                    
+                     
                      if ($punchOut) {
-                     $duration = $punchIn->diff($punchOut);
-                     $hours = $duration->h;
-                     $minutes = $duration->i;
-                     $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
+                        $duration = $punchIn->diff($punchOut);
+                        $hours = $duration->h;
+                        $minutes = $duration->i;
+                        $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
                      }
                   }
-
+                  
                   $isSunday = in_array($day, $sundays);
                   $isLastSaturday = $day == $lastSaturday;
                   @endphp
@@ -190,7 +190,6 @@
                      <img src="{{ url('public/admin/images/half_day_leave.svg') }}" alt="Half Day">
                      @endif
                      @else 
-                     <img src="{{ url('public/admin/images/absent_icon.svg') }}" alt="Absent">
                      @endif
                      @endif
                   </td>
@@ -198,7 +197,7 @@
                </tr>
                @empty
                <tr>
-                  <td colspan="{{ count($days) + 6 }}" class="text-center">No Student found</td>
+                  <td colspan="{{ count($days) + 6 }}" class="text-center">No Employee Attendances found</td>
                </tr>
                @endforelse
             </tbody>

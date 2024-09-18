@@ -36,7 +36,7 @@
             <option value="Full Stack Development">Full Stack Development</option>
          </select>
          <a href="{{ url('admin/export-inqueries') }}" class="export"><img src="{{ url('public/admin/images/csv-file.svg') }}"></a>
-         <a href="{{ url('admin/all-converted-inqueries-list') }}">All Converted Inqueries</a>
+         <a href="{{ url('admin/all-converted-inqueries-list') }}">Converted Inqueries</a>
          <a href="{{ url('admin/add-new-inquery') }}"><img src="{{ url('public/admin/images/pluse.svg') }}">Add New Inquery</a>
       </div>
    </div>
@@ -91,7 +91,8 @@
                   @else
                   <td>-</td>
                   @endif
-                  <td>{{ $list->total_fees }} </td>
+
+                  <td>{{ $list->total_fees ?? '-'}} </td>
                   @if($list->status == 'Active') 
                   <td class="green-color"><span>Active</span></td>
                   @elseif($list->status == 'Office_Visited') 

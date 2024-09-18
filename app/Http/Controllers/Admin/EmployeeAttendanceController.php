@@ -13,32 +13,100 @@ class EmployeeAttendanceController extends Controller
 
     //Function for all employees attenedance lists
     public function all_employees_attendance_list() { 
-    // Get the current month and year
-    $month = Carbon::now()->month;
-    $year = Carbon::now()->year;
+        //Get the current month and year
+        $month = Carbon::now()->month;
+        $year = Carbon::now()->year;
 
-    // Get employee details along with their attendance records for the current month only
-    $get_all_employees_list = User::where('user_type', 'Employee')
-                                   ->where('user_status', 'Active')
-                                   ->with(['employees_attendance_detail' => function ($query) use ($month, $year) {
-                                       $query->whereYear('created_at', $year)
-                                             ->whereMonth('created_at', $month);
-                                   }])
-                                   ->get();
-                          
-    // Define months
-    $months = [
-        '01' => 'Jan', '02' => 'Feb', '03' => 'March', '04' => 'April',
-        '05' => 'May', '06' => 'June', '07' => 'July', '08' => 'August',
-        '09' => 'Sep', '10' => 'Oct', '11' => 'Nov', '12' => 'Dec'
-    ];
+        //Get employee details
+        $get_employee_detail = User::where('user_type', 'Employee')
+            ->where('user_status', 'Active')
+            ->with([
+                'employees_attendance_detail' => function ($query) use ($month, $year) {
+                    $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
+                }
+            ])->get();
 
-    // Get number of days in the current month
-    $daysInMonth = \Carbon\Carbon::create($year, $month, 1)->daysInMonth;
-    $days = range(1, $daysInMonth);
- 
-    return view('admin.employees.all-employees-attendance-list', compact('get_all_employees_list', 'months', 'days', 'month', 'year'));
-}
+        //Get attendance details
+        $total_present_hours = 0;
+        $total_present_days = 0;
+        $total_absent_days = 0;
+        $total_leave_days = 0;
+        $total_half_day = 0;
+
+        //Get the current month and year
+        $currentMonth = Carbon::now()->month;
+        $currentYear = Carbon::now()->year;
+
+        //Calculate totals
+        foreach ($get_employee_detail as $employee) {
+            foreach ($employee->employees_attendance_detail as $attendance) {
+                //Get punch in and outs
+                $punchIn = Carbon::parse($attendance->punch_in_time);
+                $punchOut = $attendance->punch_out_time ? Carbon::parse($attendance->punch_out_time) : null;
+
+                //Check if attendance current month and year
+                if ($punchIn->month == $currentMonth && $punchIn->year == $currentYear) {
+                    //Check attendance status 
+                    if ($attendance->attendance_status == 'present') {
+                        //Calculate total present hours
+                        if ($punchOut) {
+                            $duration = $punchIn->diff($punchOut);
+                            $total_present_hours += ($duration->h + $duration->i / 60);
+                        }
+                        //Count the day as present
+                        $total_present_days++;
+                    } elseif ($attendance->attendance_status == 'absent') {
+                        $total_absent_days++;
+                    } elseif ($attendance->attendance_status == 'leave') {
+                        $total_leave_days++;
+                    } elseif ($attendance->attendance_status == 'half_day') {
+                        $total_half_day++;
+                    }
+                }
+            }
+        }
+        //Define months
+        $months = [
+            '1' => 'January',
+            '2' => 'February',
+            '3' => 'March',
+            '4' => 'April',
+            '5' => 'May',
+            '6' => 'June',
+            '7' => 'July',
+            '8' => 'August',
+            '9' => 'September',
+            '10' => 'October',
+            '11' => 'November',
+            '12' => 'December'
+        ];
+
+        //Get current month
+        $daysInMonth = Carbon::create($year, $month, 1)->daysInMonth;
+        $days = range(1, $daysInMonth);
+
+        //Get all Sundays and last Saturday of the month
+        $sundays = [];
+        $lastSaturday = null;
+
+        for ($day = 1; $day <= $daysInMonth; $day++) {
+            $date = Carbon::create($year, $month, $day);
+
+            //Check for Sundays
+            if ($date->isSunday()) {
+                $sundays[] = $day;
+            }
+
+            //Check for the last Saturday
+            if ($date->isSaturday() && $day >= ($daysInMonth - 6)) {
+                $lastSaturday = $day;
+            }
+        }
+        //Get total holidays all Sundays and last Saturday
+        $total_holidays = count($sundays) + ($lastSaturday ? 1 : 0);
+
+        return view('admin.employee-attendances.all-employees-attendance-list', compact('get_employee_detail', 'months', 'days', 'month', 'year', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays', 'daysInMonth'));
+    }
 
 
     //Function for update 
@@ -107,50 +175,104 @@ class EmployeeAttendanceController extends Controller
 
     //search employee attendance list
     public function search_employee_attendance_list(Request $request) {
-        //Capture query parameters
-        $employeeName = $request->employee_name;
+        //Get month and year
+        $employee_name = $request->employee_name;
         $month = $request->month;
         $year = $request->year;
-    
-        //Get employee detail 
-        $get_all_employees_list = User::where('user_type', 'Employee')->where('user_status', 'Active')->get();
 
-        //Get name
-        $get_name = User::where('user_type', 'Employee')->where('user_status', 'Active')->where('name', $employeeName)->first();
 
-        //echo $get_name;exit;
+        //Get employee details 
+        $get_employee_detail = User::where('user_type', 'Employee')
+            ->where('user_status', 'Active')->where('name', $employee_name)
+            ->with([
+                'employees_attendance_detail' => function ($query) use ($month, $year) {
+                    $query->whereYear('created_at', $year)
+                        ->whereMonth('created_at', $month);
+                }
+            ])->get();
+            
+        //Get employee name
+        $get_employee_name = User::select('name')->where('user_type', 'Employee')->where('user_status', 'Active')->get();
 
-        //Build the query
-        $query = User::where('user_type', 'Employee')
-                     ->where('user_status', 'Active')
-                     ->with('employees_attendance_detail');
-    
-        //Filter by employee name 
-        if ($employeeName) {
-            $query->where('name', 'like', '%' . $employeeName . '%');
+        //Get attendance details
+        $total_present_hours = 0;
+        $total_present_days = 0;
+        $total_absent_days = 0;
+        $total_leave_days = 0;
+        $total_half_day = 0;
+
+        //Get the current month and year
+        $currentMonth = Carbon::now()->month;
+        $currentYear = Carbon::now()->year;
+
+        //Calculate totals
+        foreach ($get_employee_detail as $employee) {
+            foreach ($employee->employees_attendance_detail as $attendance) {
+                //Get punch in and outs
+                $punchIn = Carbon::parse($attendance->punch_in_time);
+                $punchOut = $attendance->punch_out_time ? Carbon::parse($attendance->punch_out_time) : null;
+
+                //Check if attendance current month and year
+                if ($punchIn->month == $currentMonth && $punchIn->year == $currentYear) {
+                    //Check attendance status 
+                    if ($attendance->attendance_status == 'present') {
+                        //Calculate total present hours
+                        if ($punchOut) {
+                            $duration = $punchIn->diff($punchOut);
+                            $total_present_hours += ($duration->h + $duration->i / 60);
+                        }
+                        //Count the day as present
+                        $total_present_days++;
+                    } elseif ($attendance->attendance_status == 'absent') {
+                        $total_absent_days++;
+                    } elseif ($attendance->attendance_status == 'leave') {
+                        $total_leave_days++;
+                    } elseif ($attendance->attendance_status == 'half_day') {
+                        $total_half_day++;
+                    }
+                }
+            }
         }
-    
-        //Execute the query
-        $get_employees_detail = $query->orderBy('ID', 'ASC')->get();
-    
         //Define months
         $months = [
-            'Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'August', 'Sep', 'Oct', 'Nov', 'Dec'
+            '1' => 'January',
+            '2' => 'February',
+            '3' => 'March',
+            '4' => 'April',
+            '5' => 'May',
+            '6' => 'June',
+            '7' => 'July',
+            '8' => 'August',
+            '9' => 'September',
+            '10' => 'October',
+            '11' => 'November',
+            '12' => 'December'
         ];
-    
-        //Selected month
-        if ($month && $year) {
-            $monthNumber = array_search($month, $months) + 1; 
-            $daysInMonth = \Carbon\Carbon::create($year, $monthNumber, 1)->daysInMonth;
-        } else {
-            $daysInMonth = 31; 
-        }
-    
+
+        //Get current month
+        $daysInMonth = Carbon::create($year, $month, 1)->daysInMonth;
         $days = range(1, $daysInMonth);
 
-        return view('admin.employees.search-employee-attendances', compact('get_employees_detail', 'get_all_employees_list', 'get_name', 'months', 'days', 'month', 'year'));
-    }
-    
+        //Get all Sundays and last Saturday of the month
+        $sundays = [];
+        $lastSaturday = null;
 
-    
+        for ($day = 1; $day <= $daysInMonth; $day++) {
+            $date = Carbon::create($year, $month, $day);
+
+            //Check for Sundays
+            if ($date->isSunday()) {
+                $sundays[] = $day;
+            }
+
+            //Check for the last Saturday
+            if ($date->isSaturday() && $day >= ($daysInMonth - 6)) {
+                $lastSaturday = $day;
+            }
+        }
+        //Get total holidays all Sundays and last Saturday
+        $total_holidays = count($sundays) + ($lastSaturday ? 1 : 0);
+
+        return view('admin.employee-attendances.search-employee-attendances', compact('get_employee_detail', 'get_employee_name', 'months', 'days', 'month', 'year', 'daysInMonth', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays'));
+    }
 }

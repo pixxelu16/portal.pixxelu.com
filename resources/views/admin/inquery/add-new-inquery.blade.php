@@ -27,12 +27,12 @@
                <label for="mobile">Mobile</label>
                <input type="mobile" id="mobile" name="mobile" value="{{ old('mobile') }}" placeholder="Enter mobile" required>
             </div>
-         </div>
-         <div class="form-group display-column">
             <div class="form-design dob">
                <label for="address">Address</label>
                <input type="text" id="address" name="address" value="{{ old('address') }}"  placeholder="Enter Address">
             </div>
+         </div>
+         <div class="form-group display-column">
             <div class="form-design mail">
                <label for="course_type">Course</label>
                <select class="form-control" name="course_type" id="Course Type" required>
@@ -45,6 +45,19 @@
                   <option value="Full Stack Development">Full Stack Development</option>
                </select>
             </div>
+            <div class="form-design mail">
+               <label for="priority">Priority</label>
+               <select class="form-control" name="priority" id="Priority Type" required>
+                  <option value ="" disabled selected>Select Priority Type</option>
+                  <option value="hot">Hot</option>
+                  <option value="coldt">Cold</option>
+                  <option value="warm">Warm</option>
+               </select>
+            </div>
+            <div class="form-design dob">
+               <label for="total_fees">Total Fees</label>
+               <input type="text" id="total_fees" name="total_fees" value="{{ old('total_fees') }}"  placeholder="Enter Total Fees">
+            </div>
             <!-- <div class="form-design fees">
                <label for="status">Status</label>
                <select class="form-control" name="status" id="User Status">
@@ -52,12 +65,6 @@
                   <option value="Active">Active</option>
                </select>
                </div> -->
-         </div>
-         <div class="form-group display-column">
-            <div class="form-design dob">
-               <label for="total_fees">Total Fees</label>
-               <input type="text" id="total_fees" name="total_fees" value="{{ old('total_fees') }}"  placeholder="Enter Total Fees">
-            </div>
          </div>
          <div class="form-button">
             <div class="back-button">
