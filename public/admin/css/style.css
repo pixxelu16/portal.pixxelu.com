@@ -3512,10 +3512,14 @@ td.ligth-green-color span {
 
 .search-all-students-attendance {
 	display: block ruby;
-	width: 80%;
+	width: 90%;
 	height: 60px;
+    font-size: 14px;
 }
 
+h2.attendance-header {
+    font-size: 18px;
+}
 /*end student attendances css*/
 
 /* { 9/9/2024 Menu Dropdown Design Start } */

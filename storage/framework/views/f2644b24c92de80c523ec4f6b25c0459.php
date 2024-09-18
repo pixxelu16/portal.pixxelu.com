@@ -13,7 +13,7 @@
    </div>
    <?php endif; ?>
    <div class ="search-header">
-      <h2>Search Student Attendance List</h2>
+      <h2 class="attendance-header">Search Student Attendance List</h2>
    </div>
     <!--start student attendance boxes--->
     <div class="boxes-wrapper student-attendance-header">
