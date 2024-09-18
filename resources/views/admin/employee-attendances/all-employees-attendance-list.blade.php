@@ -13,7 +13,7 @@
    </div>
    @endif
    <div class ="search-header">
-      <h2>All Employees Attendance Listing</h2>
+   <h2 class="attendance-header">All Employees Monthly Attendance List:-  {{ date('F Y') }}</h2>
    </div>
    <!--start employee attendance boxes-->
    <div class="boxes-wrapper student-attendance-header">

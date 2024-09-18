@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('content'); ?>
 <div class="space-remove"></div>
 <div class="title-subheading">
@@ -13,9 +12,9 @@
    </div>
    <?php endif; ?>
    <div class ="search-header">
-   <h2 class="attendance-header">All Employees Monthly Attendance List:-  <?php echo e(date('F Y')); ?></h2>
+      <h2>Attendance Listing</h2>
    </div>
-   <!--start employee attendance boxes-->
+   <!--start six boxes employee attendance-->
    <div class="boxes-wrapper student-attendance-header">
       <div class="box">
          <img src="<?php echo e(url('public/admin/images/working_hours.svg')); ?>" alt="Working Hours">
@@ -29,17 +28,17 @@
       </div>
       <div class="box">
          <img src="<?php echo e(url('public/admin/images/absent_icon.svg')); ?>" alt="Absent">
-         <h3>Absent</h3>
+         <h3>Absents</h3>
          <p><?php echo e($total_absent_days); ?></p>
       </div>
       <div class="box">
          <img src="<?php echo e(url('public/admin/images/leave_icon.svg')); ?>" alt="Leave">
-         <h3>Leave</h3>
+         <h3>Leaves</h3>
          <p><?php echo e($total_leave_days); ?></p>
       </div>
       <div class="box">
          <img src="<?php echo e(url('public/admin/images/half_day_leave.svg')); ?>" alt="Half Day">
-         <h3>Half Day</h3>
+         <h3>Half Days</h3>
          <p><?php echo e($total_half_day); ?></p>
       </div>
       <div class="box">
@@ -53,21 +52,17 @@
          <p><?php echo e($daysInMonth); ?></p>
       </div>
    </div>
-   <!--end employee attendance boxes-->
+   <!--end six boxes employee attendance-->
 </div>
-<!--start search filter-->
-<form action="<?php echo e(url('admin/search-employee-attendance')); ?>" method="GET">
-   <div class="row search-all-students-attendance">
-      <div class="col-sm-6 col-md-3">
+<form action="<?php echo e(url('employee/search-attendance')); ?>" method="GET">
+   <!--start search filter-->
+   <div class="row search-student-attendance">
+      <!-- <div class="col-sm-6 col-md-3">
          <div class="input-block mb-3 form-focus">
-            <select class="select floating" name="employee_name">
-               <option value="">Select Employee Name</option>
-               <?php $__currentLoopData = $get_employee_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $employee): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-               <option value="<?php echo e($employee->name); ?>">(<?php echo e($employee->unique_employee_id); ?>) <?php echo e($employee->name); ?></option>
-               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </select>
+             <input type="text" class="form-control" name="name" id="name" 
+                 value="<?php echo e(request()->input('name')); ?>" placeholder="Enter Your Name">
          </div>
-      </div>
+         </div> -->
       <div class="col-sm-6 col-md-3">
          <div class="input-block mb-3 form-focus select-focus">
             <select class="select floating" name="month">
@@ -112,8 +107,8 @@
                   <th>Employee ID</th>
                   <th>Image</th>
                   <th>Name</th>
-                  <th>Sift</th>
-                  <th>Sift Type</th>
+                  <th>Shift</th>
+                  <th>Shift Type</th>
                   <?php $__currentLoopData = $days; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                   <?php
                   $date = \Carbon\Carbon::create($year, $month, $day);
@@ -146,7 +141,7 @@
                      <img src="<?php echo e(url('public/uploads/employees/default_user.png')); ?>" alt="">
                      <?php endif; ?>
                   </td>
-                  <td><?php echo e($employee->name); ?></td>
+                  <td class="batch-time"><?php echo e($employee->name); ?></td>
                   <td><?php echo e($employee['employees_attendance_detail']['0']['sift'] ?? '-'); ?></td>
                   <td class="batch-time"><?php echo e($employee['employees_attendance_detail'][0]['sift_type'] ?? '-'); ?></td>
                   <?php $__currentLoopData = $days; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -162,12 +157,11 @@
                   if ($attendance) {
                      $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
                      $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
-                     
                      if ($punchOut) {
-                        $duration = $punchIn->diff($punchOut);
-                        $hours = $duration->h;
-                        $minutes = $duration->i;
-                        $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
+                     $duration = $punchIn->diff($punchOut);
+                     $hours = $duration->h;
+                     $minutes = $duration->i;
+                     $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
                      }
                   }
                   
@@ -200,7 +194,7 @@
                </tr>
                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                <tr>
-                  <td colspan="<?php echo e(count($days) + 6); ?>" class="text-center">No Employee Attendances found</td>
+                  <td colspan="<?php echo e(count($days) + 6); ?>" class="text-center">No Employee found</td>
                </tr>
                <?php endif; ?>
             </tbody>
@@ -209,4 +203,4 @@
    </div>
 </div>
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/admin/employee-attendances/all-employees-attendance-list.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('employee.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/employee/attendances/employee-attendance-list.blade.php ENDPATH**/ ?>

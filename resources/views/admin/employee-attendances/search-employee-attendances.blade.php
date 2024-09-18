@@ -13,7 +13,7 @@
    </div>
    @endif
    <div class ="search-header">
-      <h2>Search Employee Attendance List</h2>
+    <h2 class="attendance-header">Search Employee Attendance List</h2>
    </div>
    <!--start employee attendance boxes-->
    <div class="boxes-wrapper student-attendance-header">
