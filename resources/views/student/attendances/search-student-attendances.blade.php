@@ -13,7 +13,7 @@
    </div>
    @endif
    <div class ="search-header">
-      <h2>Search Attendances</h2>
+      <h2 class="attendance-header">Search Attendances List</h2>
    </div>
     <!--start four boxes studens fees-->
     <div class="boxes-wrapper student-attendance-header">

@@ -12,7 +12,7 @@
    </div>
    <?php endif; ?>
    <div class ="search-header">
-      <h2>Attendance Listing</h2>
+   <h2 class="attendance-header">Monthly Attendance List:-  <?php echo e(date('F Y')); ?></h2>
    </div>
    <!--start six boxes employee attendance-->
    <div class="boxes-wrapper student-attendance-header">

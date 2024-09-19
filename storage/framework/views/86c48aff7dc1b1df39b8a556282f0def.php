@@ -67,8 +67,14 @@
             <img src="<?php echo e(url('public/admin/images/help.svg')); ?>" alt="leads" />
             <span class="link-name">Help</span>
             </a>
-         </li>
-         <li><a href="#">
+         </li> 
+         <!-- <li><a href="#">
+            <img src="<?php echo e(url('public/admin/images/setting.svg')); ?>" alt="leads" />
+            <span class="link-name">Settings</span>
+            </a>
+         </li> -->
+         <li class="<?php echo e(request()->is('admin/setting') ? 'active' : ''); ?>">
+            <a href="<?php echo e(url('admin/setting')); ?>">
             <img src="<?php echo e(url('public/admin/images/setting.svg')); ?>" alt="leads" />
             <span class="link-name">Settings</span>
             </a>

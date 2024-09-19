@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('content'); ?>
 <div class="space-remove"></div>
 <div class="title-subheading">
@@ -13,9 +12,9 @@
    </div>
    <?php endif; ?>
    <div class ="search-header">
-      <h2 class="attendance-header">All Students Monthly Attendance List:-  <?php echo e(date('F Y')); ?></h2>
+      <h2 class="attendance-header">Search Attendances List</h2>
    </div>
-   <!--start student attendance boxes--->
+   <!--start six boxes employee attendance-->
    <div class="boxes-wrapper student-attendance-header">
       <div class="box">
          <img src="<?php echo e(url('public/admin/images/working_hours.svg')); ?>" alt="Working Hours">
@@ -29,17 +28,17 @@
       </div>
       <div class="box">
          <img src="<?php echo e(url('public/admin/images/absent_icon.svg')); ?>" alt="Absent">
-         <h3>Absent</h3>
+         <h3>Absents</h3>
          <p><?php echo e($total_absent_days); ?></p>
       </div>
       <div class="box">
          <img src="<?php echo e(url('public/admin/images/leave_icon.svg')); ?>" alt="Leave">
-         <h3>Leave</h3>
+         <h3>Leaves</h3>
          <p><?php echo e($total_leave_days); ?></p>
       </div>
       <div class="box">
          <img src="<?php echo e(url('public/admin/images/half_day_leave.svg')); ?>" alt="Half Day">
-         <h3>Half Day</h3>
+         <h3>Half Days</h3>
          <p><?php echo e($total_half_day); ?></p>
       </div>
       <div class="box">
@@ -53,27 +52,23 @@
          <p><?php echo e($daysInMonth); ?></p>
       </div>
    </div>
-   <!--end student attendance boxes--->
+   <!--end six boxes employee attendance-->
 </div>
-<!--start search filter-->
-<form action="<?php echo e(url('admin/search-student-attendance')); ?>" method="GET">
-   <div class="row search-all-students-attendance">
-      <div class="col-sm-6 col-md-3">
+<form action="<?php echo e(url('employee/search-attendance')); ?>" method="GET">
+   <!--start search filter-->
+   <div class="row search-student-attendance">
+      <!-- <div class="col-sm-6 col-md-3">
          <div class="input-block mb-3 form-focus">
-            <select class="select floating" name="student_name">
-               <option value="">Select Student Name</option>
-               <?php $__currentLoopData = $get_student_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-               <option value="<?php echo e($student->name); ?>">(<?php echo e($student->id); ?>) <?php echo e($student->name); ?></option>
-               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </select>
+             <input type="text" class="form-control" name="name" id="name" 
+                 value="<?php echo e(request()->input('name')); ?>" placeholder="Enter Your Name">
          </div>
-      </div>
+         </div> -->
       <div class="col-sm-6 col-md-3">
          <div class="input-block mb-3 form-focus select-focus">
             <select class="select floating" name="month">
                <option value="">Select Month</option>
                <?php $__currentLoopData = $months; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $name): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-               <option value="<?php echo e($key); ?>" <?php echo e(\Carbon\Carbon::now()->month === $key ? 'selected' : ''); ?>>
+               <option value="<?php echo e($key); ?>" <?php echo e(request()->input('month') == $key ? 'selected' : ''); ?>>
                <?php echo e($name); ?>
 
                </option>
@@ -81,16 +76,20 @@
             </select>
          </div>
       </div>
+      <?php
+      $currentYear = date('Y');
+      $startYear = 2023; 
+      ?>
       <div class="col-sm-6 col-md-3">
          <div class="input-block mb-3 form-focus select-focus">
             <select class="select floating" name="year">
-               <option value="">Select Year</option>
-               <?php for($i = date('Y'); $i >= 2023; $i--): ?>
-               <option value="<?php echo e($i); ?>" <?php echo e($i == date('Y') ? 'selected' : ''); ?>>
-               <?php echo e($i); ?>
+                  <option value="">Select Year</option>
+                  <?php for($i = $currentYear; $i >= $startYear; $i--): ?>
+                     <option value="<?php echo e($i); ?>" <?php echo e(request()->input('year') == $i ? 'selected' : ''); ?>>
+                        <?php echo e($i); ?>
 
-               </option>
-               <?php endfor; ?>
+                     </option>
+                  <?php endfor; ?>
             </select>
          </div>
       </div>
@@ -109,11 +108,11 @@
             <thead>
                <tr>
                   <th>Sr No.</th>
-                  <th>Registration ID</th>
+                  <th>Employee ID</th>
                   <th>Image</th>
                   <th>Name</th>
-                  <th>Batch</th>
-                  <th>Batch Timing</th>
+                  <th>Shift</th>
+                  <th>Shift Type</th>
                   <?php $__currentLoopData = $days; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                   <?php
                   $date = \Carbon\Carbon::create($year, $month, $day);
@@ -133,26 +132,26 @@
                <?php
                $count = 1;
                ?>
-               <?php $__empty_1 = true; $__currentLoopData = $get_student_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+               <?php $__empty_1 = true; $__currentLoopData = $get_employee_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $employee): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                <tr>
                   <td><?php echo e($count++); ?>.</td>
-                  <td><?php echo e($student->id); ?></td>
+                  <td><?php echo e($employee->unique_employee_id); ?></td>
                   <td data-th="Image">
-                     <?php if($student->user_pic): ?>
+                     <?php if($employee->user_pic): ?>
                      <div class="user-image">
-                        <img src="<?php echo e(url('public/uploads/users/'. $student->user_pic)); ?>" alt="">
+                        <img src="<?php echo e(url('public/uploads/employees/'. $employee->user_pic)); ?>" alt="">
                      </div>
                      <?php else: ?>
-                     <img src="<?php echo e(url('public/uploads/users/default_user.png')); ?>" alt="">
+                     <img src="<?php echo e(url('public/uploads/employees/default_user.png')); ?>" alt="">
                      <?php endif; ?>
                   </td>
-                  <td><?php echo e($student->name); ?></td>
-                  <td><?php echo e($student['student_attendance_detail']['0']['batch'] ?? '-'); ?></td>
-                  <td class="batch-time"><?php echo e($student['student_attendance_detail'][0]['batch_time'] ?? '-'); ?></td>
+                  <td class="batch-time"><?php echo e($employee->name); ?></td>
+                  <td><?php echo e($employee['employees_attendance_detail']['0']['sift'] ?? '-'); ?></td>
+                  <td class="batch-time"><?php echo e($employee['employees_attendance_detail'][0]['sift_type'] ?? '-'); ?></td>
                   <?php $__currentLoopData = $days; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                   <?php
                   $date = \Carbon\Carbon::create($year, $month, $day)->format('Y-m-d');
-                  $attendance = $student->student_attendance_detail->first(function ($att) use ($date) {
+                  $attendance = $employee->employees_attendance_detail->first(function ($att) use ($date) {
                   return \Carbon\Carbon::parse($att->created_at)->format('Y-m-d') === $date;
                   });
                   $punchIn = null;
@@ -162,7 +161,6 @@
                   if ($attendance) {
                      $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
                      $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
-                    
                      if ($punchOut) {
                      $duration = $punchIn->diff($punchOut);
                      $hours = $duration->h;
@@ -170,7 +168,6 @@
                      $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
                      }
                   }
-
                   $isSunday = in_array($day, $sundays);
                   $isLastSaturday = $day == $lastSaturday;
                   ?>
@@ -200,7 +197,7 @@
                </tr>
                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                <tr>
-                  <td colspan="<?php echo e(count($days) + 6); ?>" class="text-center">No Student Attendance found</td>
+                  <td colspan="<?php echo e(count($days) + 6); ?>" class="text-center">No Employee found</td>
                </tr>
                <?php endif; ?>
             </tbody>
@@ -209,4 +206,4 @@
    </div>
 </div>
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/admin/student-attendances/all-students-attendance-list.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('employee.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/employee/attendances/search-employee-attendances.blade.php ENDPATH**/ ?>
