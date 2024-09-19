@@ -248,7 +248,7 @@ use Carbon\Carbon;
                            <label for="batch_time">Batch Timings <span class="text-danger">*</span></label>
                            <select class="form-control" name="batch_time" id="batch_time" required>
                               <option value="" disabled selected>Select Batch Timing</option>
-                              <option value="10:00 AM - 1:30 PM">10:00 AM - 1:30 PM</option>
+                              <option value="9:30 AM - 1:30 PM">9:30 AM - 1:30 PM</option>
                               <option value="2:30 PM - 6:00 PM">2:30 PM - 6:00 PM</option>
                            </select>
                         </div>

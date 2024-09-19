@@ -1,23 +1,23 @@
-@extends('admin.layouts.master') 
-@section('content')
+ 
+<?php $__env->startSection('content'); ?>
 <div class="space-remove"></div>
 <div class="title-subheading">
    <h2>Add New Student Record</h2>
 </div>
 <div class="main-table">
-   @if (Session::has('success')) 
+   <?php if(Session::has('success')): ?> 
    <div class="notification-green">
-      <p>{{ Session::get('success') }}</p>
+      <p><?php echo e(Session::get('success')); ?></p>
    </div>
-   @endif 
-   @if (Session::has('unsuccess')) 
+   <?php endif; ?> 
+   <?php if(Session::has('unsuccess')): ?> 
    <div class="notification-red">
-      <p>{{ Session::get('unsuccess') }}</p>
+      <p><?php echo e(Session::get('unsuccess')); ?></p>
    </div>
-   @endif 
+   <?php endif; ?> 
    <div class="login-form">
-      <form action="{{ route('admin.submit.student') }}" Method="POST" enctype="multipart/form-data">
-         @csrf 
+      <form action="<?php echo e(route('admin.submit.student')); ?>" Method="POST" enctype="multipart/form-data">
+         <?php echo csrf_field(); ?> 
          <div class="small-12 medium-2 large-2 columns">
             <div class="avatar-upload">
                <div class="avatar-edit">
@@ -26,7 +26,7 @@
                </div>
                <div class="add-new-student-pic">
                <div class="avatar-preview">
-                  <img id="imagePreview" src="{{ url('public/uploads/users/default_user.png') }}" >
+                  <img id="imagePreview" src="<?php echo e(url('public/uploads/users/default_user.png')); ?>" >
                 </div>
                 </div>
             </div>
@@ -34,43 +34,43 @@
          <div class="form-group display-column">
             <div class="form-design first-name">
                <label for="first-name">First Name</label>
-               <input type="text" id="first-name" name="first_name" value="{{ old('first_name') }}" placeholder="Enter First Name" required>
+               <input type="text" id="first-name" name="first_name" value="<?php echo e(old('first_name')); ?>" placeholder="Enter First Name" required>
             </div>
             <div class="form-design last-name">
                <label for="last-name">Last Name</label>
-               <input type="text" id="last-name" name="last_name" value="{{ old('last_name') }}" placeholder="Enter Last Name">
+               <input type="text" id="last-name" name="last_name" value="<?php echo e(old('last_name')); ?>" placeholder="Enter Last Name">
             </div>
             <div class="form-design mail">
                <label for="email">Email</label>
-               <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="Enter email address" required>
+               <input type="email" id="email" name="email" value="<?php echo e(old('email')); ?>" placeholder="Enter email address" required>
             </div>
          </div>
          <div class="form-group display-column">
             <div class="form-design dob">
                <label for="dob">Date of Birth</label>
-               <input type="date" id="dob" name="dob" value="{{ old('dob') }}">
+               <input type="date" id="dob" name="dob" value="<?php echo e(old('dob')); ?>">
             </div>
             <div class="form-design father-name">
                <label for="father_name">Father Name</label>
-               <input type="text" id="father_name" name="father_name" value="{{ old('father_name') }}" placeholder="Enter Father Name">
+               <input type="text" id="father_name" name="father_name" value="<?php echo e(old('father_name')); ?>" placeholder="Enter Father Name">
             </div>
             <div class="form-design phone-no">
                <label for="father_phone_no">Father Phone Number</label>
-               <input type="text" id="father_phone_no" name="father_phone_no" value="{{ old('father_phone_no') }}" placeholder="Enter Father Phone Number">
+               <input type="text" id="father_phone_no" name="father_phone_no" value="<?php echo e(old('father_phone_no')); ?>" placeholder="Enter Father Phone Number">
             </div>
          </div>
          <div class="form-group display-column">
             <div class="form-design aadhaar-no">
                <label for="aadhar_no">Aadhar Number</label>
-               <input type="text" id="aadhar_no" name="aadhaar_no" value="{{ old('aadhaar_no') }}" placeholder="Enter Aaadhar Number">
+               <input type="text" id="aadhar_no" name="aadhaar_no" value="<?php echo e(old('aadhaar_no')); ?>" placeholder="Enter Aaadhar Number">
             </div>
             <div class="form-design password">
                <label for="password">Password</label>
-               <input type="password" id="password" name="password" value="{{ old('password') }}" placeholder="Enter Password">
+               <input type="password" id="password" name="password" value="<?php echo e(old('password')); ?>" placeholder="Enter Password">
             </div>
             <div class="form-design student-phone-no">
                <label for="student_phone_no">Student Phone Number</label>
-               <input type="text" id="student_phone_no" name="student_phone_no" value="{{ old('student_phone_no') }}" placeholder="Enter Student Phone Number">
+               <input type="text" id="student_phone_no" name="student_phone_no" value="<?php echo e(old('student_phone_no')); ?>" placeholder="Enter Student Phone Number">
             </div>
          </div>
          <div class="form-group display-column radio-btn-design">
@@ -162,7 +162,7 @@
          <div class="form-group display-column">
             <div class="form-design address">
                <label for="address">Address</label>
-               <input type="text" id="address" name="address" value="{{ old('address') }}" placeholder="Enter Address">
+               <input type="text" id="address" name="address" value="<?php echo e(old('address')); ?>" placeholder="Enter Address">
             </div>
             <div class="form-design district">
                <label for="district">District</label>
@@ -228,7 +228,7 @@
          <div class="form-group display-column">
             <div class="form-design pin-code">
                <label for="pin_code">Pin Code</label>
-               <input type="text" id="pin_code" name="pin_code" value="{{ old('pin_code') }}" placeholder="Enter Pin Code">
+               <input type="text" id="pin_code" name="pin_code" value="<?php echo e(old('pin_code')); ?>" placeholder="Enter Pin Code">
             </div>
             <div class="form-design course">
                <label for="course_type">Course Type</label>
@@ -264,17 +264,17 @@
             </div>
             <div class="form-design join-date">
                <label for="course_joining_date">Course Joining Date</label>
-               <input type="date" id="course_joining_date" name="course_joining_date" value="{{ old('course_joining_date') }}" required>
+               <input type="date" id="course_joining_date" name="course_joining_date" value="<?php echo e(old('course_joining_date')); ?>" required>
             </div>
             <div class="form-design end-date">
                <label for="course_complession_date">Course Complession Date</label>
-               <input type="date" id="course_complession_date" name="course_complession_date" value="{{ old('course_complession_date') }}" class="email-disabled">
+               <input type="date" id="course_complession_date" name="course_complession_date" value="<?php echo e(old('course_complession_date')); ?>" class="email-disabled">
             </div>
          </div>
          <div class="form-group display-column">
             <div class="form-design status">
                <label for="total-fees">Total Fees</label>
-               <input type="text" id="total_fees" name="total_fees" value="{{ old('total_fees') }}" placeholder="Enter amount" required>
+               <input type="text" id="total_fees" name="total_fees" value="<?php echo e(old('total_fees')); ?>" placeholder="Enter amount" required>
             </div>
             <div class="form-design fees">
                <label for="user_status">Status</label>
@@ -295,4 +295,5 @@
       </form>
    </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/admin/students/add-new-student.blade.php ENDPATH**/ ?>
