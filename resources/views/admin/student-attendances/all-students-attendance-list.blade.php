@@ -190,7 +190,6 @@
                      <img src="{{ url('public/admin/images/half_day_leave.svg') }}" alt="Half Day">
                      @endif
                      @else 
-                     <img src="{{ url('public/admin/images/absent_icon.svg') }}" alt="Absent">
                      @endif
                      @endif
                   </td>
@@ -198,7 +197,7 @@
                </tr>
                @empty
                <tr>
-                  <td colspan="{{ count($days) + 6 }}" class="text-center">No Student found</td>
+                  <td colspan="{{ count($days) + 6 }}" class="text-center">No Student Attendance found</td>
                </tr>
                @endforelse
             </tbody>

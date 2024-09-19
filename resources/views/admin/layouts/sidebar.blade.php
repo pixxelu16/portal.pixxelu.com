@@ -67,8 +67,14 @@
             <img src="{{ url('public/admin/images/help.svg') }}" alt="leads" />
             <span class="link-name">Help</span>
             </a>
-         </li>
-         <li><a href="#">
+         </li> 
+         <!-- <li><a href="#">
+            <img src="{{ url('public/admin/images/setting.svg') }}" alt="leads" />
+            <span class="link-name">Settings</span>
+            </a>
+         </li> -->
+         <li class="{{ request()->is('admin/setting') ? 'active' : '' }}">
+            <a href="{{ url('admin/setting') }}">
             <img src="{{ url('public/admin/images/setting.svg') }}" alt="leads" />
             <span class="link-name">Settings</span>
             </a>

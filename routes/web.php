@@ -112,6 +112,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('admin/update-profile/{id}', [App\Http\Controllers\Admin\ProfileController::class, 'update_profile'])->name('admin.update.profile');
         Route::get('admin/change-password', [App\Http\Controllers\Admin\ProfileController::class, 'changed_password']);
         Route::post('admin/submit-change-password/{id}', [App\Http\Controllers\Admin\ProfileController::class, 'submit_changed_password'])->name('admin.changed.password');
+        Route::get('admin/setting', [App\Http\Controllers\Admin\ProfileController::class, 'edit_profile']);
         //employees 
         Route::get('admin/all-employees-list', [App\Http\Controllers\Admin\EmployeeController::class, 'all_employees_list']);
         Route::get('admin/get-employee-detail', [App\Http\Controllers\Admin\EmployeeController::class, 'single_employee_detail']);
