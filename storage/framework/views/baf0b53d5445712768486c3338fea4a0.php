@@ -159,11 +159,10 @@
                   <td><?php echo e($student->course_duration); ?></td>
                   <?php if($student->total_fees): ?>
                   <td>
-                     Rs <?php echo e(number_format($student->total_fees)); ?>
-
+                     Rs <?php echo e(number_format($student->total_fees)); ?> 
                      <div class="box-pay">
                         <button type="button" class="pay-fes-buton student_pay_fees"
-                           data-student_id="<?php echo e($student->id); ?>" data-toggle="modal" data-target="#myModal">Pay
+                           data-student_id="<?php echo e($student->id); ?>" data-student_name="<?php echo e($student->name); ?>" data-toggle="modal" data-target="#myModal">Pay
                         Fee</button>
                      </div>
                   </td>
@@ -271,7 +270,7 @@
             <div class="modal-content">
                <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title">Pay Fees</h4>
+                  <h4 class="modal-title"><span class="student_name_pay_fees"></span>Wants to pay fees</h4>
                </div>
                <div class="modal-body">
                   <form action="#" id="is_create_student_fee" Method="POST">

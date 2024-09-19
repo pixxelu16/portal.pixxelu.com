@@ -71,16 +71,20 @@ class DashboardController extends Controller
       
         //Get total current month paid fees
         $current_month_paid_fees = StudentFees::where('user_status', 'Active')->whereBetween('submission_date', [$startOfMonth, $endOfMonth])->sum('user_fees');
+        
         //Get student fees detail list
-        $get_student_list = User::orderBy('ID', 'DESC')
-        ->where('user_status', 'Active')
+        $get_student_list = User::where('user_status', 'Active')
         ->whereHas('student_fees_detail', function ($query) use ($startOfMonth, $endOfMonth) {
             $query->whereBetween('submission_date', [$startOfMonth, $endOfMonth]);
         })
         ->with(['student_fees_detail' => function ($query) use ($startOfMonth, $endOfMonth) {
-            $query->whereBetween('submission_date', [$startOfMonth, $endOfMonth]);
+            $query->whereBetween('submission_date', [$startOfMonth, $endOfMonth])
+                  ->orderBy('submission_date', 'desc'); 
         }])
-        ->get();
+        ->get()
+        ->sortByDesc(function ($user) {
+            return $user->student_fees_detail->first()->submission_date ?? null;
+        });
 
         //Get total course type students list   
         $is_total_students = User::where('user_status', 'Active')->where('user_type', 'Student')->count();
@@ -88,9 +92,10 @@ class DashboardController extends Controller
         $is_web_development_students = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Web Development')->count();
         $is_full_stack_development = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Full Stack Development')->count();
         $is_php = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'PHP Development')->count();
+        $digital_marketing = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Digital Marketing')->count();
         $is_graphic = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Graphic')->count();
 
-        return view('super-admin.dashboard', compact('get_student_list','all_students_total_fees','all_students_paid_fees','current_month_paid_fees','payment_type_online','payment_type_cash','jan_month_fees_detail','feb_month_fees_detail','march_month_fees_detail','april_month_fees_detail','may_month_fees_detail','june_month_fees_detail','july_month_fees_detail','august_month_fees_detail','sept_month_fees_detail','oct_month_fees_detail','nov_month_fees_detail','dec_month_fees_detail','jan_month_student_detail_2023','feb_month_student_detail_2023','march_month_student_detail_2023','april_month_student_detail_2023','may_month_student_detail_2023','june_month_student_detail_2023','july_month_student_detail_2023','august_month_student_detail_2023','sep_month_student_detail_2023','oct_month_student_detail_2023','nov_month_student_detail_2023','dec_month_student_detail_2023','jan_month_student_detail_2024','feb_month_student_detail_2024','march_month_student_detail_2024','april_month_student_detail_2024','may_month_student_detail_2024','june_month_student_detail_2024','july_month_student_detail_2024','august_month_student_detail_2024','sep_month_student_detail_2024','oct_month_student_detail_2024','nov_month_student_detail_2024','dec_month_student_detail_2024','all_students_list_2023','is_total_students','is_web_designing_students','is_web_development_students','is_full_stack_development','is_php','is_graphic'));
+        return view('super-admin.dashboard', compact('get_student_list','all_students_total_fees','all_students_paid_fees','current_month_paid_fees','payment_type_online','payment_type_cash','jan_month_fees_detail','feb_month_fees_detail','march_month_fees_detail','april_month_fees_detail','may_month_fees_detail','june_month_fees_detail','july_month_fees_detail','august_month_fees_detail','sept_month_fees_detail','oct_month_fees_detail','nov_month_fees_detail','dec_month_fees_detail','jan_month_student_detail_2023','feb_month_student_detail_2023','march_month_student_detail_2023','april_month_student_detail_2023','may_month_student_detail_2023','june_month_student_detail_2023','july_month_student_detail_2023','august_month_student_detail_2023','sep_month_student_detail_2023','oct_month_student_detail_2023','nov_month_student_detail_2023','dec_month_student_detail_2023','jan_month_student_detail_2024','feb_month_student_detail_2024','march_month_student_detail_2024','april_month_student_detail_2024','may_month_student_detail_2024','june_month_student_detail_2024','july_month_student_detail_2024','august_month_student_detail_2024','sep_month_student_detail_2024','oct_month_student_detail_2024','nov_month_student_detail_2024','dec_month_student_detail_2024','all_students_list_2023','is_total_students','is_web_designing_students','is_web_development_students','is_full_stack_development','is_php','is_graphic','digital_marketing'));
     }
   
 }

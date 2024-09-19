@@ -1712,7 +1712,7 @@ body .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTab
 .pay-modal .modal-header .modal-title {
 	color: #018294;
 	font-weight: 600;
-	font-size: 20px;
+	font-size: 18px;
 }
 .pay-modal .close {
 	background-color: #018294;
@@ -3167,7 +3167,7 @@ margin: 0rem auto 0;
     color: #100f0f;
     margin: 0px 8px 0 0px;
     font-weight: 500;
-    font-size: 20px;
+    font-size: 16px;
   }
   .pay_employee_salary {
     color: #100f0f;
@@ -3520,6 +3520,14 @@ td.ligth-green-color span {
 h2.attendance-header {
     font-size: 18px;
 }
+
+.edit_pay_fees {
+	color: #100f0f;
+	margin: 0px 0px 0px 8px;
+	font-weight: 500;
+	font-size: 18px;
+}
+
 /*end student attendances css*/
 
 /* { 9/9/2024 Menu Dropdown Design Start } */

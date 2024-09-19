@@ -38,51 +38,75 @@ $(document).ready(function() {
 //For get student pay fees model
 $('body').on('click', '.student_pay_fees', function() {
     var student_id = $(this).data("student_id");
+    var student_name = $(this).data("student_name");
   
     //Append value
-    $("#model_student_id").val(student_id);      
+    $("#model_student_id").val(student_id);
+    //student pay fees header
+    $(".student_name_pay_fees").text(student_name);      
 });
 
-//Student fees update 
+//Student edit fees model 
 $(document).ready(function() {
-    //Show the modal with pre-filled data
+    //Show modal and populate fields
     $('body').on('click', '.edit-btn', function() {
-        var feeId = $(this).data('fee-id');
+        var feeId = $(this).data('fee-id');   
         var feeMonth = $(this).data('fee-month');
+        var feesAmount = $(this).data('fee-amount');
+        var studentName = $(this).data('student-name');
+        
+        //Populate values
         $('#fee_id').val(feeId);
         $('#fee_month').val(feeMonth);  
+        $("#model_student_amount").val(feesAmount);    
+        $(".edit_pay_fees").text(studentName);   
         $('#editFeeModal').modal('show');
     });
 
     //Update student fees 
-        $('body').on('click', '.is_update_student_fees', function(e) {
-        e.preventDefault();
-        //Validate the input field
-        var userFees = $('#user_fees').val();
-        if (userFees === '' || !/^\d+$/.test(userFees)) {
-            $('.user_fee_responce').html('<div class="alert alert-danger">This field is required</div>');
-            return;
-        }
-        //serialize form data
-        var data = $('#editFeeForm').serialize();  
-        $.ajax({ 
-            type: 'POST',
-            url: base_url + '/admin/update-student-fees',
-            data: data,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            beforeSend: function () {
-                $(".com_ajax_loader").show();
-                $('.is_update_student_fees').prop('disabled', true);
-            },
-            success: function (response) {
-                $('.student_update_fee_responce').html(response);
-                $(".is_update_student_fees").prop('disabled', false);
-                $(".com_ajax_loader").hide();
+    $('body').on('submit', '#editFeeForm', function(e) {
+        e.preventDefault(); 
 
-            }
-        });
+        //Get field values
+        var userFees = $('#model_student_amount').val();
+        var paymentType = $('#payment_type').val();
+
+        //Validate form
+        var isValid = true;
+        $('.user_fee_responce').empty();
+        $('.user_fee_type_responce').empty();
+
+        if (userFees === '' || !/^\d+$/.test(userFees)) {
+            $('.user_fee_responce').html('<div class="alert alert-danger">Fees Amount is required and must be a valid number.</div>');
+            isValid = false;
+        }
+
+        if (paymentType === '') {
+            $('.user_fee_type_responce').html('<div class="alert alert-danger">Payment Type is required.</div>');
+            isValid = false;
+        }
+
+        if (isValid) {
+            var formData = $(this).serialize();
+
+            $.ajax({
+                type: 'POST',
+                url: base_url + '/admin/update-student-fees',
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
+                },
+                beforeSend: function() {
+                    $(".com_ajax_loader").show(); 
+                    $('.is_update_student_fees').prop('disabled', true); 
+                },
+				   success: function (response) {
+					$('.student_update_fee_responce').html(response);
+					$(".is_update_student_fees").prop('disabled', false);
+					$(".com_ajax_loader").hide();
+				}              
+            });
+        }
     });
 });
 
