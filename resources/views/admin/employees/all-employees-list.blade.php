@@ -135,7 +135,7 @@
       </div>
    </div>
 </div> 
-<!--start employee attendance modal -->
+<!--start employee punch in attendance modal -->
 <div class="modal" id="punchInModel">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -196,8 +196,8 @@
       </div>
    </div>
 </div>
-<!--end employee attendance modal -->
-<!--start employee attendance modal -->
+<!--end employee punch in attendance modal -->
+<!--start employee punch out attendance modal -->
 <div class="modal" id="punchOutModel">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -226,7 +226,7 @@
       </div>
    </div>
 </div>
-<!--end employee attendance modal -->
+<!--end employee punch out attendance modal -->
 <div id="myNav" class="overlay hide">
    <div class="overlay-content">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
