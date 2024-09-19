@@ -291,8 +291,8 @@ class StudentController extends Controller
         }
     }
 
-    //Function for view single student list
-    public function single_student_detail(Request $request)  {
+     //Function for view single student list
+     public function single_student_detail(Request $request)  {
         $studentId = $request->input('studentId');
         //Get student detail
         $get_student_detail = User::where([['id', '=', $studentId], ['user_type', '=', 'Student']])
@@ -411,8 +411,10 @@ class StudentController extends Controller
                                                                     <em>(<?php echo $fee['user_fees']; ?> /
                                                                         <?php echo $fee['payment_type']; ?>)</em>
                                                                     <button class="btn btn-primary btn-sm edit-btn"
-                                                                        data-fee-id="<?php echo $fee['id']; ?>"
-                                                                        data-fee-month="<?php echo $fee['submission_date']; ?>">
+                                                                        data-fee-id="<?php echo $fee['id']; ?>" 
+                                                                        data-fee-month="<?php echo $fee['submission_date']; ?>"                                                                               
+                                                                        data-fee-amount="<?php echo $fee['user_fees']; ?>"
+                                                                        data-student-name="<?php echo $get_student_detail['name']; ?>">                           
                                                                         <img src="<?php echo url('public/admin/images/edite-icon.svg'); ?>"
                                                                             alt="Edit Icon">
                                                                     </button>
@@ -552,7 +554,7 @@ class StudentController extends Controller
             <div class="modal-dialog">
                 <div class="modal-content edit-pay">
                     <div class="modal-header-damage">
-                        <h4 class="modal-title">pay fees</h4>
+                    <h4 class="modal-title">Edit pay fees To<span class="edit_pay_fees"></h4>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
@@ -561,14 +563,15 @@ class StudentController extends Controller
                             <input type="hidden" id="fee_month" name="fee_month">
                             <div class="form-group">
                                 <label for="user_fees">Fees Amount</label>
-                                <input type="text" id="user_fees" name="user_fees" class="form-control" required>
-                            </div>
+                                <input type="text" id="model_student_amount" name="user_fees" value="" class="form-control">
+                            </div> 
                             <div class="user_fee_responce"></div>
                             <select name="payment_type" id="payment_type">
                                 <option value="">Payment Type</option>
                                 <option value="online">Online</option>
                                 <option value="cash">Cash</option>
-                            </select>
+                            </select>       
+                            <div class="user_fee_type_responce"></div>         
                             <div class="button-save is_update_student_fees"><button type="submit"
                                     class="disable-submit">Update</button></div>
                             <div class="loader com_ajax_loader" style="display:none;">
@@ -592,6 +595,7 @@ class StudentController extends Controller
         </script>
         <?php
     }
+
     //Function for update student fees
     public function update_student_feess(Request $request) {
         //Get ajax request

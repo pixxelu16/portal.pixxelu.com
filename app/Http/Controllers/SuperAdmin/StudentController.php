@@ -22,11 +22,17 @@ class StudentController extends Controller
     public function all_students() {
         //Get students details
         $get_students_detail = User::where('user_type', 'Student')->where('user_status', 'Active')->orderBy('id', 'DESC')->with('student_fees_detail')->get();
-
-        //Get all students total fees and all paid fees 
-        $all_students_total_fees = User::where('user_status', 'Active')->sum('total_fees');
-        $all_students_paid_fees = StudentFees::where('user_status', 'Active')->sum('user_fees');  
-            return view('super-admin.students.all-students-list', compact('get_students_detail','all_students_total_fees','all_students_paid_fees'));
+       
+        //Get total students list acc to course  
+        $is_total_students = User::where('user_status', 'Active')->where('user_type', 'Student')->count();
+        $is_web_designing_students = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Web Designing')->count();
+        $is_web_development_students = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Web Development')->count();
+        $is_full_stack_development = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Full Stack Development')->count();
+        $is_php = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Php Development')->count();
+        $is_graphic = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Graphic')->count();
+        $digital_marketing = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Digital Marketing')->count();
+        
+        return view('super-admin.students.all-students-list', compact('get_students_detail','is_total_students','is_web_designing_students','is_web_development_students','is_full_stack_development','is_php','is_graphic','digital_marketing'));
     }  
     
     //Function for add new student
@@ -285,24 +291,24 @@ class StudentController extends Controller
     // }
 
     //Function for view single student list
-    public function single_student_detail(Request $request) {
+    public function single_student_detail(Request $request)  {
         $studentId = $request->input('studentId');
         //Get student detail
         $get_student_detail = User::where([['id', '=', $studentId], ['user_type', '=', 'Student']])
             ->where('user_status', 'Active')
             ->with('student_fees_detail', 'student_assign_accessories')
             ->first();
-    
+
         //Get student damage accessories 
-        $get_student_damage_accessories = StudentDamageAccessories::where('user_id', $studentId)->get(); 
-    
+        $get_student_damage_accessories = StudentDamageAccessories::where('user_id', $studentId)->get();
+
         $course_duration = $get_student_detail->course_duration;
         $course_joining_date = Carbon::parse($get_student_detail->course_joining_date);
-    
+
         //Get course joining date
         $start_date = $course_joining_date->copy();
         $end_date = $course_joining_date->copy();
-    
+
         //Calculate the end date acc course duration
         if ($course_duration == '1 Month') {
             $end_date->addMonth();
@@ -315,252 +321,280 @@ class StudentController extends Controller
         } elseif ($course_duration == '2 Year') {
             $end_date->addYears(2);
         } else {
-            $end_date->addYear(); 
+            $end_date->addYear();
         }
-    
+
         ?>
-       <div class="all-student">
-        <div class="contanier">
-            <div class="main-student">
-                <div class="section-name">
-                    <div class="name">
-                    <div class="profile-image-popup">
-                     <img src="<?php echo url('public/uploads/users/' . $get_student_detail->user_pic); ?>" alt="Student Picture">
+        <div class="all-student">
+            <div class="contanier">
+                <div class="main-student">
+                    <div class="section-name">
+                        <div class="name">
+                            <div class="profile-image-popup">
+                                <img src="<?php echo url('public/uploads/users/' . $get_student_detail->user_pic); ?>"
+                                    alt="Student Picture">
+                            </div>
+                            <h3><?php echo $get_student_detail->name ?></h3>
+                            <p><?php echo $get_student_detail->course_type ?></p>
+                            <p><?php echo $get_student_detail->email ?></p>
+                            <p><?php echo substr($get_student_detail->student_phone_no, 0, 5) . '-' . substr($get_student_detail->student_phone_no, 5) ?></span>
+                            </p>
+                            <p><span>Joining
+                                    Date:-</span><?php echo \Carbon\Carbon::parse($get_student_detail->course_joining_date)->format('d M Y') ?>
+                            </p>
+                        </div>
+                        <div class="info">
+                            <h4>information</h4>
+                        </div>
+                        <div class="detail">
+                            <p><em>registration no: </em><span><?php echo $get_student_detail->id ?></span></p>
+                            <p><em>father's name:</em><span><?php echo $get_student_detail->father_name ? $get_student_detail->father_name : '-'; ?></span></p>
+                            <p><em>father's phone no:</em><span><?php echo substr($get_student_detail->father_phone_no, 0, 5) . '-' . substr($get_student_detail->father_phone_no, 5) ?></span></p>
+                            <p><em>batch timing:</em><span><?php echo $get_student_detail->batch_timing ? $get_student_detail->batch_timing : '-'; ?></span></p>
+                            <p><em>date of birth:</em><span><?php echo \Carbon\Carbon::parse($get_student_detail->dob)->format('d M Y') ?></span></p>
+                            <p><em>sex:</em><span><?php echo $get_student_detail->gender ? $get_student_detail->gender : '-'; ?></span></p>
+                            <p><em>category:</em><span><?php echo $get_student_detail->category ? $get_student_detail->category : '-'; ?></span></p>
+                            <p><em>Aadhar card no:</em><span><?php echo $get_student_detail->aadhaar_no ? $get_student_detail->aadhaar_no : '-'; ?></span></p>
+                            <p><em>current address:</em><span><?php echo $get_student_detail->address . ', ' . $get_student_detail->district . ', ' . $get_student_detail->state . ', ' . $get_student_detail->pin_code; ?></span></p>
+                        </div>
                     </div>
-                    <h3><?php echo $get_student_detail->name ?></h3>
-                    <p><?php echo $get_student_detail->course_type ?></p>
-                    <p><?php echo $get_student_detail->email ?></p>
-                    <p><?php echo substr($get_student_detail->student_phone_no, 0, 5) . '-' . substr($get_student_detail->student_phone_no, 5) ?></span></p>
-                    <p><span>Joining Date:-</span><?php echo \Carbon\Carbon::parse($get_student_detail->course_joining_date)->format('d M Y') ?></p>
-                    </div>
-                    <div class="info">
-                    <h4>information</h4>
-                    </div>
-                    <div class="detail">
-                    <p><em>registration no: </em><span><?php echo $get_student_detail->id ?></span></p>
-                    <p><em>father's name:</em><span><?php echo $get_student_detail->father_name ? $get_student_detail->father_name : '-'; ?></span></p>
-                    <p><em>father's phone no: </em><span><?php echo substr($get_student_detail->father_phone_no, 0, 5) . '-' . substr($get_student_detail->father_phone_no, 5) ?></span></p>
-                    <p><em>batch timing:</em><span><?php echo $get_student_detail->batch_timing ? $get_student_detail->batch_timing : '-'; ?></span></p>
-                    <p><em>date of birth:</em><span><?php echo \Carbon\Carbon::parse($get_student_detail->dob)->format('d M Y') ?></span></p>
-                    <p><em>sex:</em><span><?php echo $get_student_detail->gender ? $get_student_detail->gender : '-'; ?></span></p>
-                    <p><em>category: </em><span><?php echo $get_student_detail->category ? $get_student_detail->category : '-'; ?></span></p>
-                    <p><em>Aadhar card no: </em><span><?php echo $get_student_detail->aadhar_no ? $get_student_detail->aadhar_no : '-'; ?></span></p>
-                    <p><em>current address: </em><span><?php echo $get_student_detail->address . ', ' . $get_student_detail->district . ', ' . $get_student_detail->state . ', ' . $get_student_detail->pin_code; ?></span></p>
-                    </div>
-                </div>
-                <!--start students all tables-->
-                <div class="table-all">
-                    <!--start students monthly fees table-->
-                    <div class="table-qualification">
-                    <label>Monthly Fees details</label>
-                    <div id="table-scroll" class="table-scroll first-table">
-                        <table id="main-table" class="main-table">
-                            <thead>
-                                <tr class="sticky">
-                                <th>Sr.No.</th>
-                                <th>Name Of Month</th>
-                                <th class="small">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody class="scroll">
-                                <?php if ($get_student_detail) : ?>
-                                <?php
-                                $count = 1;
-                                $totalFees = $get_student_detail['total_fees'];
-                                $paidFees = 0;
-                                $currentDate = new \DateTime($start_date);
-                                $endDate = new \DateTime($end_date);
-                                ?>
-                                <?php while ($currentDate < $endDate) : ?>
-                                <?php
-                                    $monthlyFees = 0;
-                                    // Loop through student fees details to sum all payments for the current month
-                                    foreach ($get_student_detail['student_fees_detail'] as $fee) {
-                                        $submissionDate = new \DateTime($fee['submission_date']);
-                                        if ($submissionDate->format('m-Y') == $currentDate->format('m-Y')) {
-                                            $monthlyFees += $fee['user_fees'];
-                                            $paidFees += $fee['user_fees'];
-                                        }
-                                    }
-                                ?>
-                                <tr>
-                                <td><?php echo $count++ ?>.</td>
-                                <td><?php echo $currentDate->format('M Y') ?></td>
-                                <td>
-                                <?php if (count($get_student_detail['student_fees_detail']) > 0): 
-                                    if($monthlyFees > 0){?>
-                                    <strong>Paid Fees:
-                                        <?php echo number_format($monthlyFees, 0); ?>
-                                    </strong>
-                                    <?php } else {
-                                        echo number_format($monthlyFees, 0);
-                                    }?>
-                                    <?php foreach ($get_student_detail['student_fees_detail'] as $fee): ?>
-                                        <?php
-                                            $submissionDate = new \DateTime($fee['submission_date']);
-                                            if ($submissionDate->format('m-Y') == $currentDate->format('m-Y')):
-                                        ?>
-                                            <span class="total-paid-payment">
-                                                <em>(<?php echo $fee['user_fees']; ?> / <?php echo $fee['payment_type']; ?>)</em>
-                                                <button class="btn btn-primary btn-sm edit-btn" 
-                                                    data-fee-id="<?php echo $fee['id']; ?>" 
-                                                    data-fee-month="<?php echo $fee['submission_date']; ?>">
-                                                <img src="<?php echo url('public/admin/images/edite-icon.svg'); ?>" alt="Edit Icon">
-                                            </button>
-                                            </span><br>
+                    <!--start students all tables-->
+                    <div class="table-all">
+                        <!--start students monthly fees table-->
+                        <div class="table-qualification">
+                            <label>Monthly Fees details</label>
+                            <div id="table-scroll" class="table-scroll first-table">
+                                <table id="main-table" class="main-table">
+                                    <thead>
+                                        <tr class="sticky">
+                                            <th>Sr.No.</th>
+                                            <th>Name Of Month</th>
+                                            <th>Payment Type</th>
+                                            <th class="small">Total Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="scroll">
+                                        <?php if ($get_student_detail): ?>
+                                            <?php
+                                            $count = 1;
+                                            $totalFees = $get_student_detail['total_fees'];
+                                            $paidFees = 0;
+                                            $currentDate = new \DateTime($start_date);
+                                            $endDate = new \DateTime($end_date);
+                                            ?>
+                                            <?php while ($currentDate < $endDate): ?>
+                                                <?php
+                                                $monthlyFees = 0;
+                                                //sum all payments for the current month
+                                                foreach ($get_student_detail['student_fees_detail'] as $fee) {
+                                                    $submissionDate = new \DateTime($fee['submission_date']);
+                                                    if ($submissionDate->format('m-Y') == $currentDate->format('m-Y')) {
+                                                        $monthlyFees += $fee['user_fees'];
+                                                        $paidFees += $fee['user_fees'];
+                                                    }
+                                                }
+                                                ?>
+                                                <tr>
+                                                    <td><?php echo $count++ ?>.</td>
+                                                    <td><?php echo $currentDate->format('M Y') ?></td>
+                                                    <td>
+                                                        <?php
+                                                        $feePaidForMonth = false;
+                                                        foreach ($get_student_detail['student_fees_detail'] as $fee):
+                                                            $submissionDate = new \DateTime($fee['submission_date']);
+                                                            //Check if the current month's fee exists
+                                                            if ($submissionDate->format('m-Y') === $currentDate->format('m-Y')):
+                                                                $feePaidForMonth = true;
+                                                                ?>
+                                                                <span class="total-paid-payment">
+                                                                    <em>(<?php echo $fee['user_fees']; ?> /
+                                                                        <?php echo $fee['payment_type']; ?>)</em>
+                                                                    <button class="btn btn-primary btn-sm edit-btn"
+                                                                        data-fee-id="<?php echo $fee['id']; ?>" 
+                                                                        data-fee-month="<?php echo $fee['submission_date']; ?>"                                                                               
+                                                                        data-fee-amount="<?php echo $fee['user_fees']; ?>"
+                                                                        data-student-name="<?php echo $get_student_detail['name']; ?>">                           
+                                                                        <img src="<?php echo url('public/admin/images/edite-icon.svg'); ?>"
+                                                                            alt="Edit Icon">
+                                                                    </button>
+                                                                </span><br>
+                                                                <?php
+                                                            endif;
+                                                        endforeach;
+                                                        //If no fee is paid for the current month
+                                                        if (!$feePaidForMonth):
+                                                            ?>
+                                                            -
+                                                        <?php endif; ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php if (count($get_student_detail['student_fees_detail']) > 0): ?>
+                                                            <?php if ($monthlyFees > 0): ?>
+                                                                <?php echo number_format($monthlyFees, 0); ?>
+                                                            <?php else: ?>
+                                                                -
+                                                            <?php endif; ?>
+                                                        <?php else: ?>
+                                                            <!--If no fee records exist-->
+                                                            -
+                                                        <?php endif; ?>
+                                                    </td>
+                                                </tr>
+                                                <?php
+                                                $currentDate->modify('+1 month');
+                                                ?>
+                                            <?php endwhile; ?>
                                         <?php endif; ?>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    -
-                                <?php endif; ?>
-                            </td>
-                                </tr>
-                                <?php
-                                $currentDate->modify('+1 month');
-                                ?>
-                                <?php endwhile; ?>
-                                <?php endif; ?>
-                            </tbody>
-                            <tfoot>
-                                <tr class="tfooter">
-                                <td class="space" colspan="2"><span style="color: black;">Total Fees:</span></td>
-                                <td><strong><?php echo number_format($totalFees, 0) ?></strong></td>
-                                </tr>
-                                <tr class="tfooter">
-                                <td class="space" colspan="2"><span style="color: green;">Total Paid Fees:</span></td>
-                                <td><strong style="color: green;"><?php echo number_format($paidFees, 0) ?></strong></td>
-                                </tr>
-                                <tr class="tfooter">
-                                <td class="space" colspan="2"><span style="color: red;">Remaining Fees:</span></td>
-                                <td><strong style="color: red;"><?php echo number_format($totalFees - $paidFees, 0) ?></strong></td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="tfooter">
+                                            <td class="space" colspan="3"><span style="color: black;">Total Fees:</span></td>
+                                            <td><strong><?php echo 'Rs.' . number_format($totalFees, 0) ?></strong></td>
+                                        </tr>
+                                        <tr class="tfooter">
+                                            <td class="space" colspan="3"><span style="color: green;">Total Paid Fees:</span>
+                                            </td>
+                                            <td><strong style="color: green;"><?php echo 'Rs. ' . number_format($paidFees, 0) ?></strong>
+                                            </td>
+                                        </tr>
+                                        <tr class="tfooter">
+                                            <td class="space" colspan="3"><span style="color: red;">Remaining Fees:</span></td>
+                                            <td><strong
+                                                    style="color: red;"><?php echo 'Rs. ' . number_format($totalFees - $paidFees, 0) ?></strong>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <!--end students monthly fees table-->
+                        <!--start student assign accessoriess table-->
+                        <?php if ($get_student_detail['student_assign_accessories']->count() > 0): ?>
+                            <div class="table-qualification">
+                                <label>Assign Accessories details</label>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Sr.No.</th>
+                                            <th>Keyboard</th>
+                                            <th>Mouse</th>
+                                            <th>Assign Accessories Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php if ($get_student_detail && !empty($get_student_detail['student_assign_accessories'])): ?>
+                                            <?php
+                                            $count = 1;
+                                            ?>
+                                            <?php foreach ($get_student_detail['student_assign_accessories'] as $accessories): ?>
+                                                <tr>
+                                                    <td><?php echo $count++ ?>.</td>
+                                                    <td><?php echo $accessories['keyboard_assigned'] ?></td>
+                                                    <td><?php echo $accessories['mouse_assigned'] ?></td>
+                                                    <td><?= (new DateTime($accessories['created_at']))->format('d M Y') ?>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <tr>
+                                                <td colspan="4">No accessories assigned to this student.</td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
+                        <!--end student assign accessoriess table-->
+                        <!--start student damage accessoriess table-->
+                        <?php if ($get_student_damage_accessories->count() > 0): ?>
+                            <div class="table-qualification">
+                                <label>Damage Accessories details</label>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Sr.No.</th>
+                                            <th>Keyboard</th>
+                                            <th>Mouse</th>
+                                            <th>Damage Accessories Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php if ($get_student_damage_accessories): ?>
+                                            <?php
+                                            $count = 1;
+                                            ?>
+                                            <?php foreach ($get_student_damage_accessories as $damage_accessories): ?>
+                                                <tr>
+                                                    <td><?php echo $count++ ?>.</td>
+                                                    <td><?php echo $damage_accessories['keyboard_damaged'] ?></td>
+                                                    <td><?php echo $damage_accessories['mouse_damaged'] ?></td>
+                                                    <td><?= (new DateTime($damage_accessories['created_at']))->format('d M Y') ?>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <tr>
+                                                <td colspan="4">No damage accessories assigned to this student.
+                                                </td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
+                        <!--end student damage accessoriess table-->
                     </div>
-                    </div>
-                    <!--end students monthly fees table-->
-                    <!--start students assign accessoriess table-->
-                    <?php if($get_student_detail['student_assign_accessories']->count() > 0): ?>
-                    <div class="table-qualification">
-                    <label>Assign Accessories details</label>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Sr.No.</th>
-                                <th>Keyboard</th>
-                                <th>Mouse</th>
-                                <th>Assign Accessories Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if ($get_student_detail && !empty($get_student_detail['student_assign_accessories'])) : ?>
-                            <?php
-                                $count = 1;
-                                ?>
-                            <?php foreach ($get_student_detail['student_assign_accessories'] as $accessories) : ?>
-                            <tr>
-                                <td><?php echo $count++ ?>.</td>
-                                <td><?php echo $accessories['keyboard_assigned'] ?></td>
-                                <td><?php echo $accessories['mouse_assigned'] ?></td>
-                                <td><?= (new DateTime($accessories['created_at']))->format('d M Y') ?></td>
-                            </tr>
-                            <?php endforeach; ?>
-                            <?php else : ?>
-                            <tr>
-                                <td colspan="4">No accessories assigned to this student.</td>
-                            </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                    </div>
-                    <?php endif; ?>
-                    <!--end students assign accessoriess table-->
-                    <!--start students damage accessoriess table-->
-                    <?php if($get_student_damage_accessories->count() > 0): ?>
-                    <div class="table-qualification">
-                    <label>Damage Accessories details</label>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Sr.No.</th>
-                                <th>Keyboard</th>
-                                <th>Mouse</th>
-                                <th>Damage Accessories Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if ($get_student_damage_accessories) : ?>
-                            <?php
-                                $count = 1;
-                                ?>
-                            <?php foreach ($get_student_damage_accessories as $damage_accessories) : ?>
-                            <tr>
-                                <td><?php echo $count++ ?>.</td>
-                                <td><?php echo $damage_accessories['keyboard_damaged'] ?></td>
-                                <td><?php echo $damage_accessories['mouse_damaged'] ?></td>
-                                <td><?= (new DateTime($damage_accessories['created_at']))->format('d M Y') ?></td>
-                            </tr>
-                            <?php endforeach; ?>
-                            <?php else : ?>
-                            <tr>
-                                <td colspan="4">No damage accessories assigned to this student.</td>
-                            </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                    </div>
-                    <?php endif; ?>
-                    <!--end students damage accessoriess table-->
-                </div>
-              <!--end students all tables-->
-            </div>
-        </div>
-        </div>
-        <!--start students edit fees model-->
-        <div id="editFeeModal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Fee</h5>
-                    <button type="button" class="custom-close-btn" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="editFeeForm" method="POST">
-                    <input type="hidden" id="fee_id" name="fee_id">
-                    <input type="hidden" id="fee_month" name="fee_month">
-                    <div class="form-group">
-                        <label for="user_fees">Fees Amount</label>
-                        <input type="text" id="user_fees" name="user_fees" class="form-control" required > 
-                    </div>
-                    <div class="user_fee_responce"></div>
-                    <select name="payment_type" id="payment_type">
-                        <option value="">Payment Type</option>
-                        <option value="online">Online</option>
-                        <option value="cash">Cash</option>
-                    </select>
-                    <button type="submit" class="btn btn-primary is_update_student_fees">Update</button>
-                    <div class="loader com_ajax_loader" style="display:none;">
-                        <img src="<?php echo url('public/admin/images/200w.gif'); ?>">
-                    </div>
-                    </form>
-                    <div class="student_update_fee_responce"></div>
+                    <!--end students all tables-->
                 </div>
             </div>
         </div>
+        <!--start student edit pay fees model-->
+        <div class="modal fade pay-modals" id="editFeeModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content edit-pay">
+                    <div class="modal-header-damage">
+                    <h4 class="modal-title">Edit pay fees To<span class="edit_pay_fees"></h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editFeeForm" method="POST">
+                            <input type="hidden" id="fee_id" name="fee_id">
+                            <input type="hidden" id="fee_month" name="fee_month">
+                            <div class="form-group">
+                                <label for="user_fees">Fees Amount</label>
+                                <input type="text" id="model_student_amount" name="user_fees" value="" class="form-control">
+                            </div> 
+                            <div class="user_fee_responce"></div>
+                            <select name="payment_type" id="payment_type">
+                                <option value="">Payment Type</option>
+                                <option value="online">Online</option>
+                                <option value="cash">Cash</option>
+                            </select>       
+                            <div class="user_fee_type_responce"></div>         
+                            <div class="button-save is_update_student_fees"><button type="submit"
+                                    class="disable-submit">Update</button></div>
+                            <div class="loader com_ajax_loader" style="display:none;">
+                                <img src="<?php echo url('public/admin/images/200w.gif'); ?>">
+                            </div>
+                        </form>
+                        <div class="student_update_fee_responce"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!--end students edit fees model-->
+        <!--end student edit pay fees model-->
+        </div>
+        </div>
         <script>
-        $(document).ready(function() {
-            $('#user_fees').on('input', function() {
-                this.value = this.value.replace(/\D/g, '');
+            $(document).ready(function () {
+                $('#user_fees').on('input', function () {
+                    this.value = this.value.replace(/\D/g, '');
+                });
             });
-        });
         </script>
         <?php
     }
-
+    
     //Function for update student fees
     public function update_student_feess(Request $request){
         //Get ajax request

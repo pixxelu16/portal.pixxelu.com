@@ -249,10 +249,17 @@ $(document).ready(function() {
 $(document).ready(function() {
     //Show our model
     $('body').on('click', '.edit-btn', function() {
-        var feeId = $(this).data('fee-id');
+        var feeId = $(this).data('fee-id');   
         var feeMonth = $(this).data('fee-month');
+        var feesAmount = $(this).data('fee-amount');
+        var StudentName = $(this).data('student-name');
+        //alert(feesAmount); return false;
+        //Apend value
         $('#fee_id').val(feeId);
         $('#fee_month').val(feeMonth);  
+        $("#model_student_amount").val(feesAmount);    
+        //pay salary employee header
+        $(".edit_pay_fees").text(StudentName);   
         $('#editFeeModal').modal('show');
     });
 
@@ -260,11 +267,11 @@ $(document).ready(function() {
         $('body').on('click', '.is_update_student_fees', function(e) {
         e.preventDefault();
         //Validate form
-        var userFees = $('#user_fees').val();
+        var userFees = $('#model_student_amount').val();
         if (userFees === '' || !/^\d+$/.test(userFees)) {
             $('.user_fee_responce').html('<div class="alert alert-danger">This field is required</div>');
-            return;
         }
+        
         //serialize form data
         var data = $('#editFeeForm').serialize();  
         $.ajax({ 

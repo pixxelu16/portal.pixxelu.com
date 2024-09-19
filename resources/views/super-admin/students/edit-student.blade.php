@@ -53,10 +53,17 @@
                <label for="last-name">Last Name</label>
                <input type="text" id="last-name" name="last_name" value="{{ $student->last_name }}" placeholder="Enter Last Name">
             </div>
-            <div class="form-design mail">
-               <label for="email">Email</label>
-               <input type="email" id="email" name="email" class="email-disabled" value="{{ $student->email }}" placeholder="Enter email address">
-            </div>
+            @if(!($student->email))
+               <div class="form-design mail">
+                  <label for="email">Email</label>
+                  <input type="email" id="email" name="email" class="email-input" placeholder="Enter email address">
+               </div>
+            @else
+               <div class="form-design mail">
+                  <label for="email">Email</label>
+                  <input type="email" id="email" name="email" class="email-disabled" value="{{ $student->email }}" readonly>
+               </div>
+            @endif
          </div>
          <div class="form-group display-column">
             <div class="form-design dob">
@@ -197,8 +204,46 @@
                </select>
             </div>
             <div class="form-design state">
-               <label for="state">State</label>
-               <input type="text" id="state" name="state" value="{{ $student->state }}" placeholder="Enter State">
+            <label for="state">State</label>
+            <select name="state" class="form-control" id="state">
+               <option value="" disabled selected>Select State/UT</option>
+               <option value="Andhra Pradesh" @if($student->state == 'Andhra Pradesh') selected @endif>Andhra Pradesh</option>
+               <option value="Arunachal Pradesh" @if($student->state == 'Arunachal Pradesh') selected @endif>Arunachal Pradesh</option>
+               <option value="Assam" @if($student->state == 'Assam') selected @endif>Assam</option>
+               <option value="Bihar" @if($student->state == 'Bihar') selected @endif>Bihar</option>
+               <option value="Chhattisgarh" @if($student->state == 'Chhattisgarh') selected @endif>Chhattisgarh</option>
+               <option value="Goa" @if($student->state == 'Goa') selected @endif>Goa</option>
+               <option value="Gujarat" @if($student->state == 'Gujarat') selected @endif>Gujarat</option>
+               <option value="Haryana" @if($student->state == 'Haryana') selected @endif>Haryana</option>
+               <option value="Himachal Pradesh" @if($student->state == 'Himachal Pradesh') selected @endif>Himachal Pradesh</option>
+               <option value="Jharkhand" @if($student->state == 'Jharkhand') selected @endif>Jharkhand</option>
+               <option value="Karnataka" @if($student->state == 'Karnataka') selected @endif>Karnataka</option>
+               <option value="Kerala" @if($student->state == 'Kerala') selected @endif>Kerala</option>
+               <option value="Madhya Pradesh" @if($student->state == 'Madhya Pradesh') selected @endif>Madhya Pradesh</option>
+               <option value="Maharashtra" @if($student->state == 'Maharashtra') selected @endif>Maharashtra</option>
+               <option value="Manipur" @if($student->state == 'Manipur') selected @endif>Manipur</option>
+               <option value="Meghalaya" @if($student->state == 'Meghalaya') selected @endif>Meghalaya</option>
+               <option value="Mizoram" @if($student->state == 'Mizoram') selected @endif>Mizoram</option>
+               <option value="Nagaland" @if($student->state == 'Nagaland') selected @endif>Nagaland</option>
+               <option value="Odisha" @if($student->state == 'Odisha') selected @endif>Odisha</option>
+               <option value="Punjab" @if($student->state == 'Punjab') selected @endif>Punjab</option>
+               <option value="Rajasthan" @if($student->state == 'Rajasthan') selected @endif>Rajasthan</option>
+               <option value="Sikkim" @if($student->state == 'Sikkim') selected @endif>Sikkim</option>
+               <option value="Tamil Nadu" @if($student->state == 'Tamil Nadu') selected @endif>Tamil Nadu</option>
+               <option value="Telangana" @if($student->state == 'Telangana') selected @endif>Telangana</option>
+               <option value="Tripura" @if($student->state == 'Tripura') selected @endif>Tripura</option>
+               <option value="Uttar Pradesh" @if($student->state == 'Uttar Pradesh') selected @endif>Uttar Pradesh</option>
+               <option value="Uttarakhand" @if($student->state == 'Uttarakhand') selected @endif>Uttarakhand</option>
+               <option value="West Bengal" @if($student->state == 'West Bengal') selected @endif>West Bengal</option>
+               <option value="Andaman and Nicobar Islands" @if($student->state == 'Andaman and Nicobar Islands') selected @endif>Andaman and Nicobar Islands</option>
+               <option value="Chandigarh" @if($student->state == 'Chandigarh') selected @endif>Chandigarh</option>
+               <option value="Dadra and Nagar Haveli and Daman and Diu" @if($student->state == 'Dadra and Nagar Haveli and Daman and Diu') selected @endif>Dadra and Nagar Haveli and Daman and Diu</option>
+               <option value="Lakshadweep" @if($student->state == 'Lakshadweep') selected @endif>Lakshadweep</option>
+               <option value="Delhi" @if($student->state == 'Delhi') selected @endif>Delhi</option>
+               <option value="Puducherry" @if($student->state == 'Puducherry') selected @endif>Puducherry</option>
+               <option value="Ladakh" @if($student->state == 'Ladakh') selected @endif>Ladakh</option>
+               <option value="Jammu and Kashmir" @if($student->state == 'Jammu and Kashmir') selected @endif>Jammu and Kashmir</option>
+            </select>
             </div>
          </div>
          <div class="form-group display-column">
@@ -242,7 +287,8 @@
                <label for="batch_timing">Batch Timing</label>
                <select id="batch_timing" name="batch_timing" class="form-control">
                   <option value ="" disabled selected>Select Batch Timing</option>
-                  <option value="10:30 to 5:00" @if($student->batch_timing == '10:30 to 5:00') selected @endif>10:30 to 5:00</option>
+                  <option value="9:30 AM - 1:30 PM" @if($student->batch_timing == '9:30 AM - 1:30 PM') selected @endif>9:30 AM - 1:30 PM</option>
+                  <option value="2:30 PM - 6:00 PM" @if($student->batch_timing == '2:30 PM - 6:00 PM') selected @endif>2:30 PM - 6:00 PM</option>
                </select>
             </div>
          </div>

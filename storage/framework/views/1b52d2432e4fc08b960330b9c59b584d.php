@@ -12,40 +12,74 @@
       <p><?php echo e(Session::get('unsuccess')); ?></p>
    </div>
    <?php endif; ?>
+   <!--start six boxes students information-->
+   <div class="boxes-wrapperers">
+      <div class="box">
+         <h3>Total Students</h3>
+         <p><?php echo e($is_total_students); ?></p>
+      </div>
+      <div class="box">
+         <h3>Web Designing</h3>
+         <p><?php echo e($is_web_designing_students); ?></p>
+      </div>
+      <div class="box">
+         <h3>Web Development</h3>
+         <p><?php echo e($is_web_development_students); ?></p>
+      </div>
+      <div class="box">
+         <h3>Php Development</h3>
+         <p><?php echo e($is_php); ?></p>
+      </div>
+      <div class="box">
+         <h3>Full Stack Development</h3>
+         <p><?php echo e($is_full_stack_development); ?></p>
+      </div>
+      <div class="box">
+         <h3>Digital Marketing</h3>
+         <p><?php echo e($digital_marketing); ?></p>
+      </div>
+      <div class="box">
+         <h3>Graphic</h3>
+         <p><?php echo e($is_graphic); ?></p>
+      </div>
+   </div>
+   <!--end six boxes students information-->
    <h2>All Students Listing</h2>
 </div>
 <div class="main-table">
    <div class="data-table-listing">
       <div class="btn-pixxelu">
-         <!-- Filter Student Status Fees-->
+         <!--start filter student status acc fees-->
          <select name="fees_status" id="search_student_fees_status" class="search-student-list">
             <option value ="" disabled selected>Monthly Fees Status</option>
             <option value="Paid">Paid</option>
             <option value="Pending">Pending</option>
             <option value="Overdue">Overdue</option>
          </select>
-         <!-- Filter Student Course-->
+         <!--end filter student status acc fees-->
+         <!--start filter student status acc course-->
          <select name="course_type" id="search_student_list" class="search-student-list">
             <option value ="" disabled selected>Select Course Type</option>
             <option value="Web Designing">Web Designing</option>
             <option value="Web Development">Web Development</option>
             <option value="PHP Development">PHP Development</option>
+            <option value="Digital Marketing">Digital Marketing</option>
             <option value="Graphic">Graphic</option>
             <option value="Full Stack Development">Full Stack Development</option>
          </select>
-         <a href="<?php echo e(url('super-admin/add-new-student')); ?>"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add New Student</a>
          <a href="<?php echo e(url('super-admin/export-student')); ?>" class="export"><img src="<?php echo e(url('public/admin/images/csv-file.svg')); ?>"></a>
          <a href="<?php echo e(url('super-admin/all-students-trash-list')); ?>" class="export"><img src="<?php echo e(url('public/admin/images/trash.svg')); ?>"></a>
+         <a href="<?php echo e(url('super-admin/add-new-student')); ?>"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add New Student</a>
          <!--<a href="<?php echo e(url('super-admin/add-student-previous-fees')); ?>" class="add-pervious"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add Previous Fees</a>-->
       </div>
    </div>
    <div class="scrolling-data-table">
       <div class="">
-         <table id="example1" class="rwd-table cloud-path">
+      <table id="example1" class="rwd-table cloud-path">
             <thead>
-               <tr  class="">
+               <tr class="">
                   <th>S. No</th>
-                  <th>Student ID</th>
+                  <th>Registration ID</th>
                   <th>Image</th>
                   <th>Name</th>
                   <th>Phone No</th>
@@ -61,111 +95,130 @@
             </thead>
             <tbody>
                <?php 
-               $count = 1;
-               use Carbon\Carbon;
-               $currentMonth = Carbon::now()->month;
-               $currentYear = Carbon::now()->year;
+                  $count = 1;
+                  use Carbon\Carbon;
+                  $currentMonth = Carbon::now()->month;
+                  $currentYear = Carbon::now()->year;
                ?>
                <?php $__currentLoopData = $get_students_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-               <?php 
-               $total_fees = $student->total_fees;
-               $pay_fees = 0;
-               ?>
-               <?php if(isset($student->student_fees_detail)): ?> 
-               <?php $__currentLoopData = $student->student_fees_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fees): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-               <?php 
-               $total_fees = $student->total_fees;
-               $pay_fees  += $fees['user_fees'];
-               $submissionMonths[] = Carbon::parse($fees['submission_date'])->month;
-               ?>
-               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
-               <?php endif; ?>     
+                  <?php 
+                     $total_fees = $student->total_fees;
+                     $pay_fees = 0;
+                     ?>
+                     <?php if(isset($student->student_fees_detail)): ?>
+                  <?php $__currentLoopData = $student->student_fees_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fees): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                     <?php 
+                        $total_fees = $student->total_fees;
+                        $pay_fees += $fees['user_fees'];
+                        $submissionMonths[] = Carbon::parse($fees['submission_date'])->month;
+                     ?>
+                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
+               <?php endif; ?>                 
                <tr>
                   <td><?php echo e($count++); ?></td>
                   <td><?php echo e($student->id); ?> </td>
                   <td data-th="Image">
                      <?php if($student->user_pic): ?>
-                     <div class="user-image"> <img src = "<?php echo e(url('public/uploads/users/'. $student->user_pic)); ?>" alt=""></div>
-                     <?php endif; ?> 
+                     <div class="user-image"> <img src="<?php echo e(url('public/uploads/users/' . $student->user_pic)); ?>" alt="">
+                     <?php else: ?>
+                     <img src="<?php echo e(url('public/uploads/users/default_user.png')); ?>" alt="">
+                     </div>
+                     <?php endif; ?>                           
                   </td>
                   <td>
-                     <span onclick="openNav()"><a href="#" class="student-link" data-student_id="<?php echo e($student->id); ?>"><?php echo e($student->name); ?></a></span>
+                     <span onclick="openNav()"><a href="#" class="student-link"
+                        data-student_id="<?php echo e($student->id); ?>"><?php echo e($student->name); ?></a></span>
                   </td>
                   <td>
                      <?php if($student->student_phone_no): ?>
-                        <a href="https://wa.me/<?php echo e(str_replace(['+', '-', ' '], '', $student->student_phone_no)); ?>" target="_blank">
-                              <?php echo e(substr($student->student_phone_no, 0, 5)); ?>-<?php echo e(substr($student->student_phone_no, 5)); ?>
+                     <a href="https://wa.me/<?php echo e(str_replace(['+', '-', ' '], '', $student->student_phone_no)); ?>"
+                        target="_blank">
+                     <?php echo e(substr($student->student_phone_no, 0, 5)); ?>-<?php echo e(substr($student->student_phone_no, 5)); ?>
 
-                        </a>
+                     </a>
                      <?php else: ?>
-                       -
+                     -
                      <?php endif; ?>
                   </td>
                   <td><?php echo e(\Carbon\Carbon::parse($student->course_joining_date)->format('d M Y')); ?></td>
-                  <?php if($student->course_type == 'Full Stack Development'): ?> 
-                    <td class="lights-blue-color"><span>Full Stack Development</span></td>
+                  <?php if($student->course_type == 'Full Stack Development'): ?>
+                  <td class="lights-blue-color"><span>Full Stack Development</span></td>
                   <?php elseif($student->course_type == 'PHP Development'): ?>
-                    <td class="lights-green-color"><span>PHP Development</span></td>
+                  <td class="lights-green-color"><span>PHP Development</span></td>
                   <?php elseif($student->course_type == 'Web Development'): ?>
-                    <td class="light-yellow-color"><span>Web Development</span></td>
+                  <td class="light-yellow-color"><span>Web Development</span></td>
                   <?php elseif($student->course_type == 'Web Designing'): ?>
-                    <td class="light-pink-color"><span>Web Designing</span></td>
+                  <td class="light-pink-color"><span>Web Designing</span></td>
+                  <?php elseif($student->course_type == 'Digital Marketing'): ?>
+                  <td class="light-organge-color"><span>Digital Marketing</span></td>
                   <?php elseif($student->course_type == 'Graphic Designing'): ?>
-                    <td class="light-cyan-color"><span>Graphic Designing</span></td>
+                  <td class="light-cyan-color"><span>Graphic Designing</span></td>
                   <?php else: ?>
-                    <td></td>
+                  <td></td>
                   <?php endif; ?>
                   <td><?php echo e($student->course_duration); ?></td>
+                  <?php if($student->total_fees): ?>
                   <td>
-                     Rs <?php echo e(number_format($student->total_fees)); ?>
-
+                     Rs <?php echo e(number_format($student->total_fees)); ?> 
                      <div class="box-pay">
-                        <button type="button" class="pay-fes-buton student_pay_fees" data-student_id="<?php echo e($student->id); ?>" data-student_name="<?php echo e($student->name); ?>" data-toggle="modal" data-target="#myModal">Pay Fee</button>
+                        <button type="button" class="pay-fes-buton student_pay_fees"
+                           data-student_id="<?php echo e($student->id); ?>" data-student_name="<?php echo e($student->name); ?>" data-toggle="modal" data-target="#myModal">Pay
+                        Fee</button>
                      </div>
                   </td>
+                  <?php else: ?>
+                  <td>N/A</td>
+                  <?php endif; ?>
                   <td>
                      <?php if(isset($student->student_fees_detail)): ?>
-                     <?php $last_record = $student->student_fees_detail->last(); ?>
+                     <?php      $last_record = $student->student_fees_detail->last(); ?>
                      <?php if($last_record): ?>
                      Rs <?php echo e(number_format($last_record->user_fees)); ?><br>
-                     <span class="date-tbl"><?php echo e(Carbon::parse($last_record->submission_date)->format('d M Y')); ?></span>  
+                     <span class="date-tbl"><?php echo e(Carbon::parse($last_record->submission_date)->format('d M Y')); ?></span>
                      <?php else: ?>
-                     0<br>
+                     -<br>
                      <?php endif; ?>
                      <?php endif; ?>
                   </td>
-                  <td>Rs <?php echo e(number_format($total_fees - $pay_fees)); ?></td>
+                  <td>
+                  <?php if($pay_fees == 0): ?>
+                     -
+                  <?php else: ?>
+                     Rs <?php echo e(number_format($total_fees - $pay_fees)); ?>
+
+                  <?php endif; ?>
+               </td>
+
                   <?php
-                  $isPaid = false;
-                  $isPending = false;
-                  $isOverdue = false;
-                  $lastPaymentDate = null;
-                  $noPayment = true;
-                  $payment_completed = false;
+                     $isPaid = false;
+                     $isPending = false;
+                     $isOverdue = false;
+                     $lastPaymentDate = null;
+                     $noPayment = true;
+                     $payment_completed = false;
 
-                  if (isset($student->student_fees_detail)) {
+                     if (isset($student->student_fees_detail)) {
                      foreach ($student->student_fees_detail as $fees) {
-                        $submissionMonth = Carbon::parse($fees['submission_date'])->format('m');
-                        $submissionYear = Carbon::parse($fees['submission_date'])->format('Y');
-                        $lastPaymentDate = Carbon::parse($fees['submission_date']);
+                     $submissionMonth = Carbon::parse($fees['submission_date'])->format('m');
+                     $submissionYear = Carbon::parse($fees['submission_date'])->format('Y');
+                     $lastPaymentDate = Carbon::parse($fees['submission_date']);
 
-                        // Check if the fees for the current month and year are paid
-                        if ($submissionMonth == $currentMonth && $submissionYear == $currentYear && !is_null($fees['user_fees'])) {
-                              $isPaid = true;
-                              break;
-                        }
+                     //Check if the fees for the current month and year are paid
+                     if ($submissionMonth == $currentMonth && $submissionYear == $currentYear && !is_null($fees['user_fees'])) {
+                        $isPaid = true;
+                        break;
+                     }
                      }
 
-                     // Check if the last payment date is more than 45 days ago
+                     //Check if the last payment date is more than 45 days ago
                      if ($lastPaymentDate && $lastPaymentDate->diffInDays(Carbon::now()) > 45) {
-                        $isOverdue = true;
-                     } else {
-                        $isPending = !$isPaid;
-                     }
-                  }
+                         $isOverdue = true;
+                        } else {
+                         $isPending = !$isPaid;
+                        }
+                     } 
 
-                  
-                  //check user total fees
+                     //check user total fees
                      if (!empty($student->total_fees) && $student->total_fees !== 0)  {
                         $noPayment = false;
                      }
@@ -184,17 +237,20 @@
                   <?php elseif($payment_completed): ?>
                   <td class="ligth-green-color"><span>Fees Complete</span></td>
                   <?php else: ?>
-                  <td class="green-color"><span>Paid</span></td>
+                  <td class="green-colors"><span>Paid</span></td>
                   <?php endif; ?>
                   <td>
                      <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle action-fee-design" type="button" data-bs-toggle="dropdown" aria-expanded="false"> <img src="<?php echo e(url('public/admin/images/ellips.svg')); ?>" alt="ellips" /> </button>
+                        <button class="btn btn-secondary dropdown-toggle action-fee-design" type="button"
+                           data-bs-toggle="dropdown" aria-expanded="false"> <img
+                           src="<?php echo e(url('public/admin/images/ellips.svg')); ?>" alt="ellips" /> </button>
                         <ul class="dropdown-menu pay-fees-submit">
                            <form class="drop-don-list">
-                              <li> 
-                                 <!-- <a href="<?php echo e(url('super-admin/single-student-detail', $student->id)); ?>"><img src="<?php echo e(url('public/admin/images/ico-1.png')); ?>">View Student Detail</a> -->
+                              <li>
+                                 <!-- <a href="<?php echo e(url('admin/single-student-detail', $student->id)); ?>"><img src="<?php echo e(url('public/admin/images/ico-1.png')); ?>">View Student Detail</a> -->
                               </li>
-                              <li><a href="<?php echo e(url('super-admin/edit-student', $student->id)); ?>"><img src="<?php echo e(url('public/admin/images/ico-4.png')); ?>">Edit</a></li>
+                              <li><a href="<?php echo e(url('super-admin/edit-student', $student->id)); ?>"><img
+                                 src="<?php echo e(url('public/admin/images/ico-4.png')); ?>">Edit</a></li>
                               <!-- <li><button type="submit" class="is_trash_student_record" data-id="<?php echo e($student->id); ?>"><img src="<?php echo e(url('public/admin/images/ico-5.png')); ?>">Trash</button></li> -->
                               <li class="student_trash_record" data-student_id="<?php echo e($student->id); ?>">
                                  <img src="<?php echo e(url('public/admin/images/ico-5.png')); ?>" alt="Trash Icon"> Trash
@@ -208,7 +264,7 @@
             </tbody>
          </table>
       </div>
-      <!--Start fees popup -->
+      <!--start student pay fees model-->
       <div class="modal fade pay-modal" id="myModal" role="dialog">
          <div class="modal-dialog">
             <!-- Modal content-->
@@ -241,8 +297,8 @@
             </div>
          </div>
       </div>
-      <!--End fees popup -->
-        <!--Start trash popup -->
+      <!--end student pay fees model-->
+      <!--start student trash model-->
         <div class="modal" id="modeal_student_id" role="dialog">
          <div class="modal-dialog">
             <!-- Modal content-->
@@ -271,7 +327,7 @@
             </div>
          </div>
       </div>
-      <!-- End trash popup -->
+      <!--end student trash model-->
    </div>
 </div>
 </div>

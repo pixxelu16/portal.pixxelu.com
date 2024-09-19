@@ -12,7 +12,7 @@
       <p>{{ Session::get('unsuccess') }}</p>
    </div>
    @endif
-   <h2>All Students Course Listing</h2>
+   <h2>Search Students List According Course</h2>
 </div>
 <div class="main-table">
    <div class="data-table-listing">
@@ -125,12 +125,12 @@
                   <td></td>
                   @endif
                   <td>{{ $student->course_duration }}</td>
-                  @if($student->total_fees)
+                   @if($student->total_fees)
                   <td>
-                     Rs {{ number_format($student->total_fees) }}
+                     Rs {{ number_format($student->total_fees) }} 
                      <div class="box-pay">
                         <button type="button" class="pay-fes-buton student_pay_fees"
-                           data-student_id="{{ $student->id }}" data-toggle="modal" data-target="#myModal">Pay
+                           data-student_id="{{ $student->id }}" data-student_name="{{ $student->name }}" data-toggle="modal" data-target="#myModal">Pay
                         Fee</button>
                      </div>
                   </td>
@@ -237,7 +237,7 @@
             <div class="modal-content">
                <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title">Pay Fees</h4>
+                  <h4 class="modal-title"><span class="student_name_pay_fees"></span>Wants to pay fees</h4>
                </div>
                <div class="modal-body">
                   <form action="#" id="is_create_student_fee" Method="POST">

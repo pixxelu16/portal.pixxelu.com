@@ -47,7 +47,7 @@
       </div>
    </div>
    <!--end four boxes studens fees-->
-   <!--start students six boxes students information-->
+   <!--start six boxes students information-->
    <div class="boxes-wrapperers">
       <div class="box">
          <h3>Total Students</h3>
@@ -70,11 +70,15 @@
          <p>{{ $is_full_stack_development }}</p>
       </div>
       <div class="box">
+         <h3>Digital Marketing</h3>
+         <p>{{ $digital_marketing }}</p>
+      </div>
+      <div class="box">
          <h3>Graphic</h3>
          <p>{{ $is_graphic }}</p>
       </div>
    </div>
-   <!--end students six boxes students information-->
+   <!--end six boxes students information-->
    <div class="chart-design">
       <figure class=".highcharts-figure">
          <div id="students_monthly_fees_detail"></div>
@@ -163,6 +167,8 @@
                   <td class="light-yellow-color"><span>Web Development</span></td>
                   @elseif($student->course_type == 'Web Designing')
                   <td class="light-pink-color"><span>Web Designing</span></td>
+                  @elseif($student->course_type == 'Digital Marketing')
+                  <td class="light-organge-color"><span>Digital Marketing</span></td>
                   @elseif($student->course_type == 'Graphic Designing')
                   <td class="light-cyan-color"><span>Graphic Designing</span></td>
                   @else
@@ -179,9 +185,10 @@
                      @endphp
                   @endforeach
                   <!-- Display total fees after the loop -->
-                  Rs {{ number_format($total_fees) }}
+                  Rs {{ number_format($total_fees) }} <br>
+                  <!-- Display submission date, if it exists -->
+                    {{ \Carbon\Carbon::parse($student->student_fees_detail->first()->submission_date)->format('d M Y') }}
                </td>
-
                </tr>
                @endforeach
             </tbody>
