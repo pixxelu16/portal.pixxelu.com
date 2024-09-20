@@ -11,6 +11,49 @@ use Carbon\Carbon;
 class EmployeeAttendanceController extends Controller
 {
 
+
+    
+    //Function for submit employee punch in attendance
+    public function submit_employee_attendance(Request $request) {
+    // //Get the current date and time in IST
+    // $current_time = Carbon::now('Asia/Kolkata')->format('H:i:s');
+    // $current_date = Carbon::now('Asia/Kolkata')->toDateString();
+
+    // //Check if attendance already exists or not
+    // $existing_attendance = EmployeeAttendance::where('employee_id', $request->employee_id)
+    //     ->whereDate('created_at', $current_date)
+    //     ->first();
+
+    // //Check if employee attendance already exists for today
+    // if ($existing_attendance) {
+    //     echo '<p style="color:red;">Your attendance has already been marked for today.</p>';
+    //     echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
+    // } else {
+   
+
+      
+        //Create attendance employee
+        $is_create_employee_attendance = EmployeeAttendance::create([
+            'employee_id' => $request->employee_id,
+            'sift' => $request->sift,
+            'sift_type' => $request->sift_type,
+            'punch_in_time' => $request->punch_in_time,
+            'punch_out_time' => $request->punch_out_time,
+            'submission_date' => $request->submission_date,
+            'attendance_status' => $request->attendance_status,
+        ]);
+
+        //echo "<pre>"; print_r($is_create_employee_attendance); exit;
+
+        //Check if employee attendance is created or not
+        if ($is_create_employee_attendance) {
+            echo '<p style="color:green;">Employee attendance created successfully.</p>';
+            echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
+        } else {
+            echo '<p style="color:red;">Oops, something went wrong. Please try again.</p>';
+        }
+    }
+
     //Function for all employees attenedance lists
     public function all_employees_attendance_list() { 
         //Get the current month and year
@@ -22,7 +65,7 @@ class EmployeeAttendanceController extends Controller
             ->where('user_status', 'Active')
             ->with([
                 'employees_attendance_detail' => function ($query) use ($month, $year) {
-                    $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
+                    $query->whereYear('submission_date', $year)->whereMonth('submission_date', $month);
                 }
             ])->get();
 
@@ -112,7 +155,7 @@ class EmployeeAttendanceController extends Controller
     //Function for update 
     public function employee_punch_out_attendance(Request $request) {
         //Get employee id
-         $employee_id = $request->employee_id;
+        $employee_id = $request->employee_id;
         ////Get Current day
         //  $today = Carbon::today()->format('Y-m-d');
       
@@ -146,7 +189,7 @@ class EmployeeAttendanceController extends Controller
         $today = Carbon::today()->format('Y-m-d');
       
         //Get employee attendance
-        $existing_attendance = EmployeeAttendance::where('employee_id', $request->employee_id)->whereDate('created_at', $today)->first();   
+        $existing_attendance = EmployeeAttendance::where('employee_id', $request->employee_id)->whereDate('submission_date', $today)->first();   
 
         //Check if employee attendance is already exists or not
         if ($existing_attendance) {
@@ -186,8 +229,8 @@ class EmployeeAttendanceController extends Controller
             ->where('user_status', 'Active')->where('name', $employee_name)
             ->with([
                 'employees_attendance_detail' => function ($query) use ($month, $year) {
-                    $query->whereYear('created_at', $year)
-                        ->whereMonth('created_at', $month);
+                    $query->whereYear('submission_date', $year)
+                        ->whereMonth('submission_date', $month);
                 }
             ])->get();
             
@@ -275,4 +318,12 @@ class EmployeeAttendanceController extends Controller
 
         return view('admin.employee-attendances.search-employee-attendances', compact('get_employee_detail', 'get_employee_name', 'months', 'days', 'month', 'year', 'daysInMonth', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays'));
     }
+
 }
+
+
+
+
+
+
+

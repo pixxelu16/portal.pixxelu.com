@@ -3004,7 +3004,7 @@ div#myModal {
 .modal-header-damage h4 {
     color: #018294;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 18px;
 }
 
 .modal-header-damage button {
@@ -3525,7 +3525,7 @@ h2.attendance-header {
 	color: #100f0f;
 	margin: 0px 0px 0px 8px;
 	font-weight: 500;
-	font-size: 18px;
+	font-size: 14px;
 }
 
 /*end student attendances css*/

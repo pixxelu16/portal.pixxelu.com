@@ -25,7 +25,7 @@ class AttendanceController extends Controller
             ->where('user_status', 'Active')->where('id', $is_login_id)
             ->with([
                 'employees_attendance_detail' => function ($query) use ($month, $year) {
-                    $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
+                    $query->whereYear('submission_date', $year)->whereMonth('submission_date', $month);
                 }
             ])->get();
 
@@ -133,7 +133,7 @@ class AttendanceController extends Controller
 
         //Check if attendance already exists or not
         $existing_attendance = EmployeeAttendance::where('employee_id', $request->employee_id)
-            ->whereDate('created_at', $current_date)
+            ->whereDate('submission_date', $current_date)
             ->first();
 
         //Check if employee attendance already exists for today
@@ -147,9 +147,9 @@ class AttendanceController extends Controller
                 'sift' => $request->sift,
                 'sift_type' => $request->sift_type,
                 'punch_in_time' => $current_time,
+                'submission_date' => $current_date,
                 'attendance_status' => $request->attendance_status,
             ]);
-
             //Check if employee attendance is created or not
             if ($is_create_employee_attendance) {
                 echo '<p style="color:green;">Your attendance has been successfully submitted for today.</p>';
@@ -171,7 +171,7 @@ class AttendanceController extends Controller
 
         //Get employee attendance for the current date
         $existing_attendance = EmployeeAttendance::where('employee_id', $employee_id)
-            ->whereDate('created_at', $current_date)
+            ->whereDate('submission_date', $current_date)
             ->whereNotNull('punch_out_time')
             ->exists();
 
@@ -182,7 +182,7 @@ class AttendanceController extends Controller
         } else {
             //Update employee punch out attendance record
             $is_update_employee_punch_out_attendance = EmployeeAttendance::where('employee_id', $employee_id)
-                ->whereDate('created_at', $current_date)
+                ->whereDate('submission_date', $current_date)
                 ->update([
                     'punch_out_time' => $current_time,
                 ]);
@@ -211,8 +211,8 @@ class AttendanceController extends Controller
             ->where('user_status', 'Active')->where('id', $is_login_id)
             ->with([
                 'employees_attendance_detail' => function ($query) use ($month, $year) {
-                    $query->whereYear('created_at', $year)
-                        ->whereMonth('created_at', $month);
+                    $query->whereYear('submission_date', $year)
+                        ->whereMonth('submission_date', $month);
                 }
             ])->get();
 

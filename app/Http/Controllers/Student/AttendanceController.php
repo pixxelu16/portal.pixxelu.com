@@ -25,7 +25,7 @@ class AttendanceController extends Controller
             ->where('user_status', 'Active')->where('id', $is_login_id)
             ->with([
                 'student_attendance_detail' => function ($query) use ($month, $year) {
-                    $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
+                    $query->whereYear('submission_date', $year)->whereMonth('submission_date', $month);
                 }
             ])->get();
 
@@ -131,7 +131,7 @@ class AttendanceController extends Controller
 
         //Check if attendance already exists or not
         $existing_attendance = StudentAttendance::where('user_id', $request->student_id)
-            ->whereDate('created_at', $current_date)
+            ->whereDate('submission_date', $current_date)
             ->first();
 
         //Check if student attendance already exists for today
@@ -145,6 +145,7 @@ class AttendanceController extends Controller
                 'batch' => $request->batch,
                 'batch_time' => $request->batch_time,
                 'punch_in_time' => $current_time,
+                'submission_date' => $current_date,
                 'attendance_status' => $request->attendance_status,
             ]);
 
@@ -169,7 +170,7 @@ class AttendanceController extends Controller
 
         //Get student attendance for the current date
         $existing_attendance = StudentAttendance::where('user_id', $student_id)
-            ->whereDate('created_at', $current_date)
+            ->whereDate('submission_date', $current_date)
             ->whereNotNull('punch_out_time')
             ->exists();
 
@@ -180,7 +181,7 @@ class AttendanceController extends Controller
         } else {
             //Update student punch out attendance record
             $is_update_student_punch_out_attendance = StudentAttendance::where('user_id', $student_id)
-                ->whereDate('created_at', $current_date)
+                ->whereDate('submission_date', $current_date)
                 ->update([
                     'punch_out_time' => $current_time,
                 ]);
@@ -209,8 +210,8 @@ class AttendanceController extends Controller
             ->where('user_status', 'Active')->where('id', $is_login_id)
             ->with([
                 'student_attendance_detail' => function ($query) use ($month, $year) {
-                    $query->whereYear('created_at', $year)
-                        ->whereMonth('created_at', $month);
+                    $query->whereYear('submission_date', $year)
+                        ->whereMonth('submission_date', $month);
                 }
             ])->get();
 
