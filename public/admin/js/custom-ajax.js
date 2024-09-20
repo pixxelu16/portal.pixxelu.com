@@ -46,68 +46,21 @@ $('body').on('click', '.student_pay_fees', function() {
     $(".student_name_pay_fees").text(student_name);      
 });
 
-//Student edit fees model 
-$(document).ready(function() {
-    //Show modal and populate fields
-    $('body').on('click', '.edit-btn', function() {
-        var feeId = $(this).data('fee-id');   
-        var feeMonth = $(this).data('fee-month');
-        var feesAmount = $(this).data('fee-amount');
-        var studentName = $(this).data('student-name');
-        
-        //Populate values
-        $('#fee_id').val(feeId);
-        $('#fee_month').val(feeMonth);  
-        $("#model_student_amount").val(feesAmount);    
-        $(".edit_pay_fees").text(studentName);   
-        $('#editFeeModal').modal('show');
-    });
+//Student Show modal edit fees model 
+$('body').on('click', '.edit-btn', function() {
+    var feeId = $(this).data('fee-id'); 
+    var feeMonth = $(this).data('fee-month');
+    var feesAmount = $(this).data('fee-amount');
+    var studentName = $(this).data('student-name');
+    
+    //apend values
+    $('#fee_id').val(feeId);
+    $('#fee_month').val(feeMonth);  
+    $("#model_student_amount").val(feesAmount);
 
-    //Update student fees 
-    $('body').on('submit', '#editFeeForm', function(e) {
-        e.preventDefault(); 
-
-        //Get field values
-        var userFees = $('#model_student_amount').val();
-        var paymentType = $('#payment_type').val();
-
-        //Validate form
-        var isValid = true;
-        $('.user_fee_responce').empty();
-        $('.user_fee_type_responce').empty();
-
-        if (userFees === '' || !/^\d+$/.test(userFees)) {
-            $('.user_fee_responce').html('<div class="alert alert-danger">Fees Amount is required and must be a valid number.</div>');
-            isValid = false;
-        }
-
-        if (paymentType === '') {
-            $('.user_fee_type_responce').html('<div class="alert alert-danger">Payment Type is required.</div>');
-            isValid = false;
-        }
-
-        if (isValid) {
-            var formData = $(this).serialize();
-
-            $.ajax({
-                type: 'POST',
-                url: base_url + '/admin/update-student-fees',
-                data: formData,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
-                },
-                beforeSend: function() {
-                    $(".com_ajax_loader").show(); 
-                    $('.is_update_student_fees').prop('disabled', true); 
-                },
-				   success: function (response) {
-					$('.student_update_fee_responce').html(response);
-					$(".is_update_student_fees").prop('disabled', false);
-					$(".com_ajax_loader").hide();
-				}              
-            });
-        }
-    });
+    //Update student pay fees header    
+    $(".edit_pay_fees").text(studentName);   
+    $('#editFeeModal').modal('show');
 });
 
 //Student assign accessories
@@ -557,6 +510,112 @@ $(document).ready(function() {
         window.location.href = base_url+'/admin/search-inquery-course-type/'+course_type;
     });
 });
+
+
+
+//Edit Employee attendance details
+$(document).ready(function() {
+    //validation
+    $("#employee_attendances").validate({
+        rules: {
+            attendance_status: {
+                required: true,
+            },
+            sift: {
+                required: true,
+            },
+            sift_type: {
+                required: true,
+            },
+            punch_in_time: {
+                required: true,
+            },
+            punch_out_time: {
+                required: true,
+            },
+        },
+        messages: {
+        },
+        submitHandler: function(form, e) {
+            e.preventDefault();
+            var formData = $(form).serialize();    
+            //Ajax employee attendance submit form
+            $.ajax({
+                type: 'POST',
+                url: base_url + '/admin/submit-employee-attendance',
+                data: formData,
+                headers: { 
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                beforeSend: function() {
+                    $(".com_ajax_loader").show();
+                    $(".is_create_employee_attendance").prop("disabled", true);
+                },
+                success: function(response) {
+                    $(".employee_attendance_responce").html(response);
+                    //Reset form
+                    $('#employee_attendances')[0].reset();
+                    $(".is_create_employee_attendance").prop("disabled", false);
+                    $(".com_ajax_loader").hide();
+                },
+            });
+        }
+    });
+    //Getting employee attandance id and name
+    $('body').on('click', '.employee_attendance', function() {
+        var employee_id = $(this).data("employee_id"); 
+        var missing_date = $(this).data("missing_date");
+        var employee_name = $(this).data("employee_name");
+        //Apend value
+        $("#attendances_employee_id").val(employee_id);
+        $("#date").val(missing_date);
+        //attendance employee header
+        $(".employee_attendances").text(employee_name);  
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 var service_name = $(this).data("service_name");

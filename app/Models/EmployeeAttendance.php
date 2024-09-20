@@ -9,5 +9,5 @@ class EmployeeAttendance extends Model
 {
     use HasFactory;
     protected $table = 'employee_attendances';
-    protected $fillable = ['employee_id','sift','sift_type','punch_in_time','punch_out_time','attendance_status'];
+    protected $fillable = ['employee_id','sift','sift_type','punch_in_time','punch_out_time','submission_date','attendance_status'];
 }

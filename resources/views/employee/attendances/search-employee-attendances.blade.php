@@ -150,7 +150,7 @@
                   @php
                   $date = \Carbon\Carbon::create($year, $month, $day)->format('Y-m-d');
                   $attendance = $employee->employees_attendance_detail->first(function ($att) use ($date) {
-                  return \Carbon\Carbon::parse($att->created_at)->format('Y-m-d') === $date;
+                  return \Carbon\Carbon::parse($att->submission_date)->format('Y-m-d') === $date;
                   });
                   $punchIn = null;
                   $punchOut = null;
@@ -195,7 +195,7 @@
                </tr>
                @empty
                <tr>
-                  <td colspan="{{ count($days) + 6 }}" class="text-center">No Employee found</td>
+                  <td colspan="{{ count($days) + 6 }}" class="text-center">No Attendance found</td>
                </tr>
                @endforelse
             </tbody>

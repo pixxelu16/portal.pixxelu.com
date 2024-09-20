@@ -118,8 +118,9 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('admin/get-employee-detail', [App\Http\Controllers\Admin\EmployeeController::class, 'single_employee_detail']);
         Route::get('admin/search-employees-list/{any}', [App\Http\Controllers\Admin\EmployeeController::class, 'search_employee_list'])->name('admin.search.employee.list');
         //Employee attendance  
-        Route::post('admin/submit-employee-attendance', [App\Http\Controllers\Admin\EmployeeAttendanceController::class, 'employee_attendance'])->name('admin.submit.employee.attendance');
-        Route::post('admin/update-employee-punch-out-attendance', [App\Http\Controllers\Admin\EmployeeAttendanceController::class, 'employee_punch_out_attendance'])->name('admin.update.employee.punch.out.attendance');
+        Route::post('admin/submit-employee-attendance', [App\Http\Controllers\Admin\EmployeeAttendanceController::class, 'submit_employee_attendance'])->name('admin.submit.employee.attendance');
+        // Route::post('admin/submit-employee-attendance', [App\Http\Controllers\Admin\EmployeeAttendanceController::class, 'employee_attendance'])->name('admin.submit.employee.attendance');
+        // Route::post('admin/update-employee-punch-out-attendance', [App\Http\Controllers\Admin\EmployeeAttendanceController::class, 'employee_punch_out_attendance'])->name('admin.update.employee.punch.out.attendance');
         Route::get('admin/all-employees-attendance-list', [App\Http\Controllers\Admin\EmployeeAttendanceController::class, 'all_employees_attendance_list']);
         Route::get('admin/search-employee-attendance', [App\Http\Controllers\Admin\EmployeeAttendanceController::class, 'search_employee_attendance_list'])->name('admin.search.employee.attendance');
         //employee assign accessories 

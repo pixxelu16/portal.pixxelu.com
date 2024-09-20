@@ -15,7 +15,7 @@
    <div class ="search-header">
       <h2 class="attendance-header">Search Attendances List</h2>
    </div>
-    <!--start four boxes studens fees-->
+   <!--start student attendance boxes-->
     <div class="boxes-wrapper student-attendance-header">
          <div class="box">
             <img src="{{ url('public/admin/images/working_hours.svg') }}" alt="Working Hours">
@@ -53,10 +53,10 @@
             <p>{{ $daysInMonth }}</p>
          </div>
    </div>
-   <!--end four boxes studens fees-->
+   <!--end student attendance boxes-->
 </div>
+<!--start search filter-->
 <form action="{{ url('student/search-attendance') }}" method="GET">
-   <!--start search filter-->
    <div class="row search-student-attendance">
       <!-- <div class="col-sm-6 col-md-3">
          <div class="input-block mb-3 form-focus">
@@ -146,21 +146,23 @@
                   @php
                   $date = \Carbon\Carbon::create($year, $month, $day)->format('Y-m-d');
                   $attendance = $student->student_attendance_detail->first(function ($att) use ($date) {
-                  return \Carbon\Carbon::parse($att->created_at)->format('Y-m-d') === $date;
+                        return \Carbon\Carbon::parse($att->submission_date)->format('Y-m-d') === $date;
                   });
+                  
                   $punchIn = null;
                   $punchOut = null;
                   $formattedDuration = null;
                   if ($attendance) {
-                  $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
-                  $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
+                     $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
+                     $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
                      if ($punchOut) {
-                     $duration = $punchIn->diff($punchOut);
-                     $hours = $duration->h;
-                     $minutes = $duration->i;
-                     $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
+                        $duration = $punchIn->diff($punchOut);
+                        $hours = $duration->h;
+                        $minutes = $duration->i;
+                        $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
                      }
                   }
+
                   $isSunday = in_array($day, $sundays);
                   $isLastSaturday = $day == $lastSaturday;
                   @endphp
@@ -190,7 +192,7 @@
                </tr>
                @empty
                <tr>
-                  <td colspan="{{ count($days) + 6 }}" class="text-center">No Student found</td>
+                  <td colspan="{{ count($days) + 6 }}" class="text-center">No Attendances found</td>
                </tr>
                @endforelse
             </tbody>
