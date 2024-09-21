@@ -45,9 +45,9 @@ class EmployeeAttendanceController extends Controller
 
         //echo "<pre>"; print_r($is_create_employee_attendance); exit;
 
-        //Check if employee attendance is created or not
+        //Check if employee attendance is updated or not
         if ($is_create_employee_attendance) {
-            echo '<p style="color:green;">Employee attendance created successfully.</p>';
+            echo '<p style="color:green;">Employee attendance updated successfully.</p>';
             echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
         } else {
             echo '<p style="color:red;">Oops, something went wrong. Please try again.</p>';
@@ -241,8 +241,9 @@ class EmployeeAttendanceController extends Controller
         $total_present_hours = 0;
         $total_present_days = 0;
         $total_absent_days = 0;
-        $total_leave_days = 0;
-        $total_half_day = 0;
+        $total_leave_days = 0; 
+        $total_half_day = 0; 
+        $total_holidays = 0; 
 
         //Get the current month and year
         $currentMonth = Carbon::now()->month;
@@ -271,7 +272,9 @@ class EmployeeAttendanceController extends Controller
                     } elseif ($attendance->attendance_status == 'leave') {
                         $total_leave_days++;
                     } elseif ($attendance->attendance_status == 'half_day') {
-                        $total_half_day++;
+                        $total_half_day++;                    
+                    } elseif ($attendance->attendance_status == 'holiday') {
+                        $total_holidays++;
                     }
                 }
             }

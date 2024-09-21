@@ -176,7 +176,7 @@
                   <td>
                      <?php if($isAttendanceMissing && !$isHoliday): ?> 
                      <button type="button" class="studentss-punch-in-buton employee_attendance" data-employee_id="<?php echo e($employee->id); ?>" data-missing_date="<?php echo e($date); ?>" data-employee_name="<?php echo e($employee->name); ?>" data-toggle="modal" data-target="#editAttendance">
-                     <img src="<?php echo url('public/admin/images/edite-icon.svg'); ?>"
+                     <img src="<?php echo url('public/admin/images/edit.svg'); ?>"
                         alt="Edit Icon">
                      </button>
                      <?php endif; ?>
@@ -198,6 +198,8 @@
                      <img src="<?php echo e(url('public/admin/images/leave_icon.svg')); ?>" alt="Leave">
                      <?php elseif($attendance->attendance_status == 'half_day'): ?>
                      <img src="<?php echo e(url('public/admin/images/half_day_leave.svg')); ?>" alt="Half Day">
+                     <?php elseif($attendance->attendance_status == 'holiday'): ?>
+                     <img src="<?php echo e(url('public/admin/images/Holiday.svg')); ?>" alt="Holiday Day">
                      <?php endif; ?>
                      <?php endif; ?>
                      <?php endif; ?>
@@ -217,8 +219,8 @@
 <div class="modal" id="editAttendance">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
-         <div class="modal-header">
-            <h5 class="modal-title">Edit Attendance  <span class="employee_attendances"></h5>
+         <div class="modal-header-damage">
+            <h4 class="modal-title">Edit Attendance For <span class="employee_attendances"></h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -235,6 +237,7 @@
                      <option value="half_day">Half Day</option>
                      <option value="absent">Absent</option>
                      <option value="leave">Leave</option>
+                     <option value="holiday">Holiday</option>
                   </select>
                </div>
                <div class="form-group">
@@ -250,9 +253,9 @@
                   <label for="shiftType">Shift Type <span class="text-danger">*</span></label>
                   <select class="form-control" name="sift_type" id="sift_type">
                      <option value ="" disabled selected>Select Shift type</option>
-                     <option value="full_day">Full Day</option>
-                     <option value="half_day">Half Day</option>
-                     <option value="quarter_day">Quarter Day</option>
+                     <option value="Full Day">Full Day</option>
+                     <option value="Half Day">Half Day</option>
+                     <option value="Quarter Day">Quarter Day</option>
                   </select>
                </div>
                <div class="form-group">
@@ -268,7 +271,7 @@
                   <input type="time" class="form-control" name="punch_out_time" id="punchOutTime">
                </div>
                <div class="modal-footer">
-                  <button type="submit" class="btn btn-primary is_create_employee_punch_in_attendance">Submit</button>
+                  <button type="submit" class="btn btn-primary is_create_employee_punch_in_attendance">Update</button>
                </div>
             </form>
             <div class="loader com_ajax_loader" style="display:none;">

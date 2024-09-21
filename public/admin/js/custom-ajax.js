@@ -521,18 +521,18 @@ $(document).ready(function() {
             attendance_status: {
                 required: true,
             },
-            sift: {
-                required: true,
-            },
-            sift_type: {
-                required: true,
-            },
-            punch_in_time: {
-                required: true,
-            },
-            punch_out_time: {
-                required: true,
-            },
+            // sift: {
+            //     required: true,
+            // },
+            // sift_type: {
+            //     required: true,
+            // },
+            // punch_in_time: {
+            //     required: true,
+            // },
+            // punch_out_time: {
+            //     required: true,
+            // },
         },
         messages: {
         },
