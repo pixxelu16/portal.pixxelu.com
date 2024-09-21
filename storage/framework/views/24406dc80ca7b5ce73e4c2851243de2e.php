@@ -190,7 +190,7 @@
                      ?>
                      <?php if($isAttendanceMissing && !$isHoliday && $attendanceMonth == $currentMonth && $attendanceYear == $currentYear): ?> 
                      <button type="button" class="studentss-punch-in-buton employee_attendance" data-employee_id="<?php echo e($employee->id); ?>" data-missing_date="<?php echo e($date); ?>" data-employee_name="<?php echo e($employee->name); ?>" data-toggle="modal" data-target="#editAttendance">
-                     <img src="<?php echo e(url('public/admin/images/edite-icon.svg')); ?>" alt="Edit Icon">
+                     <img src="<?php echo e(url('public/admin/images/edit.svg')); ?>" alt="Edit Icon">
                      </button>
                      <?php endif; ?>
                      <!-- Show Holiday Icon -->
@@ -211,6 +211,8 @@
                      <img src="<?php echo e(url('public/admin/images/leave_icon.svg')); ?>" alt="Leave">
                      <?php elseif($attendance->attendance_status == 'half_day'): ?>
                      <img src="<?php echo e(url('public/admin/images/half_day_leave.svg')); ?>" alt="Half Day">
+                     <?php elseif($attendance->attendance_status == 'holiday'): ?>
+                     <img src="<?php echo e(url('public/admin/images/Holiday.svg')); ?>" alt="Holiday Day">
                      <?php endif; ?>
                      <?php endif; ?>
                      <?php endif; ?>
@@ -249,6 +251,7 @@
                      <option value="half_day">Half Day</option>
                      <option value="absent">Absent</option>
                      <option value="leave">Leave</option>
+                     <option value="holiday">Holiday</option>
                   </select>
                </div>
                <div class="form-group">
@@ -264,9 +267,9 @@
                   <label for="shiftType">Shift Type <span class="text-danger">*</span></label>
                   <select class="form-control" name="sift_type" id="sift_type">
                      <option value ="" disabled selected>Select Shift type</option>
-                     <option value="full_day">Full Day</option>
-                     <option value="half_day">Half Day</option>
-                     <option value="quarter_day">Quarter Day</option>
+                     <option value="Full Day">Full Day</option>
+                     <option value="Half Day">Half Day</option>
+                     <option value="Quarter Day">Quarter Day</option>
                   </select>
                </div>
                <div class="form-group">

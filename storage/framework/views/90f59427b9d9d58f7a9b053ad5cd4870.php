@@ -210,19 +210,20 @@ use Carbon\Carbon;
                   </tr>
                   <?php endif; ?>
                </tbody>
-            </table>
+            </table> 
          </div>
          <!--end student damage accessories table-->
          <!--start student punch in attendance modal-->
+ 
          <div class="modal" id="punchInModel">
-            <div class="modal-dialog" role="document">
-               <div class="modal-content">
-                  <div class="modal-header">
-                     <h5 class="modal-title">Punch In  <span class="student_attendances"></h5>
-                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                     <span aria-hidden="true">&times;</span>
-                     </button>
-                  </div>
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header-damage">
+            <h4 class="modal-title">Edit Attendance For <span class="student_attendances"></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
                   <div class="modal-body">
                      <form action="#" id="student_punch_in_attendance" method="POST">
                         <input type="hidden" id="model_student_id" name="student_id" value="" />
