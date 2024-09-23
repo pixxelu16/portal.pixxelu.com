@@ -157,6 +157,7 @@ Route::group(['middleware' => 'auth'], function() {
         //Student search fees status list 
         Route::get('admin/search-students-fees-list/{any}', [App\Http\Controllers\Admin\StudentController::class, 'search_students_fees_list'])->name('admin.search.student.fees.list');
         //Students attendance list
+        Route::post('admin/submit-student-attendance', [App\Http\Controllers\Admin\StudentAttendanceController::class, 'submit_student_attendance'])->name('admin.submit.student.attendance');
         Route::get('admin/all-students-attendance-list', [App\Http\Controllers\Admin\StudentAttendanceController::class, 'all_students_attendance_list']);
         Route::get('admin/search-student-attendance', [App\Http\Controllers\Admin\StudentAttendanceController::class, 'search_student_attendance_list'])->name('admin.search.attendance');
         //inqueries deatils 

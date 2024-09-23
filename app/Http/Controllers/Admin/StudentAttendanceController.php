@@ -10,7 +10,30 @@ use Carbon\Carbon;
 
 class StudentAttendanceController extends Controller
 {
-    //Function for student attenedance lists
+
+    //Function for submit student punch in attendance
+    public function submit_student_attendance(Request $request) {
+        //Create attendance student
+        $is_create_student_attendance = StudentAttendance::create([
+            'user_id' => $request->student_id,
+            'sift' => $request->sift,
+            'sift_type' => $request->sift_type,
+            'punch_in_time' => $request->punch_in_time,
+            'punch_out_time' => $request->punch_out_time,
+            'submission_date' => $request->submission_date,
+            'attendance_status' => $request->attendance_status,
+        ]);
+
+        //Check if student attendance is updated or not
+        if ($is_create_student_attendance) {
+            echo '<p style="color:green;">Student attendance updated successfully.</p>';
+            echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
+        } else {
+            echo '<p style="color:red;">Oops, something went wrong. Please try again.</p>';
+        }
+    }
+
+    //Function for get all students attenedance list
     public function all_students_attendance_list() {
         //Get the current month and year
         $month = Carbon::now()->month;

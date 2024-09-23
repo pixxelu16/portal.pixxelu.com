@@ -58,12 +58,6 @@
 <!--start search filter-->
 <form action="{{ url('student/search-attendance') }}" method="GET">
    <div class="row search-student-attendance">
-      <!-- <div class="col-sm-6 col-md-3">
-         <div class="input-block mb-3 form-focus">
-             <input type="text" class="form-control" name="name" id="name" 
-                 value="{{ request()->input('name') }}" placeholder="Enter Your Name">
-         </div>
-         </div> -->
       <div class="col-sm-6 col-md-3">
          <div class="input-block mb-3 form-focus select-focus">
             <select class="select floating" name="month">
@@ -76,12 +70,16 @@
             </select>
          </div>
       </div>
+      @php
+      $currentYear = date('Y');
+      $startYear = 2023; 
+      @endphp
       <div class="col-sm-6 col-md-3">
          <div class="input-block mb-3 form-focus select-focus">
             <select class="select floating" name="year">
                <option value="">Select Year</option>
-               @for ($i = date('Y'); $i >= 2023; $i--)
-               <option value="{{ $i }}" {{ $i == date('Y') ? 'selected' : '' }}>
+               @for ($i = $currentYear; $i >= $startYear; $i--)
+               <option value="{{ $i }}" {{ request()->input('year') == $i ? 'selected' : '' }}>
                {{ $i }}
                </option>
                @endfor
@@ -169,23 +167,23 @@
                   <td>
                      <!--show holiday icon-->
                      @if ($isSunday)
-                     <img src="{{ url('public/admin/images/sunday.svg') }}" alt="Holiday">
-                     @elseif ($isLastSaturday)
-                     <img src="{{ url('public/admin/images/saturday.svg') }}" alt="Holiday">
-                     @else
-                     @if ($attendance)
-                     @if ($attendance->attendance_status == 'present')
-                     <img src="{{ url('public/admin/images/present_icon.svg') }}" alt="Present">
-                     <p class="student-attendance-duration">{{ $formattedDuration ?? 'N/A' }}</p>
-                     @elseif ($attendance->attendance_status == 'absent')
-                     <img src="{{ url('public/admin/images/absent_icon.svg') }}" alt="Absent">
-                     @elseif ($attendance->attendance_status == 'leave')
-                     <img src="{{ url('public/admin/images/leave_icon.svg') }}" alt="Leave">
-                     @elseif ($attendance->attendance_status == 'half_day')
-                     <img src="{{ url('public/admin/images/half_day_leave.svg') }}" alt="Half Day">
-                     @endif
-                     @else
-                     @endif
+                           <img src="{{ url('public/admin/images/sunday.svg') }}" alt="Holiday">
+                        @elseif ($isLastSaturday)
+                           <img src="{{ url('public/admin/images/saturday.svg') }}" alt="Holiday">
+                        @else
+                        @if ($attendance)
+                           @if ($attendance->attendance_status == 'present')
+                                 <img src="{{ url('public/admin/images/present_icon.svg') }}" alt="Present">
+                                 <p class="student-attendance-duration">{{ $formattedDuration ?? 'N/A' }}</p>
+                              @elseif ($attendance->attendance_status == 'absent')
+                                 <img src="{{ url('public/admin/images/absent_icon.svg') }}" alt="Absent">
+                              @elseif ($attendance->attendance_status == 'leave')
+                                 <img src="{{ url('public/admin/images/leave_icon.svg') }}" alt="Leave">
+                              @elseif ($attendance->attendance_status == 'half_day')
+                                 <img src="{{ url('public/admin/images/half_day_leave.svg') }}" alt="Half Day">
+                           @endif
+                           @else
+                        @endif
                      @endif
                   </td>
                   @endforeach
