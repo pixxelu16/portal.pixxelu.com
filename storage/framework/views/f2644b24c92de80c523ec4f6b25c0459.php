@@ -13,7 +13,7 @@
    </div>
    <?php endif; ?>
    <div class ="search-header">
-      <h2 class="attendance-header">All Students Monthly Attendance List:-  <?php echo e(date('F Y')); ?></h2>
+      <h2 class="attendance-header">Search Student Attendances List</h2>
    </div>
    <!--start student attendance boxes-->
    <div class="boxes-wrapper student-attendance-header">
@@ -58,12 +58,12 @@
 <!--start search filter-->
 <form action="<?php echo e(url('admin/search-student-attendance')); ?>" method="GET">
    <div class="row search-all-students-attendance">
-      <div class="col-sm-6 col-md-3">
+   <div class="col-sm-6 col-md-3">
          <div class="input-block mb-3 form-focus">
             <select class="select floating" name="student_name">
-               <option value="">Select Student Name</option>
-               <?php $__currentLoopData = $get_student_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-               <option value="<?php echo e($student->name); ?>">(<?php echo e($student->id); ?>) <?php echo e($student->name); ?></option>
+            <option value="">Select Student Name</option>
+               <?php $__currentLoopData = $get_student_name; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+               <option value="<?php echo e($student->name); ?>" <?php echo e(request()->input('student_name') === $student->name ? 'selected="selected"' : ''); ?>><?php echo e($student->name); ?></option>
                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
          </div>
@@ -73,7 +73,7 @@
             <select class="select floating" name="month">
                <option value="">Select Month</option>
                <?php $__currentLoopData = $months; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $name): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-               <option value="<?php echo e($key); ?>" <?php echo e(\Carbon\Carbon::now()->month === $key ? 'selected' : ''); ?>>
+               <option value="<?php echo e($key); ?>" <?php echo e(request()->input('month') == $key ? 'selected' : ''); ?>>
                <?php echo e($name); ?>
 
                </option>
@@ -81,22 +81,26 @@
             </select>
          </div>
       </div>
+      <?php
+      $currentYear = date('Y');
+      $startYear = 2023; 
+      ?>
       <div class="col-sm-6 col-md-3">
          <div class="input-block mb-3 form-focus select-focus">
             <select class="select floating" name="year">
-               <option value="">Select Year</option>
-               <?php for($i = date('Y'); $i >= 2023; $i--): ?>
-               <option value="<?php echo e($i); ?>" <?php echo e($i == date('Y') ? 'selected' : ''); ?>>
-               <?php echo e($i); ?>
+                  <option value="">Select Year</option>
+                  <?php for($i = $currentYear; $i >= $startYear; $i--): ?>
+                     <option value="<?php echo e($i); ?>" <?php echo e(request()->input('year') == $i ? 'selected' : ''); ?>>
+                        <?php echo e($i); ?>
 
-               </option>
-               <?php endfor; ?>
+                     </option>
+                  <?php endfor; ?>
             </select>
          </div>
       </div>
       <div class="col-sm-6 col-md-3">
          <div class="d-grid">
-            <input type="submit" class="btn btn-success" value="Search" />     
+            <input type="submit" class="btn btn-success" value="Search" />   
          </div>
       </div>
    </div>
@@ -156,7 +160,7 @@
                   $attendance = $student->student_attendance_detail->first(function ($att) use ($date) {
                   return \Carbon\Carbon::parse($att->submission_date)->format('Y-m-d') === $date;
                   });
-                  
+
                   //Get punch in and out
                   $punchIn = null;
                   $punchOut = null;
@@ -165,7 +169,7 @@
                   if ($attendance) {
                      $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
                      $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
-
+                   
                      if ($punchOut) {
                         $duration = $punchIn->diff($punchOut);
                         $hours = $duration->h;
@@ -173,6 +177,7 @@
                         $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
                      }
                   }
+
                   //check if any student not filled attendance
                   $isAttendanceMissing = !$attendance;
                   $isSunday = in_array($day, $sundays);
@@ -180,13 +185,21 @@
                   $isHoliday = $isSunday || $isLastSaturday; 
                   ?>
                   <td>
-                     <?php if($isAttendanceMissing && !$isHoliday): ?> 
-                     <button type="button" class="studentss-punch-in-buton student_attendance" data-student_id="<?php echo e($student->id); ?>" data-missing_date="<?php echo e($date); ?>" data-student_name="<?php echo e($student->name); ?>" data-toggle="modal" data-target="#editStudentAttendance">
-                     <img src="<?php echo url('public/admin/images/edit.svg'); ?>"
-                        alt="Edit Icon">
-                     </button>
+                     <?php
+                     //Get current month and year
+                     $currentMonth = \Carbon\Carbon::now()->month;
+                     $currentYear = \Carbon\Carbon::now()->year;
+                     //Extract the month and year from the attendance date
+                     $attendanceMonth = \Carbon\Carbon::parse($date)->month;
+                     $attendanceYear = \Carbon\Carbon::parse($date)->year;
+                     ?>
+                     <?php if($isAttendanceMissing && !$isHoliday && $attendanceMonth == $currentMonth && $attendanceYear == $currentYear): ?> 
+                        <button type="button" class="studentss-punch-in-buton student_attendance" data-student_id="<?php echo e($student->id); ?>" data-missing_date="<?php echo e($date); ?>" data-student_name="<?php echo e($student->name); ?>" data-toggle="modal" data-target="#editStudentAttendance">
+                        <img src="<?php echo url('public/admin/images/edit.svg'); ?>"
+                           alt="Edit Icon">
+                        </button>
                      <?php endif; ?>
-                     <!--show holiday icon -->
+                     <!--show holiday icon-->
                      <?php if($isHoliday): ?>
                         <?php if($isSunday): ?>
                               <img src="<?php echo e(url('public/admin/images/sunday.svg')); ?>" alt="Holiday">
@@ -209,6 +222,7 @@
                               <?php endif; ?>
                            <?php endif; ?>
                      <?php endif; ?>
+                  </td>
                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                </tr>
                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
@@ -287,22 +301,22 @@
 </div>
 <!--end student edit attendance modal-->
 <script>
-   //Function for current time in punch Iin and punch out
-   function setCurrentTimeInIST() {
-      //Get current time in IST
-      var currentISTTime = new Date().toLocaleTimeString('en-US', {
-         timeZone: 'Asia/Kolkata',
-         hour12: false, 
-         hour: '2-digit',
-         minute: '2-digit'
-      });
-      //Set the current time for punch In
-      document.getElementById('punch_in_time').value = currentISTTime;
-      //Set the current time for punch Out
-      document.getElementById('punch_out_time').value = currentISTTime;
-   }
-   //Set the current time when the page loads
-   window.onload = setCurrentTimeInIST;
+//Function for current time in punch Iin and punch out
+function setCurrentTimeInIST() {
+   //Get current time in IST
+   var currentISTTime = new Date().toLocaleTimeString('en-US', {
+      timeZone: 'Asia/Kolkata',
+      hour12: false, 
+      hour: '2-digit',
+      minute: '2-digit'
+   });
+   //Set the current time for punch In
+   document.getElementById('punch_in_time').value = currentISTTime;
+   //Set the current time for punch Out
+   document.getElementById('punch_out_time').value = currentISTTime;
+}
+//Set the current time when the page loads
+window.onload = setCurrentTimeInIST;
 </script>
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/admin/student-attendances/all-students-attendance-list.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/admin/student-attendances/search-student-attendances.blade.php ENDPATH**/ ?>

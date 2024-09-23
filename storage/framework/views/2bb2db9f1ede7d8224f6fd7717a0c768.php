@@ -12,10 +12,10 @@
    </div>
    <?php endif; ?>
    <div class ="search-header">
-      <h2 class="attendance-header">Monthly Attendance List:-  <?php echo e(date('F Y')); ?></h2>
+      <h2 class="attendance-header">Search Attendances List</h2>
    </div>
    <!--start student attendance boxes-->
-   <div class="boxes-wrapper student-attendance-header">
+    <div class="boxes-wrapper student-attendance-header">
          <div class="box">
             <img src="<?php echo e(url('public/admin/images/working_hours.svg')); ?>" alt="Working Hours">
             <h3>Working Hours</h3>
@@ -62,7 +62,7 @@
             <select class="select floating" name="month">
                <option value="">Select Month</option>
                <?php $__currentLoopData = $months; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $name): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-               <option value="<?php echo e($key); ?>" <?php echo e(\Carbon\Carbon::now()->month === $key ? 'selected' : ''); ?>>
+               <option value="<?php echo e($key); ?>" <?php echo e(request()->input('month') == $key ? 'selected' : ''); ?>>
                <?php echo e($name); ?>
 
                </option>
@@ -70,12 +70,16 @@
             </select>
          </div>
       </div>
+      <?php
+      $currentYear = date('Y');
+      $startYear = 2023; 
+      ?>
       <div class="col-sm-6 col-md-3">
          <div class="input-block mb-3 form-focus select-focus">
             <select class="select floating" name="year">
                <option value="">Select Year</option>
-               <?php for($i = date('Y'); $i >= 2023; $i--): ?>
-               <option value="<?php echo e($i); ?>" <?php echo e($i == date('Y') ? 'selected' : ''); ?>>
+               <?php for($i = $currentYear; $i >= $startYear; $i--): ?>
+               <option value="<?php echo e($i); ?>" <?php echo e(request()->input('year') == $i ? 'selected' : ''); ?>>
                <?php echo e($i); ?>
 
                </option>
@@ -85,7 +89,7 @@
       </div>
       <div class="col-sm-6 col-md-3">
          <div class="d-grid">
-            <input type="submit" class="btn btn-success" value="Search" />     
+            <input type="submit" class="btn btn-success" value="Search" />   
          </div>
       </div>
    </div>
@@ -104,7 +108,6 @@
                   <th>Batch</th>
                   <th>Batch Timing</th>
                   <?php $__currentLoopData = $days; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-
                   <?php
                   $date = \Carbon\Carbon::create($year, $month, $day);
                   $dayOfWeek = $date->format('D'); 
@@ -112,7 +115,6 @@
                   $isSunday = $dayOfWeek === 'Sun';
                   $isLastSaturday = $dayOfWeek === 'Sat' && $day == $lastSaturday;
                   ?>
-
                   <th class="<?php echo e($isSunday ? 'text-danger' : ($isLastSaturday ? 'text-primary' : '')); ?>">
                      <?php echo e($dayNumber); ?> <?php echo e($dayOfWeek); ?>
 
@@ -144,9 +146,9 @@
                   <?php
                   $date = \Carbon\Carbon::create($year, $month, $day)->format('Y-m-d');
                   $attendance = $student->student_attendance_detail->first(function ($att) use ($date) {
-                     return \Carbon\Carbon::parse($att->submission_date)->format('Y-m-d') === $date;
+                        return \Carbon\Carbon::parse($att->submission_date)->format('Y-m-d') === $date;
                   });
-                  //Check punch in and out
+                  
                   $punchIn = null;
                   $punchOut = null;
                   $formattedDuration = null;
@@ -182,7 +184,7 @@
                               <?php elseif($attendance->attendance_status == 'half_day'): ?>
                                  <img src="<?php echo e(url('public/admin/images/half_day_leave.svg')); ?>" alt="Half Day">
                            <?php endif; ?>
-                           <?php else: ?> 
+                           <?php else: ?>
                         <?php endif; ?>
                      <?php endif; ?>
                   </td>
@@ -199,4 +201,4 @@
    </div>
 </div>
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('student.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/student/attendances/student-attendance-list.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('student.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/student/attendances/search-student-attendances.blade.php ENDPATH**/ ?>

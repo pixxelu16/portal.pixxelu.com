@@ -29,8 +29,6 @@ class EmployeeAttendanceController extends Controller
     //     echo '<p style="color:red;">Your attendance has already been marked for today.</p>';
     //     echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
     // } else {
-   
-
       
         //Create attendance employee
         $is_create_employee_attendance = EmployeeAttendance::create([
@@ -42,8 +40,6 @@ class EmployeeAttendanceController extends Controller
             'submission_date' => $request->submission_date,
             'attendance_status' => $request->attendance_status,
         ]);
-
-        //echo "<pre>"; print_r($is_create_employee_attendance); exit;
 
         //Check if employee attendance is updated or not
         if ($is_create_employee_attendance) {
@@ -321,7 +317,6 @@ class EmployeeAttendanceController extends Controller
 
         return view('admin.employee-attendances.search-employee-attendances', compact('get_employee_detail', 'get_employee_name', 'months', 'days', 'month', 'year', 'daysInMonth', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays'));
     }
-
 }
 
 

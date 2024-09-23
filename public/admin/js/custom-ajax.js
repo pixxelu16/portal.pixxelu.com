@@ -511,8 +511,6 @@ $(document).ready(function() {
     });
 });
 
-
-
 //Edit Employee attendance details
 $(document).ready(function() {
     //validation
@@ -575,7 +573,66 @@ $(document).ready(function() {
 });
 
 
-
+//Edit Student attendance details
+$(document).ready(function() {
+    //validation
+    $("#student_attendances").validate({
+        rules: {
+            attendance_status: {
+                required: true,
+            },
+            // batch: {
+            //     required: true,
+            // },
+            // batch_timing: {
+            //     required: true,
+            // },
+            // punch_in_time: {
+            //     required: true,
+            // },
+            // punch_out_time: {
+            //     required: true,
+            // },
+        },
+        messages: {
+        },
+        submitHandler: function(form, e) {
+            e.preventDefault();
+            var formData = $(form).serialize();    
+            //Ajax student attendance submit form
+            $.ajax({
+                type: 'POST',
+                url: base_url + '/admin/submit-student-attendance',
+                data: formData,
+                headers: { 
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                beforeSend: function() {
+                    $(".com_ajax_loader").show();
+                    $(".is_create_student_attendance").prop("disabled", true);
+                },
+                success: function(response) {
+                    $(".student_attendance_responce").html(response);
+                    //Reset form
+                    $('#student_attendances')[0].reset();
+                    $(".is_create_student_attendance").prop("disabled", false);
+                    $(".com_ajax_loader").hide();
+                },
+            });
+        }
+    });
+    //Getting student attandance id and name
+    $('body').on('click', '.student_attendance', function() {
+        var student_id = $(this).data("student_id"); 
+        var missing_date = $(this).data("missing_date");
+        var student_name = $(this).data("student_name");
+        //Apend value
+        $("#attendances_student_id").val(student_id);
+        $("#date").val(missing_date);
+        //attendance student header
+        $(".student_attendances").text(student_name);  
+    });
+});
 
 
 

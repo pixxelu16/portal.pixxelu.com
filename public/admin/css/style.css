@@ -3544,6 +3544,22 @@ h2.attendance-header {
 	color: #ffffff;
 }
 
+.student_attendances {
+	font-size: 16px;
+	color: black;
+}
+
+.modal-footer .is_create_student_attendance {
+	float: left;
+	margin: 23px 0 0 0;
+	background-color: #018294;
+	border: none;
+	padding: 5px 15px;
+	border-radius: 10px;
+	font-size: 14px;
+	color: #ffffff;
+}
+
 /*end student attendances css*/
 
 /* { 9/9/2024 Menu Dropdown Design Start } */
