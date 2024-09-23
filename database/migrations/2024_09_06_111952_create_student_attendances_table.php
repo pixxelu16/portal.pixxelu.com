@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('batch_time')->nullable();
             $table->string('punch_in_time')->nullable();
             $table->string('punch_out_time')->nullable();
+            $table->string('submission_date')->nullable();
             $table->string('attendance_status')->nullable();
             $table->timestamps();
         });

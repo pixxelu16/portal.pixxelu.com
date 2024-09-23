@@ -5,21 +5,21 @@
    <h2>Edit Inquery detail</h2>
 </div>
 <div class="main-table">
-   @if (Session::has('success')) 
+   @if (Session::has('success'))
    <div class="notification-green">
       <p>{{ Session::get('success') }}</p>
    </div>
    <script>
-   setTimeout(function() {
-         window.location.href = "{{ url('super-admin/all-inqueries-list') }}";
-   }, 2000); 
-  </script>
+      setTimeout(function() {
+            window.location.href = "{{ url('super-admin/all-inqueries-list') }}";
+      }, 2000); 
+   </script>
    @endif 
-   @if (Session::has('unsuccess')) 
+   @if (Session::has('unsuccess'))
    <div class="notification-red">
       <p>{{ Session::get('unsuccess') }}</p>
    </div>
-   @endif 
+   @endif
    <div class="login-form">
       <form action="{{ route('super.admin.update.inquery', $inquery->id) }}" Method="POST">
          @csrf 
@@ -40,25 +40,40 @@
          <div class="form-group display-column">
             <div class="form-design mail">
                <label for="course_type">Course</label>
-               <select class="form-control" name="course_type" id="Course Type">
+               <select class="form-control" name="course_type" id="course_type">
                   <option value ="" disabled selected>Select Course Type</option>
                   <option value="Web Designing" @if($inquery->course_type == 'Web Designing') selected @endif>Web Designing</option>
                   <option value="Web Development"@if($inquery->course_type == 'Web Development') selected @endif>Web Development</option>
-                  <option value="Php Development" @if($inquery->course_type == 'Php Development') selected @endif>Php Development</option>
+                  <option value="PHP Development" @if($inquery->course_type == 'PHP Development') selected @endif>PHP Development</option>
                   <option value="Digital Marketing" @if($inquery->course_type == 'Digital Marketing') selected @endif>Digital Marketing</option>
                   <option value="Graphic" @if($inquery->course_type == 'Graphic') selected @endif>Graphic</option>
                   <option value="Full Stack Development" @if($inquery->course_type == 'Full Stack Development') selected @endif>Full Stack Development</option>
                </select>
             </div>
             <div class="form-design fees">
+               <label for="status">Priority</label>
+               <select class="form-control" name="priority" id="User Status">
+                  <option value ="" disabled selected>Select Priority Type</option>
+                  <option value="hot" @if($inquery->priority == 'hot') selected @endif>Hot</option>
+                  <option value="cold" @if($inquery->priority == 'cold') selected @endif>Cold</option>
+                  <option value="warm" @if($inquery->priority == 'warm') selected @endif>Warm</option>
+               </select>
+            </div>
+            <div class="form-design fees">
+               <label for="total_fees">Total Fees</label>
+               <input type="text" id="total_fees" name="total_fees" value="{{$inquery->total_fees}}" placeholder="Enter Total Fees">
+            </div>
+         </div>
+         <div class="form-group display-column">
+            <div class="form-design mail">
                <label for="status">Status</label>
                <select class="form-control" name="status" id="User Status">
                   <option value ="" disabled selected>Select Status Type</option>
-                  <option value ="" disabled selected>Select Status Type</option>  
                   <option value="Active" @if($inquery->status == 'Active') selected @endif>Active</option>
                   <option value="Office_Visited" @if($inquery->status == 'Office_Visited') selected @endif>Office Visited</option>
                   <option value="Closed" @if($inquery->status == 'Closed') selected @endif>Closed</option>
                   <option value="Converted" @if($inquery->status == 'Converted') selected @endif>Converted</option>
+                  <option value="Hot_Lead" @if($inquery->status == 'Hot_Lead') selected @endif>Hot Lead</option>
                </select>
             </div>
          </div>

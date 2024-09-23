@@ -17,7 +17,7 @@
 <div class="main-table">
    <div class="data-table-listing">
       <div class="btn-pixxelu">
-         <!--filter employees-->
+         <!--start filter employees acc employee role-->
          <select name="employee_role" id="employee_role" class="search-student-list">
             <option value ="" disabled selected>Select Employee Role</option>
             <option value="Project Bidder">Project Bidder</option>
@@ -27,7 +27,7 @@
             <option value="Graphic Designing">Graphic Designing</option>
             <option value="SEO">SEO</option>
          </select>
-         <!--end filter employees-->
+         <!--end filter employees acc employee role-->
       </div>
    </div>
    <div class="scrolling-data-table">
@@ -49,93 +49,92 @@
             </thead>
             <tbody>
                @if($get_employees_detail && $get_employees_detail->isNotEmpty())
-               @php $count = 1; 
-               @endphp
-               @foreach($get_employees_detail as $employee)   
-               <tr>
-                  <td>{{ $count++ }}.</td>
-                  <td>{{ $employee->unique_employee_id }}</td>
-                  <td data-th="Image">
-                     @if($employee->user_pic)
-                     <div class="user-image"> <img src = "{{ url('public/uploads/employees/'. $employee->user_pic)}}" alt=""></div>
-                     @endif 
-                  </td>
-                  <td>
-                     <span onclick="openNav()"><a href="#" class="employee_detail" data-employee_id="{{ $employee->id }}">{{ $employee->name }}</a></span>
-                  </td>
-                  <td>
-                  <div class="box-pay">
-                        <button type="button" class="employee-punch-in-buton employee_punch_in_attendance" data-employee_id="{{ $employee->id }}" data-employee_name="{{ $employee->name }}" data-toggle="modal" data-target="#punchInModel">
-                        Punch in
-                     </div>
-                     <div class="box-pay">
-                        <button type="button" class="employee-punch-out-buton employee_punch_out_attendance" data-employee_id="{{ $employee->id }}" data-employee_name="{{ $employee->name }}" data-toggle="modal" data-target="#punchOutModel">
-                        Punch Out
-                     </div>
-                  </td>
-                  @if($employee->employee_phone_no)
-                  <td><a href="https://wa.me/{{ str_replace(['+', '-', ' '], '', $employee->employee_phone_no) }}" target="_blank">{{ substr($employee->employee_phone_no, 0, 5) . '-' . substr($employee->employee_phone_no, 5) }}</a></td>
+                  @php $count = 1; @endphp
+                  @foreach($get_employees_detail as $employee)   
+                     <tr>
+                        <td>{{ $count++ }}.</td>
+                        <td>{{ $employee->unique_employee_id }}</td>
+                        <td data-th="Image">
+                           @if($employee->user_pic)
+                              <div class="user-image"> <img src = "{{ url('public/uploads/employees/'. $employee->user_pic)}}" alt=""></div>
+                           @endif 
+                        </td>
+                        <td>
+                           <span onclick="openNav()"><a href="#" class="employee_detail" data-employee_id="{{ $employee->id }}">{{ $employee->name }}</a></span>
+                        </td>
+                        <td>
+                        <div class="box-pay">
+                              <button type="button" class="employee-punch-in-buton employee_punch_in_attendance" data-employee_id="{{ $employee->id }}" data-employee_name="{{ $employee->name }}" data-toggle="modal" data-target="#punchInModel">
+                              Punch in
+                           </div>
+                           <div class="box-pay">
+                              <button type="button" class="employee-punch-out-buton employee_punch_out_attendance" data-employee_id="{{ $employee->id }}" data-employee_name="{{ $employee->name }}" data-toggle="modal" data-target="#punchOutModel">
+                              Punch Out
+                           </div>
+                        </td>
+                        @if($employee->employee_phone_no)
+                           <td><a href="https://wa.me/{{ str_replace(['+', '-', ' '], '', $employee->employee_phone_no) }}" target="_blank">{{ substr($employee->employee_phone_no, 0, 5) . '-' . substr($employee->employee_phone_no, 5) }}</a></td>
+                           @else
+                           <td>-</td>
+                        @endif
+                        <td>{{ \Carbon\Carbon::parse($employee->joining_date)->format('d M Y') }}</td>
+                        @if($employee->employee_role == 'Project Bidder')
+                              <td class="light-blue-color"><span>Project Bidder</span></td>
+                           @elseif($employee->employee_role == 'Php Development')
+                              <td class="light-green-color"><span>PHP Development</span></td>
+                           @elseif($employee->employee_role == 'Web Development')
+                              <td class="light-yellow-color"><span>Web Development</span></td>
+                           @elseif($employee->employee_role == 'Web Designing')
+                              <td class="light-pink-color"><span>Web Designing</span></td>
+                           @elseif($employee->employee_role == 'Graphic Designing')
+                              <td class="light-cyan-color"><span>Graphic Designing</span></td>
+                           @elseif($employee->employee_role == 'SEO')
+                              <td class="light-orange-color"><span>SEO</span></td>
+                           @else
+                           <td></td>
+                        @endif
+                        <!--<td>
+                           {{ $employee->total_salary }} 
+                           <div class="box-pay">
+                              <button type="button" class="pay-fes-buton employee_pay_salary" data-employee_id="{{ $employee->id }}" data-toggle="modal" data-target="#myModal">Pay Salary</button>
+                              </div> 
+                           </td>-->
+                        @if($employee->user_status == 'Active') 
+                              <td class="green-color"><span>Working</span></td>
+                           @elseif($employee->user_status == 'Pending')
+                              <td class="red-color"><span>Pending</span></td>
+                           @elseif($employee->user_status == 'Suspend')
+                              <td class="purple-color"><span>Suspend</span></td>
+                           @elseif($employee->user_status == 'Leave')
+                              <td class="red-color"><span>Leave</span></td>
+                           @else
+                           <td></td>
+                        @endif
+                        <!-- <td>
+                           <div class="dropdown">
+                              <button class="btn btn-secondary dropdown-toggle action-fee-design" type="button" data-bs-toggle="dropdown" aria-expanded="false"> <img src="{{ url('public/admin/images/ellips.svg') }}" alt="ellips" /> </button>
+                              <ul class="dropdown-menu pay-fees-submit">
+                                 <form class="drop-don-list">
+                                    <li><a href="{{ url('admin/employee-detail', $employee->id) }}"><img src="{{ url('public/admin/images/ico-1.png') }}">View Employee Detail</a></li>
+                                 <li><a href="{{ url('super-admin/edit-employee', $employee->id) }}"><img src="{{ url('public/admin/images/ico-4.png') }}">Edit</a></li>
+                                    <li class="employee_trash_record" data-employee_id="{{ $employee->id }}"><img src="{{ url('public/admin/images/ico-5.png') }}" alt="Trash Icon">Trash</li>
+                                 </form>
+                              </ul>
+                           </div>
+                           </td> -->
+                     </tr>
+                  @endforeach 
                   @else
-                  <td>-</td>
-                  @endif
-                  <td>{{ \Carbon\Carbon::parse($employee->joining_date)->format('d M Y') }}</td>
-                  @if($employee->employee_role == 'Project Bidder') 
-                  <td class="light-blue-color"><span>Project Bidder</span></td>
-                  @elseif($employee->employee_role == 'Php Development')
-                  <td class="light-green-color"><span>PHP Development</span></td>
-                  @elseif($employee->employee_role == 'Web Development')
-                  <td class="light-yellow-color"><span>Web Development</span></td>
-                  @elseif($employee->employee_role == 'Web Designing')
-                  <td class="light-pink-color"><span>Web Designing</span></td>
-                  @elseif($employee->employee_role == 'Graphic Designing')
-                  <td class="light-cyan-color"><span>Graphic Designing</span></td>
-                  @elseif($employee->employee_role == 'SEO')
-                  <td class="light-orange-color"><span>SEO</span></td>
-                  @else
-                  <td></td>
-                  @endif
-                  <!--<td>
-                     {{ $employee->total_salary }} 
-                     <div class="box-pay">
-                        <button type="button" class="pay-fes-buton employee_pay_salary" data-employee_id="{{ $employee->id }}" data-toggle="modal" data-target="#myModal">Pay Salary</button>
-                        </div> 
-                     </td>-->
-                  @if($employee->user_status == 'Active') 
-                  <td class="green-color"><span>Working</span></td>
-                  @elseif($employee->user_status == 'Pending')
-                  <td class="red-color"><span>Pending</span></td>
-                  @elseif($employee->user_status == 'Suspend')
-                  <td class="purple-color"><span>Suspend</span></td>
-                  @elseif($employee->user_status == 'Leave')
-                  <td class="red-color"><span>Leave</span></td>
-                  @else
-                  <td></td>
-                  @endif
-                  <!-- <td>
-                     <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle action-fee-design" type="button" data-bs-toggle="dropdown" aria-expanded="false"> <img src="{{ url('public/admin/images/ellips.svg') }}" alt="ellips" /> </button>
-                        <ul class="dropdown-menu pay-fees-submit">
-                           <form class="drop-don-list">
-                              <li><a href="{{ url('admin/employee-detail', $employee->id) }}"><img src="{{ url('public/admin/images/ico-1.png') }}">View Employee Detail</a></li>
-                             <li><a href="{{ url('super-admin/edit-employee', $employee->id) }}"><img src="{{ url('public/admin/images/ico-4.png') }}">Edit</a></li>
-                              <li class="employee_trash_record" data-employee_id="{{ $employee->id }}"><img src="{{ url('public/admin/images/ico-5.png') }}" alt="Trash Icon">Trash</li>
-                           </form>
-                        </ul>
-                     </div>
-                     </td> -->
-               </tr>
-               @endforeach 
-               @else
-               <tr>
-               <td colspan="4">No Employee are available.</td>
-               </tr>
+                  <tr>
+                  <td colspan="4">No Employee are available.</td>
+                  </tr>
                @endif
             </tbody>
          </table>
       </div>
    </div>
 </div>
-<!--start employee punch in attendance modal -->
+<!--start employee punch in attendance modal-->
 <div class="modal" id="punchInModel">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -196,8 +195,8 @@
       </div>
    </div>
 </div>
-<!--end employee punch in attendance modal -->
-<!--start employee punch out attendance modal -->
+<!--end employee punch in attendance modal-->
+<!--start employee punch out attendance modal-->
 <div class="modal" id="punchOutModel">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -226,14 +225,14 @@
       </div>
    </div>
 </div>
-<!--end employee punch out attendance modal -->
+<!--end employee punch out attendance modal-->
 <div id="myNav" class="overlay hide">
    <div class="overlay-content">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
       <div class="loader com_ajax_loaders" style="display: none;">
          <img src="{{ url('public/admin/images/index.svg') }}" />
       </div>
-      <div class="student_detail_response"></div>
+      <div class="employee_detail_response"></div>
    </div>
 </div>
 <script>

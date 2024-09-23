@@ -10,7 +10,6 @@ use Carbon\Carbon;
 
 class StudentAttendanceController extends Controller
 {
-
     //Function for submit student punch in attendance
     public function submit_student_attendance(Request $request) {
         //Create attendance student
@@ -44,7 +43,7 @@ class StudentAttendanceController extends Controller
             ->where('user_status', 'Active')
             ->with([
                 'student_attendance_detail' => function ($query) use ($month, $year) {
-                    $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
+                    $query->whereYear('submission_date', $year)->whereMonth('submission_date', $month);
                 }
             ])->get();
 
@@ -143,8 +142,8 @@ class StudentAttendanceController extends Controller
             ->where('user_status', 'Active')->where('name', $student_name)
             ->with([
                 'student_attendance_detail' => function ($query) use ($month, $year) {
-                    $query->whereYear('created_at', $year)
-                        ->whereMonth('created_at', $month);
+                    $query->whereYear('submission_date', $year)
+                        ->whereMonth('submission_date', $month);
                 }
             ])->get();
             
@@ -232,5 +231,4 @@ class StudentAttendanceController extends Controller
 
         return view('admin.student-attendances.search-student-attendances', compact('get_student_detail', 'get_student_name', 'months', 'days', 'month', 'year', 'daysInMonth', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays'));
     }
-
 }

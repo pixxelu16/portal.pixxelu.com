@@ -1,35 +1,34 @@
-@extends('super-admin.layouts.master')
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="space-remove"></div>
 <div class="title-subheading">
    <h2>Add New Inquery</h2>
 </div>
 <div class="main-table">
-   @if (Session::has('success')) 
+   <?php if(Session::has('success')): ?> 
    <div class="notification-green">
-      <p>{{ Session::get('success') }}</p>
+      <p><?php echo e(Session::get('success')); ?></p>
    </div>
-   @endif 
-   @if (Session::has('unsuccess')) 
+   <?php endif; ?> 
+   <?php if(Session::has('unsuccess')): ?> 
    <div class="notification-red">
-      <p>{{ Session::get('unsuccess') }}</p>
+      <p><?php echo e(Session::get('unsuccess')); ?></p>
    </div>
-   @endif 
+   <?php endif; ?> 
    <div class="login-form">
-      <form action="{{ route('super.admin.submit.inquery') }}" Method="POST">
-         @csrf 
+      <form action="<?php echo e(route('admin.submit.inquery')); ?>" Method="POST">
+         <?php echo csrf_field(); ?> 
          <div class="form-group display-column">
             <div class="form-design first-name">
                <label for="name">Name</label>
-               <input type="text" id="name" name="name" value="{{ old('name') }}" placeholder="Enter Name" required>
+               <input type="text" id="name" name="name" value="<?php echo e(old('name')); ?>" placeholder="Enter Name" required>
             </div>
             <div class="form-design mail">
                <label for="mobile">Mobile</label>
-               <input type="mobile" id="mobile" name="mobile" value="{{ old('mobile') }}" placeholder="Enter mobile" required>
+               <input type="mobile" id="mobile" name="mobile" value="<?php echo e(old('mobile')); ?>" placeholder="Enter mobile" required>
             </div>
             <div class="form-design dob">
                <label for="address">Address</label>
-               <input type="text" id="address" name="address" value="{{ old('address') }}"  placeholder="Enter Address">
+               <input type="text" id="address" name="address" value="<?php echo e(old('address')); ?>"  placeholder="Enter Address">
             </div>
          </div>
          <div class="form-group display-column">
@@ -56,7 +55,7 @@
             </div>
             <div class="form-design dob">
                <label for="total_fees">Total Fees</label>
-               <input type="text" id="total_fees" name="total_fees" value="{{ old('total_fees') }}"  placeholder="Enter Total Fees">
+               <input type="text" id="total_fees" name="total_fees" value="<?php echo e(old('total_fees')); ?>"  placeholder="Enter Total Fees">
             </div>
             <!-- <div class="form-design fees">
                <label for="status">Status</label>
@@ -84,4 +83,5 @@
       event.target.value = truncatedValue;
    });
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/admin/inquery/add-new-inquery.blade.php ENDPATH**/ ?>

@@ -103,7 +103,7 @@
 <div class="row">
    <div class="col-lg-12">
       <div class="table-responsive">
-         <table class="table table-striped custom-table table-nowrap mb-0">
+         <table id="example10" class="rwd-table cloud-path">
             <thead>
                <tr>
                   <th>Sr No.</th>
