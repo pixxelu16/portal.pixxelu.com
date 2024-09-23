@@ -63,11 +63,11 @@ class EmployeeController extends Controller
                     <h4>Information</h4>
                     </div>
                     <div class="detail">
-                    <p><em>Registration No: </em><span><?php echo $get_employee_detail->unique_employee_id ?></span></p>
+                    <p><em>Employee ID: </em><span><?php echo $get_employee_detail->unique_employee_id ?></span></p>
                     <p><em>Date of Birth: </em><span><?php echo \Carbon\Carbon::parse($get_employee_detail->dob)->format('d M Y') ?? '-' ?></span></p>
                     <p><em>Sex: </em><span><?php echo $get_employee_detail->gender ?? '-' ?></span></p>
                     <p><em>Category: </em><span><?php echo $get_employee_detail->category ?? '-' ?></span></p>
-                    <p><em>Aadhar Card No: </em><span><?php echo $get_employee_detail->aadhar_no ?? '-' ?></span></p>
+                    <p><em>Aadhar Card No: </em><span><?php echo $get_employee_detail->aadhaar_no ?? '-' ?></span></p>
                     <p><em>Current Address: </em><span><?php echo $get_employee_detail->address . ', ' . $get_employee_detail->district . ', ' . $get_employee_detail->state . ', ' . $get_employee_detail->pin_code; ?></span></p>
                     </div>
                 </div>

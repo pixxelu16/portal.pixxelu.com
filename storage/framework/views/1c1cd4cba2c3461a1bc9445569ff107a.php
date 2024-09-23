@@ -233,7 +233,7 @@
       <div class="loader com_ajax_loaders" style="display: none;">
          <img src="<?php echo e(url('public/admin/images/index.svg')); ?>" />
       </div>
-      <div class="student_detail_response"></div>
+      <div class="employee_detail_response"></div>
    </div>
 </div>
 <script>

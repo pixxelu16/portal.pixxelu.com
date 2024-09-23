@@ -105,8 +105,8 @@
 <div class="row">
    <div class="col-lg-12">
       <div class="table-responsive">
-         <table class="table table-striped custom-table table-nowrap mb-0">
-            <thead>
+         <table id="example10" class="rwd-table cloud-path">
+             <thead>
                <tr>
                   <th>Sr No.</th>
                   <th>Registration ID</th>
@@ -287,22 +287,22 @@
 </div>
 <!--end student edit attendance modal-->
 <script>
-   //Function for current time in punch Iin and punch out
-   function setCurrentTimeInIST() {
-      //Get current time in IST
-      var currentISTTime = new Date().toLocaleTimeString('en-US', {
-         timeZone: 'Asia/Kolkata',
-         hour12: false, 
-         hour: '2-digit',
-         minute: '2-digit'
-      });
-      //Set the current time for punch In
-      document.getElementById('punch_in_time').value = currentISTTime;
-      //Set the current time for punch Out
-      document.getElementById('punch_out_time').value = currentISTTime;
-   }
-   //Set the current time when the page loads
-   window.onload = setCurrentTimeInIST;
+//Function for current time in punch in and punch out
+function setCurrentTimeInIST() {
+   //Get current time in IST
+   var currentISTTime = new Date().toLocaleTimeString('en-US', {
+      timeZone: 'Asia/Kolkata',
+      hour12: false, 
+      hour: '2-digit',
+      minute: '2-digit'
+   });
+   //Set the current time for punch In
+   document.getElementById('punch_in_time').value = currentISTTime;
+   //Set the current time for punch Out
+   document.getElementById('punch_out_time').value = currentISTTime;
+}
+//Set the current time when the page loads
+window.onload = setCurrentTimeInIST;
 </script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/admin/student-attendances/all-students-attendance-list.blade.php ENDPATH**/ ?>

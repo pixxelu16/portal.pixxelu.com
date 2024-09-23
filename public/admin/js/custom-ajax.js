@@ -476,7 +476,7 @@ $(document).ready(function() {
     $('.employee_detail').on('click', function(e) {
         e.preventDefault();
         var employee_id = $(this).data('employee_id');
-        $(".student_detail_response").empty();
+        $(".employee_detail_response").empty();
         // Make AJAX request to get student details
         $.ajax({
             url:  base_url +'/admin/get-employee-detail',
@@ -486,7 +486,7 @@ $(document).ready(function() {
                 $(".com_ajax_loaders").css('visibility', 'visible');
             },
             success: function(response) {
-                $(".student_detail_response").html(response);
+                $(".employee_detail_response").html(response);
             },
             complete: function() {
                 $(".com_ajax_loaders").css('visibility', 'hidden');

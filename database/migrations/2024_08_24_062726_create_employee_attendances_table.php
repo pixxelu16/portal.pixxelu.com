@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string('employee_id')->nullable();
             $table->string('sift')->nullable();
             $table->string('sift_type')->nullable();
-            $table->string('punch_in_time')->nullable();
+            $table->string('punch_in_time')->nullable(); 
             $table->string('punch_out_time')->nullable();
+            $table->string('submission_date')->nullable();
             $table->string('attendance_status')->nullable();
             $table->timestamps();
         });

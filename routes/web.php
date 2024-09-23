@@ -88,7 +88,8 @@ Route::group(['middleware' => 'auth'], function() {
        //inqueries deatils 
        Route::get('super-admin/add-new-inquery', [App\Http\Controllers\SuperAdmin\InqueryController::class, 'add_inquery']);
        Route::post('super-admin/submit-inquery', [App\Http\Controllers\SuperAdmin\InqueryController::class, 'submit_inquery'])->name('super.admin.submit.inquery');
-       Route::get('super-admin/all-inqueries-list', [App\Http\Controllers\SuperAdmin\InqueryController::class, 'all_inqueries']);
+       Route::get('super-admin/all-inqueries-list', [App\Http\Controllers\SuperAdmin\InqueryController::class, 'all_inqueries'])->name('super.admin.students.list');
+       Route::get('super-admin/all-converted-inqueries-list', [App\Http\Controllers\SuperAdmin\InqueryController::class, 'all_converted_inqueries']);
        Route::get('super-admin/edit-inquery/{id}', [App\Http\Controllers\SuperAdmin\InqueryController::class, 'edit_inquery'])->name('super.admin.edit.success');
        Route::post('super-admin/update-inquery/{id}', [App\Http\Controllers\SuperAdmin\InqueryController::class, 'update_inquery'])->name('super.admin.update.inquery');
        Route::get('super-admin/delete-inquery/{id}', [App\Http\Controllers\SuperAdmin\InqueryController::class, 'delete_inquery']);
