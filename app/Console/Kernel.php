@@ -12,7 +12,15 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        //Schedule the WhatsApp reminder on the 15th day of the month
+        $schedule->call(function () {
+            app('App\Http\Controllers\PaymentController')->sendWhatsAppReminderToStudents();
+        })->monthlyOn(15, '08:00');
+
+        //Schedule the second reminder on the last day of the month
+        $schedule->call(function () {
+            app('App\Http\Controllers\PaymentController')->sendWhatsAppReminderToStudents();
+        })->lastDayOfMonth('08:00'); 
     }
 
     /**

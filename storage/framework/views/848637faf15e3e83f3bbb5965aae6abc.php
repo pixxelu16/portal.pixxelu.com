@@ -68,7 +68,7 @@
          });
       });
    </script>
-         <script>
+   <script>
       $(document).ready(function() {
          $('#example10').DataTable({
                aLengthMenu: [

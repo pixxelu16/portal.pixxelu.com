@@ -18,11 +18,30 @@
                <span class="link-name">All Students</span>
             </a>
          </li>
-         <li class="<?php echo e(request()->is('super-admin/attendance') ? 'active' : ''); ?>">
+         <!-- <li class="<?php echo e(request()->is('super-admin/attendance') ? 'active' : ''); ?>">
             <a href="aatendance.html">
                <img src="<?php echo e(url('public/admin/images/attendance.svg')); ?>" alt="attendance" />
                <span class="link-name">Attendance</span>
             </a>
+         </li> -->
+         <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle <?php echo e(request()->is('super-admin/all-employees-attendance-list') || request()->is('super-admin/all-students-attendance-list') ? 'active' : ''); ?>" 
+               href="#" id="attendanceDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="<?php echo e(url('public/admin/images/attendance.svg')); ?>" alt="attendance"/>
+            <span class="link-name">Attendance</span>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
+               <li class="<?php echo e(request()->is('super-admin/all-employees-attendance-list') ? 'active' : ''); ?>">
+                  <a class="dropdown-item" href="<?php echo e(url('super-admin/all-employees-attendance-list')); ?>">
+                  Staff 
+                  </a>
+               </li>
+               <li class="<?php echo e(request()->is('super-admin/all-students-attendance-list') ? 'active' : ''); ?>">
+                  <a class="dropdown-item" href="<?php echo e(url('super-admin/all-students-attendance-list')); ?>">
+                  Student
+                  </a>
+               </li>
+            </ul>
          </li>
          <li class="<?php echo e(request()->is('super-admin/all-employees-list') ? 'active' : ''); ?>">
             <a href="<?php echo e(url('super-admin/all-employees-list')); ?>">

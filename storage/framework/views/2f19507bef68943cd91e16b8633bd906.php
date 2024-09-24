@@ -60,16 +60,27 @@
       <!-- DataTables JS CDN -->
       <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
       <script>
-      $(document).ready(function() {
-         $('#example1').DataTable({
-               aLengthMenu: [
-                  [20, 50, 100, 200, -1],
-                  [20, 50, 100, 200, "All"]
-               ],
-               iDisplayLength: 20
+         $(document).ready(function() {
+            $('#example1').DataTable({
+                  aLengthMenu: [
+                     [20, 50, 100, 200, -1],
+                     [20, 50, 100, 200, "All"]
+                  ],
+                  iDisplayLength: 20
+            });
          });
-      });
-   </script>
+      </script>
+      <script>
+         $(document).ready(function() {
+            $('#example10').DataTable({
+                  aLengthMenu: [
+                     [10, 20, 50, 100, 200, -1],
+                     [10, 20, 50, 100, 200, "All"]
+                  ],
+                  iDisplayLength: 10
+            });
+         });
+      </script>
       <script>
          // Get all the <li> elements
          const navLinks = document.querySelectorAll('.nav-links li');

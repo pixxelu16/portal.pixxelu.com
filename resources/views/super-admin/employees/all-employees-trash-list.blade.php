@@ -52,7 +52,7 @@
                   <td>{{ $employee->id }}</td>
                   <td data-th="Image">
                      @if($employee->user_pic)
-                     <div class="user-image"> <img src = "{{ url('public/uploads/employees/'. $employee->user_pic)}}" alt=""></div>
+                        <div class="user-image"> <img src = "{{ url('public/uploads/employees/'. $employee->user_pic)}}" alt=""></div>
                      @endif 
                   </td>
                   <td>{{ $employee->name }}</td>
@@ -62,15 +62,15 @@
                   <td>{{ \Carbon\Carbon::parse($employee->joining_date)->format('d M Y') }}</td>
                   <td>{{ $employee->net_salary }} </td>
                   @if($employee->user_status == 'Active') 
-                  <td class="green-color"><span>Active</span></td>
-                  @elseif($employee->user_status == 'Pending')
-                  <td class="red-color"><span>Pending</span></td>
-                  @elseif($employee->user_status == 'Suspend')
-                  <td class="purple-color"><span>Suspend</span></td>
-                  @elseif($employee->user_status == 'Leave')
-                  <td class="red-color"><span>Leave</span></td>
-                  @else
-                  <td></td>
+                        <td class="green-color"><span>Active</span></td>
+                     @elseif($employee->user_status == 'Pending')
+                        <td class="red-color"><span>Pending</span></td>
+                     @elseif($employee->user_status == 'Suspend')
+                        <td class="purple-color"><span>Suspend</span></td>
+                     @elseif($employee->user_status == 'Leave')
+                        <td class="red-color"><span>Leave</span></td>
+                     @else
+                        <td></td>
                   @endif
                   <td>
                      <div class="dropdown">

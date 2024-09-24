@@ -641,3 +641,143 @@ $(document).ready(function() {
         });
     });
 });
+
+//inquery search list accor status
+$(document).ready(function() {
+    $('body').on('change', '#search_inquery_status_list', function() {
+        var inquery_status = $(this).val();
+        window.location.href = base_url+'/super-admin/search-inquery/'+inquery_status;
+    });
+});
+
+//inquery search list accor course type
+$(document).ready(function() {
+    $('body').on('change', '#search_inquery_course_type_list', function() {
+        var course_type = $(this).val();
+        window.location.href = base_url+'/super-admin/search-inquery-course-type/'+course_type;
+    });
+});
+
+//Edit Student attendance details
+$(document).ready(function() {
+    //validation
+    $("#student_attendances").validate({
+        rules: {
+            attendance_status: {
+                required: true,
+            },
+            // batch: {
+            //     required: true,
+            // },
+            // batch_timing: {
+            //     required: true,
+            // },
+            // punch_in_time: {
+            //     required: true,
+            // },
+            // punch_out_time: {
+            //     required: true,
+            // },
+        },
+        messages: {
+        },
+        submitHandler: function(form, e) {
+            e.preventDefault();
+            var formData = $(form).serialize();    
+            //Ajax student attendance submit form
+            $.ajax({
+                type: 'POST',
+                url: base_url + '/super-admin/submit-student-attendance',
+                data: formData,
+                headers: { 
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                beforeSend: function() {
+                    $(".com_ajax_loader").show();
+                    $(".is_create_student_attendance").prop("disabled", true);
+                },
+                success: function(response) {
+                    $(".student_attendance_responce").html(response);
+                    //Reset form
+                    $('#student_attendances')[0].reset();
+                    $(".is_create_student_attendance").prop("disabled", false);
+                    $(".com_ajax_loader").hide();
+                },
+            });
+        }
+    });
+    //Getting student attandance id and name
+    $('body').on('click', '.student_attendance', function() {
+        var student_id = $(this).data("student_id"); 
+        var missing_date = $(this).data("missing_date");
+        var student_name = $(this).data("student_name");
+        //Apend value
+        $("#attendances_student_id").val(student_id);
+        $("#date").val(missing_date);
+        //attendance student header
+        $(".student_attendances").text(student_name);  
+    });
+});
+
+
+//Edit Employee attendance details
+$(document).ready(function() {
+    //validation
+    $("#employee_attendances").validate({
+        rules: {
+            attendance_status: {
+                required: true,
+            },
+            // sift: {
+            //     required: true,
+            // },
+            // sift_type: {
+            //     required: true,
+            // },
+            // punch_in_time: {
+            //     required: true,
+            // },
+            // punch_out_time: {
+            //     required: true,
+            // },
+        },
+        messages: {
+        },
+        submitHandler: function(form, e) {
+            e.preventDefault();
+            var formData = $(form).serialize();    
+            //Ajax employee attendance submit form
+            $.ajax({
+                type: 'POST',
+                url: base_url + '/super-admin/submit-employee-attendance',
+                data: formData,
+                headers: { 
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                beforeSend: function() {
+                    $(".com_ajax_loader").show();
+                    $(".is_create_employee_attendance").prop("disabled", true);
+                },
+                success: function(response) {
+                    $(".employee_attendance_responce").html(response);
+                    //Reset form
+                    $('#employee_attendances')[0].reset();
+                    $(".is_create_employee_attendance").prop("disabled", false);
+                    $(".com_ajax_loader").hide();
+                },
+            });
+        }
+    });
+    //Getting employee attandance id and name
+    $('body').on('click', '.employee_attendance', function() {
+        var employee_id = $(this).data("employee_id"); 
+        var missing_date = $(this).data("missing_date");
+        var employee_name = $(this).data("employee_name");
+        //Apend value
+        $("#attendances_employee_id").val(employee_id);
+        $("#date").val(missing_date);
+        //attendance employee header
+        $(".employee_attendances").text(employee_name);  
+    });
+});
+
