@@ -17,7 +17,7 @@ Route::get('/', function () {
     return view('auth/login');
 }); 
 //web.php
-Route::get('/send-whatsapp-reminder', [App\Http\Controllers\PaymentController::class, 'sendWhatsAppReminderToStudents']);
+Route::get('/send-reminders', [App\Http\Controllers\PaymentController::class, 'sendWhatsAppReminderToStudents']);
 
 Route::group(['middleware' => 'auth'], function() { 
     //Stcks

@@ -12,15 +12,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        //Schedule the WhatsApp reminder on the 15th day of the month
-        $schedule->call(function () {
-            app('App\Http\Controllers\PaymentController')->sendWhatsAppReminderToStudents();
-        })->monthlyOn(15, '08:00');
-
-        //Schedule the second reminder on the last day of the month
-        $schedule->call(function () {
-            app('App\Http\Controllers\PaymentController')->sendWhatsAppReminderToStudents();
-        })->lastDayOfMonth('08:00'); 
+        // $schedule->command('inspire')->hourly();
+        //Schedule the SendWhatsAppReminders command to run daily
+        $schedule->command('reminders:send')->dailyAt('10:00');
     }
 
     /**
@@ -32,4 +26,7 @@ class Kernel extends ConsoleKernel
 
         require base_path('routes/console.php');
     }
+    protected $commands = [
+        \App\Console\Commands\SendWhatsAppReminders::class,
+    ];
 }
