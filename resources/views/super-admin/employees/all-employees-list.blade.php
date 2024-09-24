@@ -42,7 +42,7 @@
                   <th>Employee ID</th>
                   <th>Image</th>
                   <th>Name</th>
-                  <th>Attendance</th>
+                  <!-- <th>Attendance</th> -->
                   <th>Phone No</th>
                   <th>Joining Date</th>
                   <th>Employee Role</th>
@@ -53,9 +53,9 @@
             </thead>
             <tbody>
                @if($get_employees_detail && $get_employees_detail->isNotEmpty())
-               @php $count = 1; 
-               @endphp
+               @php $count = 1; @endphp
                @foreach($get_employees_detail as $employee)   
+
                @php
                //Get the current month
                $currentMonth = \Carbon\Carbon::now()->month;
@@ -64,6 +64,7 @@
                return \Carbon\Carbon::parse($item->submission_date)->month == $currentMonth;
                })->sortByDesc('submission_date')->first();
                @endphp 
+
                <tr>
                   <td>{{ $count++ }}.</td>
                   <td>{{ $employee->unique_employee_id }}</td>
@@ -75,46 +76,46 @@
                   <td>
                      <span onclick="openNav()"><a href="#" class="employee_detail" data-employee_id="{{ $employee->id }}">{{ $employee->name }}</a></span>
                   </td>
-                  <td>
+                  <!-- <td>
                      <div class="box-pay">
                         <button type="button" class="employee-attandace-buton employee_attandance" data-employee_id="{{ $employee->id }}" data-employee_name="{{ $employee->name }}" data-toggle="modal" data-target="#exampleModalLong">
                            Add Attendance
                      </div>
-                  </td>
+                  </td> -->
                   @if($employee->employee_phone_no)
-                  <td><a href="https://wa.me/{{ str_replace(['+', '-', ' '], '', $employee->employee_phone_no) }}" target="_blank">{{ substr($employee->employee_phone_no, 0, 5) }}-{{ substr($employee->employee_phone_no, 5) }}</a></td>
-                  @else
-                  <td>-</td>
+                        <td><a href="https://wa.me/{{ str_replace(['+', '-', ' '], '', $employee->employee_phone_no) }}" target="_blank">{{ substr($employee->employee_phone_no, 0, 5) }}-{{ substr($employee->employee_phone_no, 5) }}</a></td>
+                     @else
+                        <td>-</td>
                   @endif
                   @if($employee->joining_date)
-                  <td>{{ \Carbon\Carbon::parse($employee->joining_date)->format('d M Y') }}</td>
-                  @else
-                  <td>-</td>
+                        <td>{{ \Carbon\Carbon::parse($employee->joining_date)->format('d M Y') }}</td>
+                     @else
+                        <td>-</td>
                   @endif
                   @if($employee->employee_role == 'Project Bidder') 
-                  <td class="light-blue-color"><span>Project Bidder</span></td>
-                  @elseif($employee->employee_role == 'Php Development')
-                  <td class="light-green-color"><span>PHP Development</span></td>
-                  @elseif($employee->employee_role == 'Web Development')
-                  <td class="light-yellow-color"><span>Web Development</span></td>
-                  @elseif($employee->employee_role == 'Web Designing')
-                  <td class="light-pink-color"><span>Web Designing</span></td>
-                  @elseif($employee->employee_role == 'Graphic Designing')
-                  <td class="light-cyan-color"><span>Graphic Designing</span></td>
-                  @elseif($employee->employee_role == 'SEO')
-                  <td class="light-orange-color"><span>SEO</span></td>
-                  @else
-                  <td></td>
+                        <td class="light-blue-color"><span>Project Bidder</span></td>
+                     @elseif($employee->employee_role == 'Php Development')
+                        <td class="light-green-color"><span>PHP Development</span></td>
+                     @elseif($employee->employee_role == 'Web Development')
+                        <td class="light-yellow-color"><span>Web Development</span></td>
+                     @elseif($employee->employee_role == 'Web Designing')
+                        <td class="light-pink-color"><span>Web Designing</span></td>
+                     @elseif($employee->employee_role == 'Graphic Designing')
+                        <td class="light-cyan-color"><span>Graphic Designing</span></td>
+                     @elseif($employee->employee_role == 'SEO')
+                        <td class="light-orange-color"><span>SEO</span></td>
+                     @else
+                        <td></td>
                   @endif 
                   @if($employee->net_salary)  
                   <td>
-                  Rs {{ number_format((int) base64_decode($employee->net_salary)) }}
-                  <div class="box-pay">
-                  <button type="button" class="pay-fes-buton employee_pay_salary" data-employee_id="{{ $employee->id }}" data-employee_name="{{ $employee->name }}" data-employee_amount="{{ base64_decode($employee->net_salary) }}"
-                     data-toggle="modal" data-target="#myModal">Pay Salary</button>
-                  </div>
-                  @else
-                  <td>-</td>
+                     Rs {{ number_format((int) base64_decode($employee->net_salary)) }}
+                     <div class="box-pay">
+                     <button type="button" class="pay-fes-buton employee_pay_salary" data-employee_id="{{ $employee->id }}" data-employee_name="{{ $employee->name }}" data-employee_amount="{{ base64_decode($employee->net_salary) }}"
+                        data-toggle="modal" data-target="#myModal">Pay Salary</button>
+                     </div>
+                     @else
+                     <td>-</td>
                   @endif
                   </td>
                   <!-- <td>
@@ -131,9 +132,9 @@
                      @endif
                      </td> -->
                   @if($last_record)
-                  <td class="green-color"><span>Paid</span></td>
+                     <td class="green-color"><span>Paid</span></td>
                   @else
-                  <td class="red-color"><span>Pending</span></td>
+                     <td class="red-color"><span>Pending</span></td>
                   @endif
                   <td>
                      <div class="dropdown">

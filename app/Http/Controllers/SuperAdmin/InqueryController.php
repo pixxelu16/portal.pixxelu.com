@@ -31,7 +31,7 @@ class InqueryController extends Controller
         $inquery_status = $request->segment(count($request->segments()));
         //Get inqueries detail
         $all_inqueries_list = Inquery::OrderBy('id', 'DESC')->where('status', $inquery_status)->get();                                   
-            return view('super-admin.inquery.search-inqueries-list', compact('all_inqueries_list'));
+            return view('super-admin.inquery.search-inqueries-status-type', compact('all_inqueries_list'));
     }
 
     //Function for search inqury acc status

@@ -1,35 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\SuperAdmin;
+namespace App\Http\Controllers\superAdmin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\EmployeeAttendance;  
-use Carbon\Carbon;  
+use App\Models\StudentAttendance;
+use Carbon\Carbon;
 
-class EmployeeAttendanceController extends Controller
+class StudentAttendanceController extends Controller
 {
-    //Function for submit employee punch in attendance
-    public function submit_employee_attendance(Request $request) {
-        // //Get the current date and time in IST
-        // $current_time = Carbon::now('Asia/Kolkata')->format('H:i:s');
-        // $current_date = Carbon::now('Asia/Kolkata')->toDateString();
-    
-        // //Check if attendance already exists or not
-        // $existing_attendance = EmployeeAttendance::where('employee_id', $request->employee_id)
-        //     ->whereDate('created_at', $current_date)
-        //     ->first();
-    
-        // //Check if employee attendance already exists for today
-        // if ($existing_attendance) {
-        //     echo '<p style="color:red;">Your attendance has already been marked for today.</p>';
-        //     echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
-        // } else {
-          
-        //Create attendance employee
-        $is_create_employee_attendance = EmployeeAttendance::create([
-            'employee_id' => $request->employee_id,
+    //Function for submit student punch in attendance
+    public function submit_student_attendance(Request $request) {
+        //Create attendance student
+        $is_create_student_attendance = StudentAttendance::create([
+            'user_id' => $request->student_id,
             'sift' => $request->sift,
             'sift_type' => $request->sift_type,
             'punch_in_time' => $request->punch_in_time,
@@ -38,26 +23,26 @@ class EmployeeAttendanceController extends Controller
             'attendance_status' => $request->attendance_status,
         ]);
 
-        //Check if employee attendance is updated or not
-        if ($is_create_employee_attendance) {
-            echo '<p style="color:green;">Employee attendance updated successfully.</p>';
+        //Check if student attendance is updated or not
+        if ($is_create_student_attendance) {
+            echo '<p style="color:green;">Student attendance updated successfully.</p>';
             echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
         } else {
             echo '<p style="color:red;">Oops, something went wrong. Please try again.</p>';
         }
     }
-    
-    //Function for all employees attenedance lists
-    public function all_employees_attendance_list() { 
+
+    //Function for get all students attenedance list
+    public function all_students_attendance_list() {
         //Get the current month and year
         $month = Carbon::now()->month;
         $year = Carbon::now()->year;
 
-        //Get employee details
-        $get_employee_detail = User::where('user_type', 'Employee')
+        //Get student details
+        $get_student_detail = User::where('user_type', 'Student')
             ->where('user_status', 'Active')
             ->with([
-                'employees_attendance_detail' => function ($query) use ($month, $year) {
+                'student_attendance_detail' => function ($query) use ($month, $year) {
                     $query->whereYear('submission_date', $year)->whereMonth('submission_date', $month);
                 }
             ])->get();
@@ -74,8 +59,8 @@ class EmployeeAttendanceController extends Controller
         $currentYear = Carbon::now()->year;
 
         //Calculate totals
-        foreach ($get_employee_detail as $employee) {
-            foreach ($employee->employees_attendance_detail as $attendance) {
+        foreach ($get_student_detail as $student) {
+            foreach ($student->student_attendance_detail as $attendance) {
                 //Get punch in and outs
                 $punchIn = Carbon::parse($attendance->punch_in_time);
                 $punchOut = $attendance->punch_out_time ? Carbon::parse($attendance->punch_out_time) : null;
@@ -141,110 +126,44 @@ class EmployeeAttendanceController extends Controller
         //Get total holidays all Sundays and last Saturday
         $total_holidays = count($sundays) + ($lastSaturday ? 1 : 0);
 
-        return view('super-admin.employee-attendances.all-employees-attendance-list', compact('get_employee_detail', 'months', 'days', 'month', 'year', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays', 'daysInMonth'));
+        return view('super-admin.student-attendances.all-students-attendance-list', compact('get_student_detail', 'months', 'days', 'month', 'year', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays', 'daysInMonth'));
     }
 
-
-    //Function for update 
-    public function employee_punch_out_attendance(Request $request) {
-        //Get employee id
-        $employee_id = $request->employee_id;
-        ////Get Current day
-        //  $today = Carbon::today()->format('Y-m-d');
-        
-        //  //Get employee attendance
-        //  $existing_attendance = EmployeeAttendance::where('employee_id', $request->employee_id)->whereDate('created_at', $today)->first();   
-    
-        //  //Check if employee attendance is already exists or not
-        //  if ($existing_attendance) {
-        //      echo '<p style="color:red;">Employee has already marked punch out attendance for today.</p>';
-        //      echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
-        //  } else {
-
-            //update employee punch out attendance record
-            $is_update_employee_punch_out_attendance = EmployeeAttendance::where('employee_id', $employee_id)->update([
-                'punch_out_time' =>$request->punch_out_time,
-            ]);
-
-            //Check if employee punch out attendance is update or not
-            if($is_update_employee_punch_out_attendance) {
-                echo '<p style="color:green;">Employee punch out attendance submitted today successfully.</p>';
-                echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
-            } else {
-                echo '<p style="color:red;">Oops, something went wrong.</p>';
-            }
-        }
-    
-
-    //Function for submit employee attendance
-    public function employee_attendance(Request $request) {
-        //Get Current day
-        $today = Carbon::today()->format('Y-m-d');
-        
-        //Get employee attendance
-        $existing_attendance = EmployeeAttendance::where('employee_id', $request->employee_id)->whereDate('submission_date', $today)->first();   
-
-        //Check if employee attendance is already exists or not
-        if ($existing_attendance) {
-            echo '<p style="color:red;">Employee has already marked attendance for today.</p>';
-            echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
-        } else {
-            //Create employee attendance
-            $is_create_employee_attendance = EmployeeAttendance::create([
-                'employee_id' => $request->employee_id,
-                'sift' => $request->sift,
-                'sift_type' => $request->sift_type,
-                'punch_in_time' => $request->punch_in_time,
-                'punch_out_time' => $request->punch_out_time,
-                'attendance_status' => $request->attendance_status,
-            ]); 
-
-            //Check if employee attendance was created successfully
-            if ($is_create_employee_attendance) {
-                echo '<p style="color:green;">Employee attendance created today successfully.</p>';
-                echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
-            } else {
-                echo '<p style="color:red;">Oops, something went wrong.</p>';
-            }
-        }        
-    }
-
-    //search employee attendance list
-    public function search_employee_attendance_list(Request $request) {
+    //Function for search student attendance list
+     public function search_student_attendance_list(Request $request) {
         //Get month and year
-        $employee_name = $request->employee_name;
+        $student_name = $request->student_name;
         $month = $request->month;
         $year = $request->year;
 
 
-        //Get employee details 
-        $get_employee_detail = User::where('user_type', 'Employee')
-            ->where('user_status', 'Active')->where('name', $employee_name)
+        //Get student details 
+        $get_student_detail = User::where('user_type', 'Student')
+            ->where('user_status', 'Active')->where('name', $student_name)
             ->with([
-                'employees_attendance_detail' => function ($query) use ($month, $year) {
+                'student_attendance_detail' => function ($query) use ($month, $year) {
                     $query->whereYear('submission_date', $year)
                         ->whereMonth('submission_date', $month);
                 }
             ])->get();
             
-        //Get employee name
-        $get_employee_name = User::select('name')->where('user_type', 'Employee')->where('user_status', 'Active')->get();
+        //Get student name
+        $get_student_name = User::select('name')->where('user_type', 'Student')->where('user_status', 'Active')->get();
 
         //Get attendance details
         $total_present_hours = 0;
         $total_present_days = 0;
         $total_absent_days = 0;
-        $total_leave_days = 0; 
-        $total_half_day = 0; 
-        $total_holidays = 0; 
+        $total_leave_days = 0;
+        $total_half_day = 0;
 
         //Get the current month and year
         $currentMonth = Carbon::now()->month;
         $currentYear = Carbon::now()->year;
 
         //Calculate totals
-        foreach ($get_employee_detail as $employee) {
-            foreach ($employee->employees_attendance_detail as $attendance) {
+        foreach ($get_student_detail as $student) {
+            foreach ($student->student_attendance_detail as $attendance) {
                 //Get punch in and outs
                 $punchIn = Carbon::parse($attendance->punch_in_time);
                 $punchOut = $attendance->punch_out_time ? Carbon::parse($attendance->punch_out_time) : null;
@@ -265,9 +184,7 @@ class EmployeeAttendanceController extends Controller
                     } elseif ($attendance->attendance_status == 'leave') {
                         $total_leave_days++;
                     } elseif ($attendance->attendance_status == 'half_day') {
-                        $total_half_day++;                    
-                    } elseif ($attendance->attendance_status == 'holiday') {
-                        $total_holidays++;
+                        $total_half_day++;
                     }
                 }
             }
@@ -312,15 +229,6 @@ class EmployeeAttendanceController extends Controller
         //Get total holidays all Sundays and last Saturday
         $total_holidays = count($sundays) + ($lastSaturday ? 1 : 0);
 
-        return view('super-admin.employee-attendances.search-employee-attendances', compact('get_employee_detail', 'get_employee_name', 'months', 'days', 'month', 'year', 'daysInMonth', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays'));
+        return view('super-admin.student-attendances.search-student-attendances', compact('get_student_detail', 'get_student_name', 'months', 'days', 'month', 'year', 'daysInMonth', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays'));
     }
 }
-    
-    
-    
-    
-    
-    
-    
-    
-

@@ -52,10 +52,13 @@
                </tr>
             </thead>
             <tbody>
+
                @if($get_employees_detail && $get_employees_detail->isNotEmpty())
                @php $count = 1; 
                @endphp
+
                @foreach($get_employees_detail as $employee)   
+
                @php
                //Get the current month
                $currentMonth = \Carbon\Carbon::now()->month;
@@ -64,6 +67,7 @@
                return \Carbon\Carbon::parse($item->submission_date)->month == $currentMonth;
                })->sortByDesc('submission_date')->first();
                @endphp 
+               
                <tr>
                   <td>{{ $count++ }}.</td>
                   <td>{{ $employee->unique_employee_id }}</td>
@@ -87,24 +91,24 @@
                   <td>-</td>
                   @endif
                   @if($employee->joining_date)
-                  <td>{{ \Carbon\Carbon::parse($employee->joining_date)->format('d M Y') }}</td>
+                     <td>{{ \Carbon\Carbon::parse($employee->joining_date)->format('d M Y') }}</td>
                   @else
-                  <td>-</td>
+                     <td>-</td>
                   @endif
                   @if($employee->employee_role == 'Project Bidder') 
-                  <td class="light-blue-color"><span>Project Bidder</span></td>
-                  @elseif($employee->employee_role == 'Php Development')
-                  <td class="light-green-color"><span>PHP Development</span></td>
-                  @elseif($employee->employee_role == 'Web Development')
-                  <td class="light-yellow-color"><span>Web Development</span></td>
-                  @elseif($employee->employee_role == 'Web Designing')
-                  <td class="light-pink-color"><span>Web Designing</span></td>
-                  @elseif($employee->employee_role == 'Graphic Designing')
-                  <td class="light-cyan-color"><span>Graphic Designing</span></td>
-                  @elseif($employee->employee_role == 'SEO')
-                  <td class="light-orange-color"><span>SEO</span></td>
-                  @else
-                  <td></td>
+                        <td class="light-blue-color"><span>Project Bidder</span></td>
+                     @elseif($employee->employee_role == 'Php Development')
+                        <td class="light-green-color"><span>PHP Development</span></td>
+                     @elseif($employee->employee_role == 'Web Development')
+                        <td class="light-yellow-color"><span>Web Development</span></td>
+                     @elseif($employee->employee_role == 'Web Designing')
+                        <td class="light-pink-color"><span>Web Designing</span></td>
+                     @elseif($employee->employee_role == 'Graphic Designing')
+                        <td class="light-cyan-color"><span>Graphic Designing</span></td>
+                     @elseif($employee->employee_role == 'SEO')
+                        <td class="light-orange-color"><span>SEO</span></td>
+                     @else
+                        <td></td>
                   @endif 
                   @if($employee->net_salary)  
                   <td>

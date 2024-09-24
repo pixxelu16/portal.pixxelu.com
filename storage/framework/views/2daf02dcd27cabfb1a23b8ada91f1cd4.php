@@ -41,7 +41,7 @@
                   <th>Employee ID</th>
                   <th>Image</th>
                   <th>Name</th>
-                  <th>Attendance</th>
+                  <!-- <th>Attendance</th> -->
                   <th>Phone No</th>
                   <th>Joining Date</th>
                   <th>Employee Role</th>
@@ -52,9 +52,9 @@
             </thead>
             <tbody>
                <?php if($get_employees_detail && $get_employees_detail->isNotEmpty()): ?>
-               <?php $count = 1; 
-               ?>
+               <?php $count = 1; ?>
                <?php $__currentLoopData = $get_employees_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $employee): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>   
+
                <?php
                //Get the current month
                $currentMonth = \Carbon\Carbon::now()->month;
@@ -63,6 +63,7 @@
                return \Carbon\Carbon::parse($item->submission_date)->month == $currentMonth;
                })->sortByDesc('submission_date')->first();
                ?> 
+
                <tr>
                   <td><?php echo e($count++); ?>.</td>
                   <td><?php echo e($employee->unique_employee_id); ?></td>
@@ -74,47 +75,47 @@
                   <td>
                      <span onclick="openNav()"><a href="#" class="employee_detail" data-employee_id="<?php echo e($employee->id); ?>"><?php echo e($employee->name); ?></a></span>
                   </td>
-                  <td>
+                  <!-- <td>
                      <div class="box-pay">
                         <button type="button" class="employee-attandace-buton employee_attandance" data-employee_id="<?php echo e($employee->id); ?>" data-employee_name="<?php echo e($employee->name); ?>" data-toggle="modal" data-target="#exampleModalLong">
                            Add Attendance
                      </div>
-                  </td>
+                  </td> -->
                   <?php if($employee->employee_phone_no): ?>
-                  <td><a href="https://wa.me/<?php echo e(str_replace(['+', '-', ' '], '', $employee->employee_phone_no)); ?>" target="_blank"><?php echo e(substr($employee->employee_phone_no, 0, 5)); ?>-<?php echo e(substr($employee->employee_phone_no, 5)); ?></a></td>
-                  <?php else: ?>
-                  <td>-</td>
+                        <td><a href="https://wa.me/<?php echo e(str_replace(['+', '-', ' '], '', $employee->employee_phone_no)); ?>" target="_blank"><?php echo e(substr($employee->employee_phone_no, 0, 5)); ?>-<?php echo e(substr($employee->employee_phone_no, 5)); ?></a></td>
+                     <?php else: ?>
+                        <td>-</td>
                   <?php endif; ?>
                   <?php if($employee->joining_date): ?>
-                  <td><?php echo e(\Carbon\Carbon::parse($employee->joining_date)->format('d M Y')); ?></td>
-                  <?php else: ?>
-                  <td>-</td>
+                        <td><?php echo e(\Carbon\Carbon::parse($employee->joining_date)->format('d M Y')); ?></td>
+                     <?php else: ?>
+                        <td>-</td>
                   <?php endif; ?>
                   <?php if($employee->employee_role == 'Project Bidder'): ?> 
-                  <td class="light-blue-color"><span>Project Bidder</span></td>
-                  <?php elseif($employee->employee_role == 'Php Development'): ?>
-                  <td class="light-green-color"><span>PHP Development</span></td>
-                  <?php elseif($employee->employee_role == 'Web Development'): ?>
-                  <td class="light-yellow-color"><span>Web Development</span></td>
-                  <?php elseif($employee->employee_role == 'Web Designing'): ?>
-                  <td class="light-pink-color"><span>Web Designing</span></td>
-                  <?php elseif($employee->employee_role == 'Graphic Designing'): ?>
-                  <td class="light-cyan-color"><span>Graphic Designing</span></td>
-                  <?php elseif($employee->employee_role == 'SEO'): ?>
-                  <td class="light-orange-color"><span>SEO</span></td>
-                  <?php else: ?>
-                  <td></td>
+                        <td class="light-blue-color"><span>Project Bidder</span></td>
+                     <?php elseif($employee->employee_role == 'Php Development'): ?>
+                        <td class="light-green-color"><span>PHP Development</span></td>
+                     <?php elseif($employee->employee_role == 'Web Development'): ?>
+                        <td class="light-yellow-color"><span>Web Development</span></td>
+                     <?php elseif($employee->employee_role == 'Web Designing'): ?>
+                        <td class="light-pink-color"><span>Web Designing</span></td>
+                     <?php elseif($employee->employee_role == 'Graphic Designing'): ?>
+                        <td class="light-cyan-color"><span>Graphic Designing</span></td>
+                     <?php elseif($employee->employee_role == 'SEO'): ?>
+                        <td class="light-orange-color"><span>SEO</span></td>
+                     <?php else: ?>
+                        <td></td>
                   <?php endif; ?> 
                   <?php if($employee->net_salary): ?>  
                   <td>
-                  Rs <?php echo e(number_format((int) base64_decode($employee->net_salary))); ?>
+                     Rs <?php echo e(number_format((int) base64_decode($employee->net_salary))); ?>
 
-                  <div class="box-pay">
-                  <button type="button" class="pay-fes-buton employee_pay_salary" data-employee_id="<?php echo e($employee->id); ?>" data-employee_name="<?php echo e($employee->name); ?>" data-employee_amount="<?php echo e(base64_decode($employee->net_salary)); ?>"
-                     data-toggle="modal" data-target="#myModal">Pay Salary</button>
-                  </div>
-                  <?php else: ?>
-                  <td>-</td>
+                     <div class="box-pay">
+                     <button type="button" class="pay-fes-buton employee_pay_salary" data-employee_id="<?php echo e($employee->id); ?>" data-employee_name="<?php echo e($employee->name); ?>" data-employee_amount="<?php echo e(base64_decode($employee->net_salary)); ?>"
+                        data-toggle="modal" data-target="#myModal">Pay Salary</button>
+                     </div>
+                     <?php else: ?>
+                     <td>-</td>
                   <?php endif; ?>
                   </td>
                   <!-- <td>
@@ -131,9 +132,9 @@
                      <?php endif; ?>
                      </td> -->
                   <?php if($last_record): ?>
-                  <td class="green-color"><span>Paid</span></td>
+                     <td class="green-color"><span>Paid</span></td>
                   <?php else: ?>
-                  <td class="red-color"><span>Pending</span></td>
+                     <td class="red-color"><span>Pending</span></td>
                   <?php endif; ?>
                   <td>
                      <div class="dropdown">

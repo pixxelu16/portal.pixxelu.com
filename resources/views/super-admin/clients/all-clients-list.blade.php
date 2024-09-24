@@ -36,8 +36,7 @@
                </tr>
             </thead>
             <tbody>
-               @php $count = 1; 
-               @endphp
+               @php $count = 1; @endphp
                @foreach($all_clients_list as $client)   
                <tr>
                   <td>{{ $count++ }}</td>
@@ -47,25 +46,21 @@
                   <td>{{ $client->country ??'-' }}</td>
                   <td>{{ $client->from ?? '-' }}</td>
                   @if($client->client_status == 'Active') 
-                  <td class="green-color"><span>Active</span></td>
-                  @elseif($client->client_status == 'Pending')
-                  <td class="red-color"><span>Pending</span></td>
-                  @elseif($client->client_status == 'Converted')
-                  <td class="purple-color"><span>Converted</span></td>
-                  @elseif($client->client_status == 'Completed')
-                  <td class="green-color"><span>Completed</span></td>
-                  @elseif($client->client_status == 'Leave')
-                  <td class="red-color"><span>Leave</span></td>
-                  @else
-                  <td></td>
+                        <td class="green-color"><span>Active</span></td>
+                     @elseif($client->client_status == 'Pending')
+                        <td class="red-color"><span>Pending</span></td>
+                     @elseif($client->client_status == 'Converted')
+                        <td class="purple-color"><span>Converted</span></td>
+                     @elseif($client->client_status == 'Completed')
+                        <td class="green-color"><span>Completed</span></td>
+                     @elseif($client->client_status == 'Leave')
+                        <td class="red-color"><span>Leave</span></td>
+                     @else
+                        <td></td>
                   @endif
                   <td>
-                     <a class="btn btn-info btn-sm" href="{{ url('super-admin/edit-client', $client->id) }}">
-                     <img src="{{ url('public/admin/images/ico-4.png') }}">
-                     </a>
-                     <!-- <a class="btn btn-danger btn-sm" href="{{ url('admin/client-inquery', $client->id) }}">
-                        <i class="fas fa-trash-alt"></i> Delete
-                        </a> -->
+                     <a class="btn btn-info btn-sm" href="{{ url('super-admin/edit-client', $client->id) }}"><img src="{{ url('public/admin/images/ico-4.png') }}"></a>
+                     <!--<a class="btn btn-danger btn-sm" href="{{ url('admin/client-inquery', $client->id) }}"><i class="fas fa-trash-alt"></i> Delete</a> -->
                   </td>
                </tr>
                @endforeach 

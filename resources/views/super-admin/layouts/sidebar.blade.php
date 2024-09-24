@@ -18,11 +18,30 @@
                <span class="link-name">All Students</span>
             </a>
          </li>
-         <li class="{{ request()->is('super-admin/attendance') ? 'active' : '' }}">
+         <!-- <li class="{{ request()->is('super-admin/attendance') ? 'active' : '' }}">
             <a href="aatendance.html">
                <img src="{{ url('public/admin/images/attendance.svg') }}" alt="attendance" />
                <span class="link-name">Attendance</span>
             </a>
+         </li> -->
+         <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle {{ request()->is('super-admin/all-employees-attendance-list') || request()->is('super-admin/all-students-attendance-list') ? 'active' : '' }}" 
+               href="#" id="attendanceDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="{{ url('public/admin/images/attendance.svg') }}" alt="attendance"/>
+            <span class="link-name">Attendance</span>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
+               <li class="{{ request()->is('super-admin/all-employees-attendance-list') ? 'active' : '' }}">
+                  <a class="dropdown-item" href="{{ url('super-admin/all-employees-attendance-list') }}">
+                  Staff 
+                  </a>
+               </li>
+               <li class="{{ request()->is('super-admin/all-students-attendance-list') ? 'active' : '' }}">
+                  <a class="dropdown-item" href="{{ url('super-admin/all-students-attendance-list') }}">
+                  Student
+                  </a>
+               </li>
+            </ul>
          </li>
          <li class="{{ request()->is('super-admin/all-employees-list') ? 'active' : '' }}">
             <a href="{{ url('super-admin/all-employees-list') }}">

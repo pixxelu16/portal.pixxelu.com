@@ -36,8 +36,7 @@
                </tr>
             </thead>
             <tbody>
-               <?php $count = 1; 
-               ?>
+               <?php $count = 1; ?>
                <?php $__currentLoopData = $all_clients_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $client): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>   
                <tr>
                   <td><?php echo e($count++); ?></td>
@@ -47,25 +46,21 @@
                   <td><?php echo e($client->country ??'-'); ?></td>
                   <td><?php echo e($client->from ?? '-'); ?></td>
                   <?php if($client->client_status == 'Active'): ?> 
-                  <td class="green-color"><span>Active</span></td>
-                  <?php elseif($client->client_status == 'Pending'): ?>
-                  <td class="red-color"><span>Pending</span></td>
-                  <?php elseif($client->client_status == 'Converted'): ?>
-                  <td class="purple-color"><span>Converted</span></td>
-                  <?php elseif($client->client_status == 'Completed'): ?>
-                  <td class="green-color"><span>Completed</span></td>
-                  <?php elseif($client->client_status == 'Leave'): ?>
-                  <td class="red-color"><span>Leave</span></td>
-                  <?php else: ?>
-                  <td></td>
+                        <td class="green-color"><span>Active</span></td>
+                     <?php elseif($client->client_status == 'Pending'): ?>
+                        <td class="red-color"><span>Pending</span></td>
+                     <?php elseif($client->client_status == 'Converted'): ?>
+                        <td class="purple-color"><span>Converted</span></td>
+                     <?php elseif($client->client_status == 'Completed'): ?>
+                        <td class="green-color"><span>Completed</span></td>
+                     <?php elseif($client->client_status == 'Leave'): ?>
+                        <td class="red-color"><span>Leave</span></td>
+                     <?php else: ?>
+                        <td></td>
                   <?php endif; ?>
                   <td>
-                     <a class="btn btn-info btn-sm" href="<?php echo e(url('super-admin/edit-client', $client->id)); ?>">
-                     <img src="<?php echo e(url('public/admin/images/ico-4.png')); ?>">
-                     </a>
-                     <!-- <a class="btn btn-danger btn-sm" href="<?php echo e(url('admin/client-inquery', $client->id)); ?>">
-                        <i class="fas fa-trash-alt"></i> Delete
-                        </a> -->
+                     <a class="btn btn-info btn-sm" href="<?php echo e(url('super-admin/edit-client', $client->id)); ?>"><img src="<?php echo e(url('public/admin/images/ico-4.png')); ?>"></a>
+                     <!--<a class="btn btn-danger btn-sm" href="<?php echo e(url('admin/client-inquery', $client->id)); ?>"><i class="fas fa-trash-alt"></i> Delete</a> -->
                   </td>
                </tr>
                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
