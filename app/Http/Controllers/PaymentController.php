@@ -1,101 +1,94 @@
-<?php
+<?php 
 
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\StudentFees;
 use App\Models\User;
+use App\Models\StudentFees;
+use App\Models\Reminder; 
 use Carbon\Carbon;
-use GuzzleHttp\Client;
+use Log;
 
-class PaymentController extends Controller
+class PaymentController extends Controller 
 {
-    // Method to check unpaid fees and send WhatsApp reminders
+    // Function for unpaid fees and log WhatsApp reminders
     public function sendWhatsAppReminderToStudents()
     {
         // Get the current date
         $currentDate = Carbon::now();
-
-        // Get student details with unpaid fees for the current month
-        $studentsWithPendingFees = User::where('user_type', 'Student')
+        // Get the date 70 days ago
+        $seventyDaysAgo = $currentDate->copy()->subDays(70);
+        // Get the date 30 days ago
+        $thirtyDaysAgo = $currentDate->copy()->subDays(30);
+    
+        // Get all active students
+        $studentsWithUnpaidFees = User::where('user_type', 'Student')
             ->where('user_status', 'Active')
             ->with(['student_fees_detail' => function ($query) {
                 $query->orderBy('submission_date', 'desc');
             }])
             ->get();
-
-        // Send WhatsApp reminders based on the last payment date
-        foreach ($studentsWithPendingFees as $student) {
-            // Get the last payment record
-            $lastPayment = $student->student_fees_detail->first();
-
-            // Check if payment record exists
-            if ($lastPayment) {
-                $lastPaidDate = Carbon::parse($lastPayment->submission_date);
-                $daysSinceLastPayment = $lastPaidDate->diffInDays($currentDate);
-
-                // Send reminders if fees are overdue (more than 10 days)
-                if ($daysSinceLastPayment >= 10 && $daysSinceLastPayment < 20) {
-                    // First reminder (after 10 days)
-                    $this->sendWhatsAppMessage($student->student_phone_no, $student->name, 1);
-                } elseif ($daysSinceLastPayment >= 20 && $daysSinceLastPayment < 30) {
-                    // Second reminder (after 20 days)
-                    $this->sendWhatsAppMessage($student->student_phone_no, $student->name, 2);
-                } elseif ($daysSinceLastPayment >= 30) {
-                    // Third reminder (after 30 days)
-                    $this->sendWhatsAppMessage($student->student_phone_no, $student->name, 3);
+    
+        // Iterate through each student
+        foreach ($studentsWithUnpaidFees as $student) {
+            // Get all payment records
+            $payments = $student->student_fees_detail;
+    
+            // Check for payments in the last 70 days
+            $paymentsLast70Days = $payments->filter(function ($payment) use ($seventyDaysAgo) {
+                return Carbon::parse($payment->submission_date)->greaterThanOrEqualTo($seventyDaysAgo);
+            });
+    
+            // Check for payments in the last 30 days
+            $paymentsLast30Days = $payments->filter(function ($payment) use ($thirtyDaysAgo) {
+                return Carbon::parse($payment->submission_date)->greaterThanOrEqualTo($thirtyDaysAgo);
+            });
+    
+            // Check if the student has no payments in the last 70 days
+            if ($paymentsLast70Days->isEmpty()) {
+                // Send reminders if no payments in the last 30 days
+                if ($paymentsLast30Days->isEmpty()) {
+                    // Send and log three reminders spaced 10 days apart
+                    for ($i = 1; $i <= 3; $i++) {
+                        $this->sendAndLogReminder($student, $i);
+                    }
                 }
-            } else {
-                // If no payment record exists, treat the student as unpaid and send the first reminder
-                $this->sendWhatsAppMessage($student->student_phone_no, $student->name, 1);
             }
         }
+    
+        // Return a response
+        return response()->json(['message' => 'WhatsApp reminders logged successfully.']);
     }
-
-    // Function to send WhatsApp message via Twilio
-    protected function sendWhatsAppMessage($phoneNumber, $userName, $reminderNumber)
+    
+    // Function to send and log reminders
+    protected function sendAndLogReminder($student, $reminderNumber)
+    {
+        // Check if reminder has already been sent
+        $reminderExists = Reminder::where('student_id', $student->id)
+            ->where('reminder_number', $reminderNumber)
+            ->exists();
+    
+        if (!$reminderExists) {
+            // Send WhatsApp reminder (log it for now)
+            $this->logWhatsAppMessage($student->student_phone_no, $student->name, $reminderNumber);
+    
+            // Store the reminder in the database
+            Reminder::create([
+                'user_id' => $student->id,
+                'reminder_number' => $reminderNumber,
+                'sent_at' => Carbon::now(),
+            ]);
+        }
+    }
+    
+    // Function to log WhatsApp message
+    protected function logWhatsAppMessage($phoneNumber, $userName, $reminderNumber)
     {
         // Message body based on reminder number
         $messageBody = "Dear $userName, this is reminder #$reminderNumber. Your fees are still pending. Please pay as soon as possible.";
-
-        // Format the phone number for WhatsApp (ensure it's international)
-        $formattedPhoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
-        
-        // Ensure the number starts with 'whatsapp:' for Twilio
-        $formattedPhoneNumber = 'whatsapp:' . $formattedPhoneNumber;
-
-        // HTTP client (using Guzzle)
-        $client = new Client();
-
-        // Request payload
-        $payload = [
-            'messaging_product' => 'whatsapp',
-            'to' => $formattedPhoneNumber,
-            'type' => 'text',
-            'text' => [
-                'body' => $messageBody
-            ]
-        ];
-
-        // Send the request to Twilio's WhatsApp API
-        try {
-            $response = $client->post('https://api.twilio.com/2010-04-01/Accounts/' . env('TWILIO_SID') . '/Messages.json', [
-                'auth' => [env('TWILIO_SID'), env('TWILIO_AUTH_TOKEN')],
-                'form_params' => [
-                    'From' => env('TWILIO_WHATSAPP_FROM'),
-                    'To' => $formattedPhoneNumber,
-                    'Body' => $messageBody,
-                ],
-            ]);
-
-            // Check response status
-            if ($response->getStatusCode() === 201) {
-                echo "WhatsApp reminder #$reminderNumber sent to $userName ($phoneNumber).";
-            } else {
-                echo "Failed to send WhatsApp reminder #$reminderNumber to $userName ($phoneNumber).";
-            }
-        } catch (\Exception $e) {
-            echo "Error sending WhatsApp message: " . $e->getMessage();
-        }
+    
+        // Log the message
+        Log::info("WhatsApp Reminder #$reminderNumber sent to $userName ($phoneNumber): $messageBody");
     }
+    
 }
