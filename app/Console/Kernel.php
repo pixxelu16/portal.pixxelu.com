@@ -15,6 +15,10 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         //Schedule the SendWhatsAppReminders command to run daily
         $schedule->command('reminders:send')->dailyAt('10:00');
+        $schedule->call(function () {
+            $paymentController = new \App\Http\Controllers\PaymentController();
+            $paymentController->sendWhatsAppReminderToStudents();
+        })->daily(); 
     }
 
     /**
