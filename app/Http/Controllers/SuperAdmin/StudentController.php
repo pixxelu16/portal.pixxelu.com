@@ -548,34 +548,37 @@ class StudentController extends Controller
                 </div>
             </div>
         </div>
-        <!--start student edit pay fees model-->
-        <div class="modal fade pay-modals" id="editFeeModal" role="dialog">
+       <!--start student edit pay fees model-->
+       <div class="modal fade pay-modals" id="editFeeModal" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content edit-pay">
                     <div class="modal-header-damage">
-                    <h4 class="modal-title">Edit pay fees To<span class="edit_pay_fees"></h4>
+                        <h4 class="modal-title">Edit Pay Fees For <span class="edit_pay_fees"></span></h4>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
                         <form id="editFeeForm" method="POST">
-                            <input type="hidden" id="fee_id" name="fee_id">
-                            <input type="hidden" id="fee_month" name="fee_month">
-                            <div class="form-group">
-                                <label for="user_fees">Fees Amount</label>
-                                <input type="text" id="model_student_amount" name="user_fees" value="" class="form-control">
-                            </div> 
-                            <div class="user_fee_responce"></div>
-                            <select name="payment_type" id="payment_type">
-                                <option value="">Payment Type</option>
+                        <input type="hidden" id="fee_id" name="fee_id">
+                        <input type="hidden" id="fee_month" name="fee_month">
+                        <div class="form-group">
+                            <label for="user_fees">Fees Amount</label>
+                            <input type="text" id="model_student_amount" name="user_fees" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="payment_type">Payment Type</label>
+                            <select name="payment_type" id="payment_type" class="form-control">
+                                <option value="">Select Payment Type</option>
                                 <option value="online">Online</option>
                                 <option value="cash">Cash</option>
-                            </select>       
-                            <div class="user_fee_type_responce"></div>         
-                            <div class="button-save is_update_student_fees"><button type="submit"
-                                    class="disable-submit">Update</button></div>
-                            <div class="loader com_ajax_loader" style="display:none;">
-                                <img src="<?php echo url('public/admin/images/200w.gif'); ?>">
-                            </div>
+                            </select>
+                        </div>
+                        <div class="form-group button-save">
+                            <button type="submit" class="disable-submit">Update</button>
+                        </div>
+                        <!-- Loader -->
+                        <div class="loader com_ajax_loader" style="display:none;">
+                            <img src="<?php echo url('public/admin/images/200w.gif'); ?>">
+                        </div>
                         </form>
                         <div class="student_update_fee_responce"></div>
                     </div>
@@ -583,15 +586,59 @@ class StudentController extends Controller
             </div>
         </div>
         <!--end student edit pay fees model-->
-        </div>
-        </div>
         <script>
+        $(document).ready(function () {
+            $('#user_fees').on('input', function () {
+                this.value = this.value.replace(/\D/g, '');
+            });
+        });
+        </script>
+        <script>
+        $(document).ready(function() {
+            //Validate Form
+            $('#editFeeForm').validate({
+                rules: {
+                    user_fees: {
+                        required: true,
+                        number: true
+                    },
+                    payment_type: {
+                        required: true
+                    }
+                },
+                submitHandler: function(form, e) {
+                    e.preventDefault();
+                    var formData = $(form).serialize();
+
+                    //AJAX request
+                    $.ajax({
+                        type: 'POST',
+                        url: base_url + '/super-admin/update-student-fees',
+                        data: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        beforeSend: function() {
+                            $(".com_ajax_loader").show();
+                            $('.disable-submit').prop('disabled', true);
+                        },
+                        success: function(response) {
+                            $('.student_update_fee_responce').html(response);
+                            $(".disable-submit").prop('disabled', false);
+                            $(".com_ajax_loader").hide();
+                        }
+                    });
+                }
+            });
+        });
+        </script>
+		      <script>
             $(document).ready(function () {
-                $('#user_fees').on('input', function () {
+                $('#model_student_amount').on('input', function () {
                     this.value = this.value.replace(/\D/g, '');
                 });
             });
-        </script>
+            </script>       
         <?php
     }
     

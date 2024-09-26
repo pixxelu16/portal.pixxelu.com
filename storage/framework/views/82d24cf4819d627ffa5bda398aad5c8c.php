@@ -207,9 +207,9 @@ use Carbon\Carbon;
                            <label for="shiftType">Shift Type <span class="text-danger">*</span></label>
                            <select class="form-control" name="sift_type" id="sift_type">
                               <option value ="" disabled selected>Select Shift type</option>
-                              <option value="full_day">Full Day</option>
-                              <option value="half_day">Half Day</option>
-                              <option value="quarter_day">Quarter Day</option>
+                              <option value="Full Day">Full Day</option>
+                              <option value="Half Day">Half Day</option>
+                              <option value="Quarter Day">Quarter Day</option>
                            </select>
                         </div>
                         <div class="form-group">

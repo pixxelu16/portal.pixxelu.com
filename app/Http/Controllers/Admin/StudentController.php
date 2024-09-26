@@ -633,7 +633,13 @@ class StudentController extends Controller
             });
         });
         </script>
-
+            <script>
+            $(document).ready(function () {
+                $('#model_student_amount').on('input', function () {
+                    this.value = this.value.replace(/\D/g, '');
+                });
+            });
+            </script>         
         <?php
     }
 
