@@ -181,6 +181,8 @@
                                  <img src="{{ url('public/admin/images/leave_icon.svg') }}" alt="Leave">
                               @elseif ($attendance->attendance_status == 'half_day')
                                  <img src="{{ url('public/admin/images/half_day_leave.svg') }}" alt="Half Day">
+                              @elseif ($attendance->attendance_status == 'holiday')
+                                 <img src="{{ url('public/admin/images/Holiday.svg') }}" alt="Holiday Day">
                            @endif
                            @else
                         @endif

@@ -47,6 +47,24 @@ $('body').on('click', '.student_pay_fees', function() {
     $(".student_name_pay_fees").text(student_name);    
 });
 
+//Student Show modal edit fees model 
+$('body').on('click', '.edit-btn', function() {
+    var feeId = $(this).data('fee-id'); 
+    var feeMonth = $(this).data('fee-month');
+    var feesAmount = $(this).data('fee-amount');
+    var studentName = $(this).data('student-name');
+    
+    //apend values
+    $('#fee_id').val(feeId);
+    $('#fee_month').val(feeMonth);  
+    $("#model_student_amount").val(feesAmount);
+
+    //Update student pay fees header    
+    $(".edit_pay_fees").text(studentName);   
+    $('#editFeeModal').modal('show');
+});
+
+
 //Student assign accessories
 $(document).ready(function() {
     //Submit assign accessories form
@@ -245,55 +263,55 @@ $(document).ready(function() {
     });
 });
 
-//Student fees model 
-$(document).ready(function() {
-    //Show our model
-    $('body').on('click', '.edit-btn', function() {
-        var feeId = $(this).data('fee-id');   
-        var feeMonth = $(this).data('fee-month');
-        var feesAmount = $(this).data('fee-amount');
-        var StudentName = $(this).data('student-name');
-        //alert(feesAmount); return false;
-        //Apend value
-        $('#fee_id').val(feeId);
-        $('#fee_month').val(feeMonth);  
-        $("#model_student_amount").val(feesAmount);    
-        //pay salary employee header
-        $(".edit_pay_fees").text(StudentName);   
-        $('#editFeeModal').modal('show');
-    });
+// //Student fees model 
+// $(document).ready(function() {
+//     //Show our model
+//     $('body').on('click', '.edit-btn', function() {
+//         var feeId = $(this).data('fee-id');   
+//         var feeMonth = $(this).data('fee-month');
+//         var feesAmount = $(this).data('fee-amount');
+//         var StudentName = $(this).data('student-name');
+//         //alert(feesAmount); return false;
+//         //Apend value
+//         $('#fee_id').val(feeId);
+//         $('#fee_month').val(feeMonth);  
+//         $("#model_student_amount").val(feesAmount);    
+//         //pay salary employee header
+//         $(".edit_pay_fees").text(StudentName);   
+//         $('#editFeeModal').modal('show');
+//     });
 
-    //Update student fees 
-        $('body').on('click', '.is_update_student_fees', function(e) {
-        e.preventDefault();
-        //Validate form
-        var userFees = $('#model_student_amount').val();
-        if (userFees === '' || !/^\d+$/.test(userFees)) {
-            $('.user_fee_responce').html('<div class="alert alert-danger">This field is required</div>');
-        }
+//     //Update student fees 
+//         $('body').on('click', '.is_update_student_fees', function(e) {
+//         e.preventDefault();
+//         //Validate form
+//         var userFees = $('#model_student_amount').val();
+//         if (userFees === '' || !/^\d+$/.test(userFees)) {
+//             $('.user_fee_responce').html('<div class="alert alert-danger">This field is required</div>');
+//         }
         
-        //serialize form data
-        var data = $('#editFeeForm').serialize();  
-        $.ajax({ 
-            type: 'POST',
-            url: base_url + '/super-admin/update-student-fees',
-            data: data,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            beforeSend: function () {
-                $(".com_ajax_loader").show();
-                $('.is_update_student_fees').prop('disabled', true);
-            },
-            success: function (response) {
-                $('.student_update_fee_responce').html(response);
-                $(".is_update_student_fees").prop('disabled', false);
-                $(".com_ajax_loader").hide();
+//         //serialize form data
+//         var data = $('#editFeeForm').serialize();  
+//         $.ajax({ 
+//             type: 'POST',
+//             url: base_url + '/super-admin/update-student-fees',
+//             data: data,
+//             headers: {
+//                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//             },
+//             beforeSend: function () {
+//                 $(".com_ajax_loader").show();
+//                 $('.is_update_student_fees').prop('disabled', true);
+//             },
+//             success: function (response) {
+//                 $('.student_update_fee_responce').html(response);
+//                 $(".is_update_student_fees").prop('disabled', false);
+//                 $(".com_ajax_loader").hide();
 
-            }
-        });
-    });
-});
+//             }
+//         });
+//     });
+// });
 
 //Employee details
 //Employee attendance details

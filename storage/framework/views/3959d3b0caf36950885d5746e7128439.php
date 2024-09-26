@@ -57,12 +57,6 @@
 <form action="<?php echo e(url('employee/search-attendance')); ?>" method="GET">
    <!--start search filter-->
    <div class="row search-student-attendance">
-      <!-- <div class="col-sm-6 col-md-3">
-         <div class="input-block mb-3 form-focus">
-             <input type="text" class="form-control" name="name" id="name" 
-                 value="<?php echo e(request()->input('name')); ?>" placeholder="Enter Your Name">
-         </div>
-         </div> -->
       <div class="col-sm-6 col-md-3">
          <div class="input-block mb-3 form-focus select-focus">
             <select class="select floating" name="month">
@@ -114,6 +108,7 @@
                   <th>Shift</th>
                   <th>Shift Type</th>
                   <?php $__currentLoopData = $days; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+
                   <?php
                   $date = \Carbon\Carbon::create($year, $month, $day);
                   $dayOfWeek = $date->format('D'); 
@@ -121,6 +116,7 @@
                   $isSunday = $dayOfWeek === 'Sun';
                   $isLastSaturday = $dayOfWeek === 'Sat' && $day == $lastSaturday;
                   ?>
+
                   <th class="<?php echo e($isSunday ? 'text-danger' : ($isLastSaturday ? 'text-primary' : '')); ?>">
                      <?php echo e($dayNumber); ?> <?php echo e($dayOfWeek); ?>
 
@@ -154,6 +150,8 @@
                   $attendance = $employee->employees_attendance_detail->first(function ($att) use ($date) {
                   return \Carbon\Carbon::parse($att->submission_date)->format('Y-m-d') === $date;
                   });
+
+                  //Get punch in and out
                   $punchIn = null;
                   $punchOut = null;
                   $formattedDuration = null;
@@ -161,11 +159,12 @@
                   if ($attendance) {
                      $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
                      $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
+                    
                      if ($punchOut) {
-                     $duration = $punchIn->diff($punchOut);
-                     $hours = $duration->h;
-                     $minutes = $duration->i;
-                     $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
+                        $duration = $punchIn->diff($punchOut);
+                        $hours = $duration->h;
+                        $minutes = $duration->i;
+                        $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
                      }
                   }
                   $isSunday = in_array($day, $sundays);
@@ -174,23 +173,25 @@
                   <td>
                      <!--show holiday icon-->
                      <?php if($isSunday): ?>
-                     <img src="<?php echo e(url('public/admin/images/sunday.svg')); ?>" alt="Holiday">
-                     <?php elseif($isLastSaturday): ?>
-                     <img src="<?php echo e(url('public/admin/images/saturday.svg')); ?>" alt="Holiday">
-                     <?php else: ?>
-                     <?php if($attendance): ?>
-                     <?php if($attendance->attendance_status == 'present'): ?>
-                     <img src="<?php echo e(url('public/admin/images/present_icon.svg')); ?>" alt="Present">
-                     <p class="student-attendance-duration"><?php echo e($formattedDuration ?? 'N/A'); ?></p>
-                     <?php elseif($attendance->attendance_status == 'absent'): ?>
-                     <img src="<?php echo e(url('public/admin/images/absent_icon.svg')); ?>" alt="Absent">
-                     <?php elseif($attendance->attendance_status == 'leave'): ?>
-                     <img src="<?php echo e(url('public/admin/images/leave_icon.svg')); ?>" alt="Leave">
-                     <?php elseif($attendance->attendance_status == 'half_day'): ?>
-                     <img src="<?php echo e(url('public/admin/images/half_day_leave.svg')); ?>" alt="Half Day">
-                     <?php endif; ?>
-                     <?php else: ?> 
-                     <?php endif; ?>
+                        <img src="<?php echo e(url('public/admin/images/sunday.svg')); ?>" alt="Holiday">
+                        <?php elseif($isLastSaturday): ?>
+                        <img src="<?php echo e(url('public/admin/images/saturday.svg')); ?>" alt="Holiday">
+                        <?php else: ?>
+                        <?php if($attendance): ?>
+                           <?php if($attendance->attendance_status == 'present'): ?>
+                                 <img src="<?php echo e(url('public/admin/images/present_icon.svg')); ?>" alt="Present">
+                                 <p class="student-attendance-duration"><?php echo e($formattedDuration ?? 'N/A'); ?></p>
+                              <?php elseif($attendance->attendance_status == 'absent'): ?>
+                                 <img src="<?php echo e(url('public/admin/images/absent_icon.svg')); ?>" alt="Absent">
+                              <?php elseif($attendance->attendance_status == 'leave'): ?>
+                                 <img src="<?php echo e(url('public/admin/images/leave_icon.svg')); ?>" alt="Leave">
+                              <?php elseif($attendance->attendance_status == 'half_day'): ?>
+                                 <img src="<?php echo e(url('public/admin/images/half_day_leave.svg')); ?>" alt="Half Day">
+                              <?php elseif($attendance->attendance_status == 'holiday'): ?>
+                                 <img src="<?php echo e(url('public/admin/images/Holiday.svg')); ?>" alt="Holiday Day">
+                           <?php endif; ?>
+                           <?php else: ?> 
+                        <?php endif; ?>
                      <?php endif; ?>
                   </td>
                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

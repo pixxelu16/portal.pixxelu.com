@@ -37,6 +37,8 @@ class PaymentController extends Controller
                 $query->orderBy('submission_date', 'desc');
             }])
             ->get();
+
+        //echo "<pre>"; print_r($studentsWithUnpaidFees->toArray());exit;    
     
         // Iterate through each student
         foreach ($studentsWithUnpaidFees as $student) {
@@ -47,7 +49,8 @@ class PaymentController extends Controller
             $paymentsCurrentMonth = $payments->filter(function ($payment) use ($startOfMonth) {
                 return Carbon::parse($payment->submission_date)->greaterThanOrEqualTo($startOfMonth);
             });
-    
+           
+            echo "<pre>"; print_r($paymentsCurrentMonth->toArray());exit;
             // If the student has paid for the current month, skip sending reminders
             if ($paymentsCurrentMonth->isNotEmpty()) {
                 continue; // Skip to the next student
@@ -58,13 +61,17 @@ class PaymentController extends Controller
                 return Carbon::parse($payment->submission_date)->greaterThanOrEqualTo($thirtyDaysAgo);
             });
             
+           
             $paymentsLast40Days = $payments->filter(function ($payment) use ($fortyDaysAgo) {
                 return Carbon::parse($payment->submission_date)->greaterThanOrEqualTo($fortyDaysAgo);
             });
             
+          
             $paymentsLast50Days = $payments->filter(function ($payment) use ($fiftyDaysAgo) {
                 return Carbon::parse($payment->submission_date)->greaterThanOrEqualTo($fiftyDaysAgo);
             });
+
+           
             
             $paymentsLast60Days = $payments->filter(function ($payment) use ($sixtyDaysAgo) {
                 return Carbon::parse($payment->submission_date)->greaterThanOrEqualTo($sixtyDaysAgo);
@@ -73,12 +80,12 @@ class PaymentController extends Controller
             $paymentsLast70Days = $payments->filter(function ($payment) use ($seventyDaysAgo) {
                 return Carbon::parse($payment->submission_date)->greaterThanOrEqualTo($seventyDaysAgo);
             });
-    
+        
             // Daily reminder for students with no payments in the last 70 days
             if ($paymentsLast70Days->isEmpty()) {
                 $this->sendAndLogReminder($student, 0);
             }
-    
+
             // Monthly reminders based on the last payment dates
             if ($paymentsLast60Days->isEmpty()) {
                 $this->sendAndLogReminder($student, 4); // Reminder for 60-70 days
