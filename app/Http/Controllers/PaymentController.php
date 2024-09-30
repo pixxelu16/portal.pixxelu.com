@@ -37,20 +37,17 @@ class PaymentController extends Controller
                 $query->orderBy('submission_date', 'desc');
             }])
             ->get();
-
-        //echo "<pre>"; print_r($studentsWithUnpaidFees->toArray());exit;    
     
         // Iterate through each student
         foreach ($studentsWithUnpaidFees as $student) {
             // Get all payment records
             $payments = $student->student_fees_detail;
-
+    
             // Check for payments in the current month
             $paymentsCurrentMonth = $payments->filter(function ($payment) use ($startOfMonth) {
                 return Carbon::parse($payment->submission_date)->greaterThanOrEqualTo($startOfMonth);
             });
-           
-            echo "<pre>"; print_r($paymentsCurrentMonth->toArray());exit;
+    
             // If the student has paid for the current month, skip sending reminders
             if ($paymentsCurrentMonth->isNotEmpty()) {
                 continue; // Skip to the next student
@@ -61,17 +58,13 @@ class PaymentController extends Controller
                 return Carbon::parse($payment->submission_date)->greaterThanOrEqualTo($thirtyDaysAgo);
             });
             
-           
             $paymentsLast40Days = $payments->filter(function ($payment) use ($fortyDaysAgo) {
                 return Carbon::parse($payment->submission_date)->greaterThanOrEqualTo($fortyDaysAgo);
             });
             
-          
             $paymentsLast50Days = $payments->filter(function ($payment) use ($fiftyDaysAgo) {
                 return Carbon::parse($payment->submission_date)->greaterThanOrEqualTo($fiftyDaysAgo);
             });
-
-           
             
             $paymentsLast60Days = $payments->filter(function ($payment) use ($sixtyDaysAgo) {
                 return Carbon::parse($payment->submission_date)->greaterThanOrEqualTo($sixtyDaysAgo);
@@ -80,12 +73,12 @@ class PaymentController extends Controller
             $paymentsLast70Days = $payments->filter(function ($payment) use ($seventyDaysAgo) {
                 return Carbon::parse($payment->submission_date)->greaterThanOrEqualTo($seventyDaysAgo);
             });
-        
+    
             // Daily reminder for students with no payments in the last 70 days
             if ($paymentsLast70Days->isEmpty()) {
                 $this->sendAndLogReminder($student, 0);
             }
-
+    
             // Monthly reminders based on the last payment dates
             if ($paymentsLast60Days->isEmpty()) {
                 $this->sendAndLogReminder($student, 4); // Reminder for 60-70 days
@@ -118,7 +111,7 @@ class PaymentController extends Controller
         // Return a response
         return response()->json(['message' => 'WhatsApp reminders logged successfully.']);
     }
-
+    
     // Function to send and log reminders
     protected function sendAndLogReminder($student, $reminderNumber)
     {
@@ -170,7 +163,7 @@ class PaymentController extends Controller
         $url = "https://api.twilio.com/2010-04-01/Accounts/$sid/Messages.json";
 
         $data = [
-            'From' => $twilioPhoneNumber,
+            'From' => $twilioPhoneNumber, // Your WhatsApp-enabled Twilio number
             'To' => $whatsappPhoneNumber,
             'Body' => $messageBody,
         ];
@@ -192,6 +185,7 @@ class PaymentController extends Controller
         if (curl_errno($ch)) {
             Log::error("Error sending WhatsApp message: " . curl_error($ch));
         } else {
+            Log::info("Twilio Response: " . $response);
             Log::info("WhatsApp Reminder #$reminderNumber sent to $userName ($phoneNumber): $messageBody");
         }
 
