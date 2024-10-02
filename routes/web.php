@@ -31,7 +31,6 @@ Route::group(['middleware' => 'auth'], function() {
        Route::post('super-admin/update-profile/{id}', [App\Http\Controllers\SuperAdmin\ProfileController::class, 'update_profile'])->name('super.admin.update.profile');
        Route::get('super-admin/change-password', [App\Http\Controllers\SuperAdmin\ProfileController::class, 'changed_password']);
        Route::post('super-admin/submit-change-password/{id}', [App\Http\Controllers\SuperAdmin\ProfileController::class, 'submit_changed_password'])->name('super.admin.changed.password');
-       Route::get('super-admin/setting', [App\Http\Controllers\SuperAdmin\ProfileController::class, 'edit_profile']);
        //employees  
        Route::get('super-admin/get-employee-detail', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'single_employee_detail']);
        Route::get('super-admin/all-employees-list', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'all_employees_list']);
@@ -106,7 +105,7 @@ Route::group(['middleware' => 'auth'], function() {
        Route::post('super-admin/update-inquery/{id}', [App\Http\Controllers\SuperAdmin\InqueryController::class, 'update_inquery'])->name('super.admin.update.inquery');
        Route::get('super-admin/delete-inquery/{id}', [App\Http\Controllers\SuperAdmin\InqueryController::class, 'delete_inquery']);
        //export inqueries
-       Route::get('super-admin/export-inqueries', [App\Http\Controllers\ExportInqueryController::class, 'export_inqueries']);        
+       Route::get('super-admin/export-inqueries', [App\Http\Controllers\Inquery\ExportInqueryController::class, 'export_inqueries']);        
        //stocks 
        Route::get('super-admin/all-stocks-list', [App\Http\Controllers\SuperAdmin\StudentController::class, 'all_stocks_list']);
        Route::get('super-admin/add-new-stock', [App\Http\Controllers\SuperAdmin\StudentController::class, 'add_new_stock']);
@@ -134,7 +133,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('admin/search-employees-list/{any}', [App\Http\Controllers\Admin\EmployeeController::class, 'search_employee_list'])->name('admin.search.employee.list');
         //employee attendance  
         Route::post('admin/submit-employee-attendance', [App\Http\Controllers\Admin\EmployeeAttendanceController::class, 'submit_employee_attendance'])->name('admin.submit.employee.attendance');
-        //Route::post('admin/submit-employee-attendance', [App\Http\Controllers\Admin\EmployeeAttendanceController::class, 'employee_attendance'])->name('admin.submit.employee.attendance');
+        Route::post('admin/submit-employee-punch-in-attendance', [App\Http\Controllers\Admin\EmployeeAttendanceController::class, 'employee_attendance'])->name('admin.submit.employee.panch.in.attendance');
         Route::post('admin/update-employee-punch-out-attendance', [App\Http\Controllers\Admin\EmployeeAttendanceController::class, 'employee_punch_out_attendance'])->name('admin.update.employee.punch.out.attendance');
         Route::get('admin/all-employees-attendance-list', [App\Http\Controllers\Admin\EmployeeAttendanceController::class, 'all_employees_attendance_list']);
         Route::get('admin/search-employee-attendance', [App\Http\Controllers\Admin\EmployeeAttendanceController::class, 'search_employee_attendance_list'])->name('admin.search.employee.attendance');
@@ -187,7 +186,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('admin/update-inquery/{id}', [App\Http\Controllers\Admin\InqueryController::class, 'update_inquery'])->name('admin.update.inquery');
         Route::get('admin/delete-inquery/{id}', [App\Http\Controllers\Admin\InqueryController::class, 'delete_inquery']);
         //export inqueries
-        Route::get('admin/export-inqueries', [App\Http\Controllers\ExportInqueryController::class, 'export_inqueries']);        
+        Route::get('admin/export-inqueries', [App\Http\Controllers\Inquery\ExportInqueryController::class, 'export_inqueries']);        
         //stocks 
         Route::get('admin/all-stocks-list', [App\Http\Controllers\Admin\StudentController::class, 'all_stocks_list']);
         Route::get('admin/add-new-stock', [App\Http\Controllers\Admin\StudentController::class, 'add_new_stock']);
