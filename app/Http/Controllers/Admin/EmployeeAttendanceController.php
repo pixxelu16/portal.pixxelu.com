@@ -185,11 +185,9 @@ class EmployeeAttendanceController extends Controller
         //Get employee id
         $employee_id = $request->employee_id;
         //Get Current day
-        $today = Carbon::today()->format('Y-m-d');
-      
-        //Get employee attendance
-        $existing_attendance = EmployeeAttendance::where('employee_id', $request->employee_id)->whereDate('submission_date', $today)->first();   
- 
+        $current_date = Carbon::today()->format('Y-m-d');      
+        //Get employee attendance 
+        $existing_attendance = EmployeeAttendance::where('employee_id', $employee_id)->whereDate('submission_date', $current_date)->whereNotNull('punch_out_time')->exists(); 
         //Check if employee attendance is already exists or not
         if ($existing_attendance) {
              echo '<p style="color:red;">Employee has already marked punch out attendance for today.</p>';
