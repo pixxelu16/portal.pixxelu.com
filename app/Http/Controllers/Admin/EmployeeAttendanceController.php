@@ -15,39 +15,38 @@ class EmployeeAttendanceController extends Controller
     
     //Function for submit employee punch in attendance
     public function submit_employee_attendance(Request $request) {
-        //Get the current date and time in IST
-        $current_time = Carbon::now('Asia/Kolkata')->format('H:i:s');
-        $current_date = Carbon::now('Asia/Kolkata')->toDateString();
+    // //Get the current date and time in IST
+    // $current_time = Carbon::now('Asia/Kolkata')->format('H:i:s');
+    // $current_date = Carbon::now('Asia/Kolkata')->toDateString();
 
-        //Check if attendance already exists or not
-        $existing_attendance = EmployeeAttendance::where('employee_id', $request->employee_id)
-            ->whereDate('submission_date', $current_date)
-            ->first();
+    // //Check if attendance already exists or not
+    // $existing_attendance = EmployeeAttendance::where('employee_id', $request->employee_id)
+    //     ->whereDate('created_at', $current_date)
+    //     ->first();
 
-        //Check if employee attendance already exists for today
-        if ($existing_attendance) {
-            echo '<p style="color:red;">Your attendance has already been marked for today.</p>';
+    // //Check if employee attendance already exists for today
+    // if ($existing_attendance) {
+    //     echo '<p style="color:red;">Your attendance has already been marked for today.</p>';
+    //     echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
+    // } else {
+      
+        //Create attendance employee
+        $is_create_employee_attendance = EmployeeAttendance::create([
+            'employee_id' => $request->employee_id,
+            'sift' => $request->sift,
+            'sift_type' => $request->sift_type,
+            'punch_in_time' => $request->punch_in_time,
+            'punch_out_time' => $request->punch_out_time,
+            'submission_date' => $request->submission_date,
+            'attendance_status' => $request->attendance_status,
+        ]);
+
+        //Check if employee attendance is updated or not
+        if ($is_create_employee_attendance) {
+            echo '<p style="color:green;">Employee attendance updated successfully.</p>';
             echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
         } else {
-        
-            //Create attendance employee
-            $is_create_employee_attendance = EmployeeAttendance::create([
-                'employee_id' => $request->employee_id,
-                'sift' => $request->sift,
-                'sift_type' => $request->sift_type,
-                'punch_in_time' => $request->punch_in_time,
-                'punch_out_time' => $request->punch_out_time,
-                'submission_date' => $current_date,
-                'attendance_status' => $request->attendance_status,
-            ]);
-
-            //Check if employee attendance is updated or not
-            if ($is_create_employee_attendance) {
-                echo '<p style="color:green;">Employee attendance updated successfully.</p>';
-                echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
-            } else {
-                echo '<p style="color:red;">Oops, something went wrong. Please try again.</p>';
-            }
+            echo '<p style="color:red;">Oops, something went wrong. Please try again.</p>';
         }
     }
 
@@ -148,46 +147,13 @@ class EmployeeAttendanceController extends Controller
         return view('admin.employee-attendances.all-employees-attendance-list', compact('get_employee_detail', 'months', 'days', 'month', 'year', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays', 'daysInMonth'));
     }
 
-
-    //Function for update 
-    public function employee_punch_out_attendance(Request $request) {
-        //Get employee id
-        $employee_id = $request->employee_id;
-        //Get Current day
-         $today = Carbon::today()->format('Y-m-d');
-      
-         //Get employee attendance
-         $existing_attendance = EmployeeAttendance::where('employee_id', $request->employee_id)->whereDate('submission_date', $today)->first();   
- 
-         //Check if employee attendance is already exists or not
-         if ($existing_attendance) {
-             echo '<p style="color:red;">Employee has already marked punch out attendance for today.</p>';
-             echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
-         } else {
-
-            //update employee punch out attendance record
-            $is_update_employee_punch_out_attendance = EmployeeAttendance::where('employee_id', $employee_id)->update([
-                'punch_out_time' =>$request->punch_out_time,
-            ]);
-
-            //Check if employee punch out attendance is update or not
-            if($is_update_employee_punch_out_attendance) {
-                echo '<p style="color:green;">Employee punch out attendance submitted today successfully.</p>';
-                echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
-            } else {
-                echo '<p style="color:red;">Oops, something went wrong.</p>';
-            }
-        }
-    }
-    
-
-    //Function for submit employee attendance
+    //Function for employee panch in attendance
     public function employee_attendance(Request $request) {
         //Get Current day
-        $today = Carbon::today()->format('Y-m-d');
+        $current_date = Carbon::today()->format('Y-m-d');
       
         //Get employee attendance
-        $existing_attendance = EmployeeAttendance::where('employee_id', $request->employee_id)->whereDate('submission_date', $today)->first();   
+        $existing_attendance = EmployeeAttendance::where('employee_id', $request->employee_id)->whereDate('submission_date', $current_date)->first();   
 
         //Check if employee attendance is already exists or not
         if ($existing_attendance) {
@@ -201,9 +167,9 @@ class EmployeeAttendanceController extends Controller
                 'sift_type' => $request->sift_type,
                 'punch_in_time' => $request->punch_in_time,
                 'punch_out_time' => $request->punch_out_time,
+                'submission_date' => $current_date,
                 'attendance_status' => $request->attendance_status,
             ]); 
-
             //Check if employee attendance was created successfully
             if ($is_create_employee_attendance) {
                 echo '<p style="color:green;">Employee attendance created today successfully.</p>';
@@ -212,6 +178,36 @@ class EmployeeAttendanceController extends Controller
                 echo '<p style="color:red;">Oops, something went wrong.</p>';
             }
         }        
+    }
+
+    //Function for employee panch out attendance
+    public function employee_punch_out_attendance(Request $request) {
+        //Get employee id
+        $employee_id = $request->employee_id;
+        //Get Current day
+        $today = Carbon::today()->format('Y-m-d');
+      
+        //Get employee attendance
+        $existing_attendance = EmployeeAttendance::where('employee_id', $request->employee_id)->whereDate('submission_date', $today)->first();   
+ 
+        //Check if employee attendance is already exists or not
+        if ($existing_attendance) {
+             echo '<p style="color:red;">Employee has already marked punch out attendance for today.</p>';
+             echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
+        } else {
+            //update employee punch out attendance record
+            $is_update_employee_punch_out_attendance = EmployeeAttendance::where('employee_id', $employee_id)->update([
+                'punch_out_time' =>$request->punch_out_time,
+            ]);
+
+            //Check if employee punch out attendance is update or not
+            if($is_update_employee_punch_out_attendance) {
+                echo '<p style="color:green;">Employee punch out attendance submitted today successfully.</p>';
+                echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
+            } else {
+                echo '<p style="color:red;">Oops, something went wrong.</p>';
+            }
+        }
     }
 
     //search employee attendance list

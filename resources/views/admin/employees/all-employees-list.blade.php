@@ -63,11 +63,8 @@
                            <span onclick="openNav()"><a href="#" class="employee_detail" data-employee_id="{{ $employee->id }}">{{ $employee->name }}</a></span>
                         </td>
                         <td>
-                        @php
-                           $today = \Carbon\Carbon::today()->format('Y-m-d');
-                        @endphp
                         <div class="box-pay">
-                              <button type="button" class="employee-punch-in-buton employee_punch_in_attendance" data-employee_id="{{ $employee->id }}" data-employee_name="{{ $employee->name }}" data-missing_date="{{ $today }}" data-toggle="modal" data-target="#punchInModel">
+                              <button type="button" class="employee-punch-in-buton employee_punch_in_attendance" data-employee_id="{{ $employee->id }}" data-employee_name="{{ $employee->name }}" data-toggle="modal" data-target="#punchInModel">
                               Punch in
                            </div>
                            <div class="box-pay">
@@ -150,7 +147,6 @@
          <div class="modal-body">
             <form action="#" id="employee_punch_in_attendance" method="POST">
                <input type="hidden" id="models_employee_id" name="employee_id" value="" />
-               <input type="hidden" id="date" name="submission_date" value="" />
                <div class="form-group">
                   <label for="attendanceStatus">Attendance Status <span class="text-danger">*</span></label>
                   <select class="form-control" name="attendance_status" id="attendanceStatus">
