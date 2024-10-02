@@ -46,7 +46,7 @@
          <li class="<?php echo e(request()->is('admin/all-employees-list') ? 'active' : ''); ?>">
             <a href="<?php echo e(url('admin/all-employees-list')); ?>">
             <img src="<?php echo e(url('public/admin/images/staff.svg')); ?>" alt="staff" />
-            <span class="link-name">Staff</span>
+            <span class="link-name">All Employees</span>
             </a>
          </li>
          <!-- <li class="<?php echo e(request()->is('admin/leads') ? 'active' : ''); ?>">
@@ -57,7 +57,7 @@
             </li> -->
          <li class="<?php echo e(request()->is('admin/all-inqueries-list') ? 'active' : ''); ?>">
             <a href="<?php echo e(url('admin/all-inqueries-list')); ?>">
-            <img src="<?php echo e(url('public/admin/images/leads.svg')); ?>" alt="inqueries" />
+            <img src="<?php echo e(url('public/admin/images/all_inquries.svg')); ?>" alt="inqueries" />
             <span class="link-name">All Inqueries</span>
             </a>
          </li>
@@ -69,7 +69,7 @@
             </a>
          </li> 
          <!-- <li><a href="#">
-            <img src="<?php echo e(url('public/admin/images/setting.svg')); ?>" alt="leads" />
+            <img src="<?php echo e(url('public/admin/images/setting.svg')); ?>" alt="setting" />
             <span class="link-name">Settings</span>
             </a>
          </li> -->

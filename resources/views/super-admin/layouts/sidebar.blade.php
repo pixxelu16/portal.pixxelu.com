@@ -46,18 +46,18 @@
          <li class="{{ request()->is('super-admin/all-employees-list') ? 'active' : '' }}">
             <a href="{{ url('super-admin/all-employees-list') }}">
                <img src="{{ url('public/admin/images/staff.svg') }}" alt="staff" />
-               <span class="link-name">Staff</span>
+               <span class="link-name">All Employees</span>
             </a>
          </li>
          <li class="{{ request()->is('super-admin/all-clients-list') ? 'active' : '' }}">
             <a href="{{ url('super-admin/all-clients-list') }}">
-               <img src="{{ url('public/admin/images/leads.svg') }}" alt="leads" />
+               <img src="{{ url('public/admin/images/all_clients.svg') }}" alt="clients" />
                <span class="link-name">All Clients</span>
             </a>
          </li>
          <li class="{{ request()->is('super-admin/all-inqueries-list') ? 'active' : '' }}">
             <a href="{{ url('super-admin/all-inqueries-list') }}">
-               <img src="{{ url('public/admin/images/leads.svg') }}" alt="inqueries" />
+               <img src="{{ url('public/admin/images/all_inquries.svg') }}" alt="inqueries" />
                <span class="link-name">All Inqueries</span>
             </a>
          </li>
@@ -68,7 +68,7 @@
             <span class="link-name">Help</span>
             </a>
          </li>
-         <li><a href="#">
+         <li><a href="{{ url('super-admin/setting') }}">
          <img src="{{ url('public/admin/images/setting.svg') }}" alt="leads" />
             <span class="link-name">Settings</span>
             </a>

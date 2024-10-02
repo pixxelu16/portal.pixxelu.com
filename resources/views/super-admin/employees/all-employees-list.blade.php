@@ -55,16 +55,21 @@
                @if($get_employees_detail && $get_employees_detail->isNotEmpty())
                @php $count = 1; @endphp
                @foreach($get_employees_detail as $employee)   
-
                @php
-               //Get the current month
-               $currentMonth = \Carbon\Carbon::now()->month;
-               //Get last record for the current month
-               $last_record = $employee->emloyees_salary__detail->filter(function ($item) use ($currentMonth) {
-               return \Carbon\Carbon::parse($item->submission_date)->month == $currentMonth;
-               })->sortByDesc('submission_date')->first();
-               @endphp 
+                  //Get current month
+                  $startMonth = \Carbon\Carbon::now()->startOfMonth();
+                  $endMonth = \Carbon\Carbon::now()->endOfMonth();
 
+                  // Get all salary records for the current month
+                  $currentMonthRecords = $employee->emloyees_salary__detail->filter(function($record) use ($startMonth, $endMonth) {
+                     $salarySubmissionDate = \Carbon\Carbon::parse($record->submission_date);
+                     return $salarySubmissionDate->between($startMonth, $endMonth);
+                  });
+
+                  //Check if salary exists for the current month or not
+                  $paidStatus = $currentMonthRecords->isNotEmpty();
+                  $status = $paidStatus ? 'Paid' : 'Pending';
+               @endphp
                <tr>
                   <td>{{ $count++ }}.</td>
                   <td>{{ $employee->unique_employee_id }}</td>
@@ -131,11 +136,10 @@
                      @endif
                      @endif
                      </td> -->
-                  @if($last_record)
-                     <td class="green-color"><span>Paid</span></td>
-                  @else
-                     <td class="red-color"><span>Pending</span></td>
-                  @endif
+                  <!-- Show Paid or Pending Status -->
+                  <td class="{{ $paidStatus ? 'green-color' : 'red-color' }}">
+                     <span>{{ $status }}</span>
+                  </td>
                   <td>
                      <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle action-fee-design" type="button" data-bs-toggle="dropdown" aria-expanded="false"> <img src="{{ url('public/admin/images/ellips.svg') }}" alt="ellips" /> </button>
