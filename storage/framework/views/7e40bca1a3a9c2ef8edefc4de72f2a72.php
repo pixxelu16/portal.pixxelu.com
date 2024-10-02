@@ -1,17 +1,16 @@
-@extends('super-admin.layouts.master')
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="space-remove"></div>
 <div class="title-subheading">
-   @if (Session::has('success'))
+   <?php if(Session::has('success')): ?>
    <div class="notification-green">
-      <p>{{ Session::get('success') }}</p>
+      <p><?php echo e(Session::get('success')); ?></p>
    </div>
-   @endif 
-   @if (Session::has('unsuccess'))
+   <?php endif; ?> 
+   <?php if(Session::has('unsuccess')): ?>
    <div class="notification-red">
-      <p>{{ Session::get('unsuccess') }}</p>
+      <p><?php echo e(Session::get('unsuccess')); ?></p>
    </div>
-   @endif
+   <?php endif; ?>
    <h2>All Employees Listing</h2>
 </div>
 <div class="main-table">
@@ -29,8 +28,8 @@
          </select>
           <!--end filter employees acc to role-->
          <!-- <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_salary"><i class="fa-solid fa-plus"></i>Add Increment</a> -->
-         <a href="{{ url('super-admin/add-new-employee') }}"><img src="{{ url('public/admin/images/pluse.svg') }}">Add New Employee</a>
-         <a href="{{ url('super-admin/all-employees-trash-list') }}" class="export"><img src="{{ url('public/admin/images/trash.svg') }}"></a>
+         <a href="<?php echo e(url('super-admin/add-new-employee')); ?>"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add New Employee</a>
+         <a href="<?php echo e(url('super-admin/all-employees-trash-list')); ?>" class="export"><img src="<?php echo e(url('public/admin/images/trash.svg')); ?>"></a>
       </div>
    </div>
    <div class="scrolling-data-table">
@@ -52,12 +51,12 @@
             </thead>
             <tbody>
 
-               @if($get_employees_detail && $get_employees_detail->isNotEmpty())
-               @php $count = 1; 
-               @endphp
+               <?php if($get_employees_detail && $get_employees_detail->isNotEmpty()): ?>
+               <?php $count = 1; 
+               ?>
 
-               @foreach($get_employees_detail as $employee)   
-               @php
+               <?php $__currentLoopData = $get_employees_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $employee): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>   
+               <?php
                   //Get current month
                   $startMonth = \Carbon\Carbon::now()->startOfMonth();
                   $endMonth = \Carbon\Carbon::now()->endOfMonth();
@@ -71,96 +70,97 @@
                   //Check if salary exists for the current month or not
                   $paidStatus = $currentMonthRecords->isNotEmpty();
                   $status = $paidStatus ? 'Paid' : 'Pending';
-               @endphp             
+               ?>             
                <tr>
-                  <td>{{ $count++ }}.</td>
-                  <td>{{ $employee->unique_employee_id }}</td>
+                  <td><?php echo e($count++); ?>.</td>
+                  <td><?php echo e($employee->unique_employee_id); ?></td>
                   <td data-th="Image">
-                     @if($employee->user_pic)
-                     <div class="user-image"> <img src = "{{ url('public/uploads/employees/'. $employee->user_pic)}}" alt=""></div>
-                     @endif 
+                     <?php if($employee->user_pic): ?>
+                     <div class="user-image"> <img src = "<?php echo e(url('public/uploads/employees/'. $employee->user_pic)); ?>" alt=""></div>
+                     <?php endif; ?> 
                   </td>
                   <td>
-                     <span onclick="openNav()"><a href="#" class="employee_detail" data-employee_id="{{ $employee->id }}">{{ $employee->name }}</a></span>
+                     <span onclick="openNav()"><a href="#" class="employee_detail" data-employee_id="<?php echo e($employee->id); ?>"><?php echo e($employee->name); ?></a></span>
                   </td>
                   <!-- <td>
                      <div class="box-pay">
-                        <button type="button" class="employee-attandace-buton employee_attandance" data-employee_id="{{ $employee->id }}" data-employee_name="{{ $employee->name }}" data-toggle="modal" data-target="#exampleModalLong">
+                        <button type="button" class="employee-attandace-buton employee_attandance" data-employee_id="<?php echo e($employee->id); ?>" data-employee_name="<?php echo e($employee->name); ?>" data-toggle="modal" data-target="#exampleModalLong">
                         Add Attendance
                      </div>
                   </td> -->
-                  @if($employee->employee_phone_no)
-                  <td><a href="https://wa.me/{{ str_replace(['+', '-', ' '], '', $employee->employee_phone_no) }}" target="_blank">{{ substr($employee->employee_phone_no, 0, 5) }}-{{ substr($employee->employee_phone_no, 5) }}</a></td>
-                  @else
+                  <?php if($employee->employee_phone_no): ?>
+                  <td><a href="https://wa.me/<?php echo e(str_replace(['+', '-', ' '], '', $employee->employee_phone_no)); ?>" target="_blank"><?php echo e(substr($employee->employee_phone_no, 0, 5)); ?>-<?php echo e(substr($employee->employee_phone_no, 5)); ?></a></td>
+                  <?php else: ?>
                   <td>-</td>
-                  @endif
-                  @if($employee->joining_date)
-                     <td>{{ \Carbon\Carbon::parse($employee->joining_date)->format('d M Y') }}</td>
-                  @else
+                  <?php endif; ?>
+                  <?php if($employee->joining_date): ?>
+                     <td><?php echo e(\Carbon\Carbon::parse($employee->joining_date)->format('d M Y')); ?></td>
+                  <?php else: ?>
                      <td>-</td>
-                  @endif
-                  @if($employee->employee_role == 'Project Bidder') 
+                  <?php endif; ?>
+                  <?php if($employee->employee_role == 'Project Bidder'): ?> 
                         <td class="light-blue-color"><span>Project Bidder</span></td>
-                     @elseif($employee->employee_role == 'Php Development')
+                     <?php elseif($employee->employee_role == 'Php Development'): ?>
                         <td class="light-green-color"><span>PHP Development</span></td>
-                     @elseif($employee->employee_role == 'Web Development')
+                     <?php elseif($employee->employee_role == 'Web Development'): ?>
                         <td class="light-yellow-color"><span>Web Development</span></td>
-                     @elseif($employee->employee_role == 'Web Designing')
+                     <?php elseif($employee->employee_role == 'Web Designing'): ?>
                         <td class="light-pink-color"><span>Web Designing</span></td>
-                     @elseif($employee->employee_role == 'Graphic Designing')
+                     <?php elseif($employee->employee_role == 'Graphic Designing'): ?>
                         <td class="light-cyan-color"><span>Graphic Designing</span></td>
-                     @elseif($employee->employee_role == 'SEO')
+                     <?php elseif($employee->employee_role == 'SEO'): ?>
                         <td class="light-orange-color"><span>SEO</span></td>
-                     @else
+                     <?php else: ?>
                         <td></td>
-                  @endif 
-                  @if($employee->net_salary)  
+                  <?php endif; ?> 
+                  <?php if($employee->net_salary): ?>  
                   <td>
-                  Rs {{ number_format((int) base64_decode($employee->net_salary)) }}
+                  Rs <?php echo e(number_format((int) base64_decode($employee->net_salary))); ?>
+
                      <div class="box-pay">
-                        <button type="button" class="pay-fes-buton employee_pay_salary" data-employee_id="{{ $employee->id }}" data-employee_name="{{ $employee->name }}" data-employee_amount="{{ base64_decode($employee->net_salary) }}"
+                        <button type="button" class="pay-fes-buton employee_pay_salary" data-employee_id="<?php echo e($employee->id); ?>" data-employee_name="<?php echo e($employee->name); ?>" data-employee_amount="<?php echo e(base64_decode($employee->net_salary)); ?>"
                         data-toggle="modal" data-target="#myModal">Pay Salary</button>
                      </div>
-                     @else
+                     <?php else: ?>
                   <td>-</td>
-                  @endif
+                  <?php endif; ?>
                   </td>
                   <!-- <td>
-                     @if(isset($employee->emloyees_salary__detail))
-                     @php
+                     <?php if(isset($employee->emloyees_salary__detail)): ?>
+                     <?php
                      $last_record = $employee->emloyees_salary__detail->last();
-                     @endphp
-                     @if($last_record)
-                     Rs {{ number_format((int) base64_decode($last_record->employee_salary)) }}<br>
-                     <span class="date-tbl">{{ \Carbon\Carbon::parse($last_record->submission_date)->format('d M Y') }}</span>
-                     @else
+                     ?>
+                     <?php if($last_record): ?>
+                     Rs <?php echo e(number_format((int) base64_decode($last_record->employee_salary))); ?><br>
+                     <span class="date-tbl"><?php echo e(\Carbon\Carbon::parse($last_record->submission_date)->format('d M Y')); ?></span>
+                     <?php else: ?>
                      0<br>
-                     @endif
-                     @endif
+                     <?php endif; ?>
+                     <?php endif; ?>
                   </td> -->
                      <!-- Show Paid or Pending Status -->
-                     <td class="{{ $paidStatus ? 'green-color' : 'red-color' }}">
-                     <span>{{ $status }}</span>
+                     <td class="<?php echo e($paidStatus ? 'green-color' : 'red-color'); ?>">
+                     <span><?php echo e($status); ?></span>
                   </td>
                   <td>
                      <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle action-fee-design" type="button" data-bs-toggle="dropdown" aria-expanded="false"> <img src="{{ url('public/admin/images/ellips.svg') }}" alt="ellips" /> </button>
+                        <button class="btn btn-secondary dropdown-toggle action-fee-design" type="button" data-bs-toggle="dropdown" aria-expanded="false"> <img src="<?php echo e(url('public/admin/images/ellips.svg')); ?>" alt="ellips" /> </button>
                         <ul class="dropdown-menu pay-fees-submit">
                            <form class="drop-don-list">
-                              <li button type="button" class="employee_increment_salary" data-employee_id="{{ $employee->id }}" data-employee_name="{{ $employee->name }}" data-toggle="modal" data-target="#add_salary"><img src="{{ url('public/admin/images/ico-1.png') }}">Add Increment</button></li>
-                              <li><a href="{{ url('super-admin/edit-employee', $employee->id) }}"><img src="{{ url('public/admin/images/ico-4.png') }}">Edit</a></li>
-                              <li class="employee_trash_record" data-employee_id="{{ $employee->id }}"><img src="{{ url('public/admin/images/ico-5.png') }}" alt="Trash Icon">Trash</li>
+                              <li button type="button" class="employee_increment_salary" data-employee_id="<?php echo e($employee->id); ?>" data-employee_name="<?php echo e($employee->name); ?>" data-toggle="modal" data-target="#add_salary"><img src="<?php echo e(url('public/admin/images/ico-1.png')); ?>">Add Increment</button></li>
+                              <li><a href="<?php echo e(url('super-admin/edit-employee', $employee->id)); ?>"><img src="<?php echo e(url('public/admin/images/ico-4.png')); ?>">Edit</a></li>
+                              <li class="employee_trash_record" data-employee_id="<?php echo e($employee->id); ?>"><img src="<?php echo e(url('public/admin/images/ico-5.png')); ?>" alt="Trash Icon">Trash</li>
                            </form>
                         </ul>
                      </div>
                   </td>
                </tr>
-               @endforeach 
-               @else
+               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
+               <?php else: ?>
                <tr>
                   <td colspan="4">No Employee are available.</td>
                </tr>
-               @endif
+               <?php endif; ?>
             </tbody>
          </table>
       </div>
@@ -217,7 +217,7 @@
                         </div>
                      </form>
                      <div class="loader com_ajax_loader" style="display:none;">
-                        <img src="{{ url('public/admin/images/200w.gif') }}" /> 
+                        <img src="<?php echo e(url('public/admin/images/200w.gif')); ?>" /> 
                      </div>
                      <div class="employee_attendance_responce"></div>
                   </div>
@@ -245,7 +245,7 @@
                      <div class="button-save"><button type="submit" class="disable-submit">Save</button></div>
                   </form>
                   <div class="loader com_ajax_loader" style="display:none;">
-                     <img src="{{ url('public/admin/images/200w.gif') }}" /> 
+                     <img src="<?php echo e(url('public/admin/images/200w.gif')); ?>" /> 
                   </div>
                </div>
                <div class="employee_salary_responce"></div>
@@ -277,7 +277,7 @@
                      </div>
                   </form>
                   <div class="loader com_ajax_loader" style="display:none;">
-                     <img src="{{ url('public/admin/images/200w.gif') }}" /> 
+                     <img src="<?php echo e(url('public/admin/images/200w.gif')); ?>" /> 
                   </div>
                   <div class="salary_responce"></div>
                </div>
@@ -306,7 +306,7 @@
                      <div class="button-saves"><button type="submit" class="disable-submit is_delete_employee_trash_record">Save</button></div>
                   </form>
                   <div class="loader com_ajax_loader" style="display:none;">
-                     <img src="{{ url('public/admin/images/200w.gif') }}" /> 
+                     <img src="<?php echo e(url('public/admin/images/200w.gif')); ?>" /> 
                   </div>
                </div>
                <div class="trash_responce"></div>
@@ -320,7 +320,7 @@
    <div class="overlay-content">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
       <div class="loader com_ajax_loaders" style="display: none;">
-         <img src="{{ url('public/admin/images/index.svg') }}" />
+         <img src="<?php echo e(url('public/admin/images/index.svg')); ?>" />
       </div>
       <div class="employee_detail_response"></div>
    </div>
@@ -348,4 +348,5 @@ function closeNav() {
    this.value = this.value.replace(/[^0-9]/g, '');
 });
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('super-admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/super-admin/employees/search-employees-list.blade.php ENDPATH**/ ?>

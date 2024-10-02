@@ -288,8 +288,10 @@ $(document).ready(function() {
     $('body').on('click', '.employee_punch_in_attendance', function() {
         var employee_id = $(this).data("employee_id");
         var employee_name = $(this).data("employee_name");
+        var missing_date = $(this).data("missing_date");
         //Apend value
         $("#models_employee_id").val(employee_id);
+        $("#date").val(missing_date);
         //attendance employee header
         $(".employee_attendances").text(employee_name);  
     });

@@ -220,44 +220,44 @@ class EmployeeController extends Controller
     //Function to pay employee salary
     public function submit_employee_salary(Request $request) {
         $employe_slary = (int)$request->employee_salary;
-        //Get the current date
-        $current_date = Carbon::now();
-
-        //Calculate the end date (30 days from the current date)
-        $newDate = $current_date->copy()->addDays(30);
-
-        //Get employee details
-        $employee = User::find($request->employee_id);
-
-        //Decode net salary
-        $netSalary = base64_decode($employee->net_salary);
-
-        //get first record of employe salary
-        $salariesThisMonth = EmployeeSalary::where('employee_id', $request->employee_id)->first();
-
-        $totalPaidThisMonth = 0;
-        if ($salariesThisMonth) {
-            $get_last_paid_date = $salariesThisMonth->submission_date;
-            $get_end_date = $salariesThisMonth->end_date;
     
-            $all_salaries_paid = EmployeeSalary::where('employee_id', $request->employee_id)
-            ->whereBetween('submission_date', [$get_last_paid_date, $get_end_date])
+        // Get the current date
+        $current_date = Carbon::now();
+    
+        // Define the start and end of the current month
+        $start_of_month = $current_date->copy()->startOfMonth();
+        $end_of_month = $current_date->copy()->endOfMonth();
+    
+        // Calculate the end date (30 days from the current date)
+        $newDate = $current_date->copy()->addDays(30);
+    
+        // Get employee details
+        $employee = User::find($request->employee_id);
+    
+        // Decode net salary
+        $netSalary = base64_decode($employee->net_salary);
+    
+        // Get salary records for the current month only
+        $salariesThisMonth = EmployeeSalary::where('employee_id', $request->employee_id)
+            ->whereBetween('submission_date', [$start_of_month, $end_of_month])
             ->get();
     
-            // Calculate the total paid salary for this month
-            foreach ($all_salaries_paid as $salary) { 
-                $total_salary = base64_decode($salary->employee_salary);
-                $totalPaidThisMonth += (int)$total_salary;
-            }
+        $totalPaidThisMonth = 0;
+    
+        // Calculate the total salary paid for the current month
+        foreach ($salariesThisMonth as $salary) {
+            $total_salary = base64_decode($salary->employee_salary);
+            $totalPaidThisMonth += (int)$total_salary;
         }
-        //Check if the total salary paid this month exceeds the net salary
+    
+        // Check if the total salary paid this month exceeds the net salary
         if (($totalPaidThisMonth + $employe_slary) > $netSalary) {
-            echo '<p style="color:red;">The total salary payments for the current month exceed the net salary, Please enter a valid salary amount.</p>';
+            echo '<p style="color:red;">The total salary payments for the current month exceed the net salary. Please enter a valid salary amount.</p>';
             echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
             return;
         }
-
-        //Create employee salary record
+    
+        // Create employee salary record
         $is_create_employee_salary = EmployeeSalary::create([
             'employee_id' => $request->employee_id,
             'employee_name' => $request->employee_name,
@@ -267,15 +267,17 @@ class EmployeeController extends Controller
             'end_date' => $newDate,
             'employee_status' => 'Active',
         ]);
-
+    
         // Check if employee salary is created successfully
         if ($is_create_employee_salary) {
             echo '<p style="color:green;">Employee salary submitted successfully.</p>';
             echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
         } else {
             echo '<p style="color:red;">Oops, something went wrong.</p>';
+            echo '<script> setTimeout(function () { window.location.reload(); }, 3000);</script>';
         }
     }
+    
 
         
     //Function for submit employee salary
