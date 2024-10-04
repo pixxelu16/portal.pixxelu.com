@@ -638,7 +638,12 @@ class StudentController extends Controller
                     this.value = this.value.replace(/\D/g, '');
                 });
             });
-            </script>       
+            </script>    
+            <script> 
+                $('.close').click(function() {
+                    $('#editFeeModal').modal('toggle'); 
+                }); 
+            </script>    
         <?php
     }
     
