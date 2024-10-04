@@ -314,6 +314,24 @@ $(document).ready(function() {
 // });
 
 //Employee details
+
+//Employee Show modal edit pay salary model 
+$('body').on('click', '.edit_employee_slry', function() {
+    var employee_id = $(this).data('employee_id'); 
+    var employee_name = $(this).data('employee_name');
+    var salary_month = $(this).data('salary_month');
+    var salary_amount = $(this).data('salary_amount');
+   
+    //apend values
+    $('#employee_id').val(employee_id);
+    $('#salary_month').val(salary_month);  
+    $("#salary_amount").val(salary_amount);
+
+    //Update employee pay fees header    
+    $(".edit_pay_fees").text(employee_name);   
+    $('#editSlryModal').modal('show');
+});
+
 //Employee attendance details
 $(document).ready(function() {
     //validation

@@ -31,8 +31,10 @@ Route::group(['middleware' => 'auth'], function() {
        Route::post('super-admin/update-profile/{id}', [App\Http\Controllers\SuperAdmin\ProfileController::class, 'update_profile'])->name('super.admin.update.profile');
        Route::get('super-admin/change-password', [App\Http\Controllers\SuperAdmin\ProfileController::class, 'changed_password']);
        Route::post('super-admin/submit-change-password/{id}', [App\Http\Controllers\SuperAdmin\ProfileController::class, 'submit_changed_password'])->name('super.admin.changed.password');
+       Route::get('super-admin/setting', [App\Http\Controllers\SuperAdmin\ProfileController::class, 'edit_profile']);
        //employees  
        Route::get('super-admin/get-employee-detail', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'single_employee_detail']);
+       Route::post('super-admin/update-employee-salary', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'update_employee_salary'])->name('super.admin.update.employee.salary');
        Route::get('super-admin/all-employees-list', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'all_employees_list']);
        Route::get('super-admin/add-new-employee', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'add_employee']);
        Route::post('super-admin/submit-employee-increment-salary', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'submit_employee_salary_increment'])->name('super.admin.employee.salary.increment');
