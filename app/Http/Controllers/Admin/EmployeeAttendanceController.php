@@ -63,7 +63,7 @@ class EmployeeAttendanceController extends Controller
                 'employees_attendance_detail' => function ($query) use ($month, $year) {
                     $query->whereYear('submission_date', $year)->whereMonth('submission_date', $month);
                 }
-            ])->get();
+            ])->get(); 
 
         //Get attendance details
         $total_present_hours = 0;
@@ -225,6 +225,8 @@ class EmployeeAttendanceController extends Controller
                         ->whereMonth('submission_date', $month);
                 }
             ])->get();
+
+            //echo "<pre>"; print_r($get_employee_detail->toArray());exit;
             
         //Get employee name
         $get_employee_name = User::select('name')->where('user_type', 'Employee')->where('user_status', 'Active')->get();

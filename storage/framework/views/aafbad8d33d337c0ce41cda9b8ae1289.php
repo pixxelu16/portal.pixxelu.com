@@ -148,7 +148,7 @@
                   </td>
                   <td><?php echo e($student->name); ?></td>
                   <td><?php echo e($student['student_attendance_detail']['0']['batch'] ?? '-'); ?></td>
-                  <td class="batch-time"><?php echo e($student['student_attendance_detail']['0']['batch_time'] ?? '-'); ?></td>
+                  <td><?php echo e($student['student_attendance_detail']['0']['batch_time'] ?? '-'); ?></td>
                   <?php $__currentLoopData = $days; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
                   <?php

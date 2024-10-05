@@ -113,6 +113,7 @@
                   <th>Sift</th>
                   <th>Sift Type</th>
                   @foreach ($days as $day)
+
                   @php
                   $date = \Carbon\Carbon::create($year, $month, $day);
                   $dayOfWeek = $date->format('D'); 
@@ -120,6 +121,7 @@
                   $isSunday = $dayOfWeek === 'Sun';
                   $isLastSaturday = $dayOfWeek === 'Sat' && $day == $lastSaturday;
                   @endphp
+
                   <th class="{{ $isSunday ? 'text-danger' : ($isLastSaturday ? 'text-primary' : '') }}">
                      {{ $dayNumber }} {{ $dayOfWeek }}
                   </th>
@@ -127,10 +129,8 @@
                </tr>
             </thead>
             <tbody>
-               @php
-               $count = 1;
-               @endphp
-               @forelse ($get_employee_detail as $employee)
+               @php $count = 1; @endphp
+               @foreach ($get_employee_detail as $employee)
                <tr>
                   <td>{{ $count++ }}.</td>
                   <td>{{ $employee->unique_employee_id }}</td>
@@ -145,26 +145,30 @@
                   </td>
                   <td>{{ $employee->name }}</td>
                   <td>{{ $employee['employees_attendance_detail']['0']['sift'] ?? '-'}}</td>
-                  <td class="batch-time">{{ $employee['employees_attendance_detail'][0]['sift_type'] ?? '-'}}</td>
+                  <td>{{ $employee['employees_attendance_detail'][0]['sift_type'] ?? '-'}}</td>
                   @foreach ($days as $day)
+
                   @php
                   $date = \Carbon\Carbon::create($year, $month, $day)->format('Y-m-d');
                   $attendance = $employee->employees_attendance_detail->first(function ($att) use ($date) {
                   return \Carbon\Carbon::parse($att->submission_date)->format('Y-m-d') === $date;
                   });
+
                   $punchIn = null;
                   $punchOut = null;
                   $formattedDuration = null;
+
                   if ($attendance) {
-                  $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
-                  $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
-                  if ($punchOut) {
-                  $duration = $punchIn->diff($punchOut);
-                  $hours = $duration->h;
-                  $minutes = $duration->i;
-                  $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
+                        $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
+                        $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
+                     if ($punchOut) {
+                        $duration = $punchIn->diff($punchOut);
+                        $hours = $duration->h;
+                        $minutes = $duration->i;
+                        $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
+                     }
                   }
-                  }
+
                   $isAttendanceMissing = !$attendance;
                   $isSunday = in_array($day, $sundays);
                   $isLastSaturday = $day == $lastSaturday;
@@ -173,40 +177,35 @@
                   <td>
                      @if ($isAttendanceMissing && !$isHoliday) 
                      <button type="button" class="studentss-punch-in-buton employee_attendance" data-employee_id="{{ $employee->id }}" data-missing_date="{{ $date }}" data-employee_name="{{ $employee->name }}" data-toggle="modal" data-target="#editAttendance">
-                     <img src="<?php echo url('public/admin/images/edit.svg'); ?>"
-                        alt="Edit Icon">
+                        <img src="<?php echo url('public/admin/images/edit.svg'); ?>" alt="Edit Icon">
                      </button>
                      @endif
-                     <!-- Show Holiday Icon -->
+                     <!--show holiday icon-->
                      @if ($isHoliday)
-                     @if ($isSunday)
-                     <img src="{{ url('public/admin/images/sunday.svg') }}" alt="Holiday">
-                     @elseif ($isLastSaturday)
-                     <img src="{{ url('public/admin/images/saturday.svg') }}" alt="Holiday">
-                     @endif
+                        @if ($isSunday)
+                           <img src="{{ url('public/admin/images/sunday.svg') }}" alt="Holiday">
+                        @elseif ($isLastSaturday)
+                           <img src="{{ url('public/admin/images/saturday.svg') }}" alt="Holiday">
+                        @endif
                      @else
-                     @if ($attendance)
-                     @if ($attendance->attendance_status == 'present')
-                     <img src="{{ url('public/admin/images/present_icon.svg') }}" alt="Present">
-                     <p class="student-attendance-duration">{{ $formattedDuration ?? 'N/A' }}</p>
-                     @elseif ($attendance->attendance_status == 'absent')
-                     <img src="{{ url('public/admin/images/absent_icon.svg') }}" alt="Absent">
-                     @elseif ($attendance->attendance_status == 'leave')
-                     <img src="{{ url('public/admin/images/leave_icon.svg') }}" alt="Leave">
-                     @elseif ($attendance->attendance_status == 'half_day')
-                     <img src="{{ url('public/admin/images/half_day_leave.svg') }}" alt="Half Day">
-                     @elseif ($attendance->attendance_status == 'holiday')
-                     <img src="{{ url('public/admin/images/Holiday.svg') }}" alt="Holiday Day">
-                     @endif
-                     @endif
+                        @if ($attendance)
+                           @if ($attendance->attendance_status == 'present')
+                              <img src="{{ url('public/admin/images/present_icon.svg') }}" alt="Present">
+                              <p class="student-attendance-duration">{{ $formattedDuration ?? 'N/A' }}</p>
+                           @elseif ($attendance->attendance_status == 'absent')
+                              <img src="{{ url('public/admin/images/absent_icon.svg') }}" alt="Absent">
+                           @elseif ($attendance->attendance_status == 'leave')
+                              <img src="{{ url('public/admin/images/leave_icon.svg') }}" alt="Leave">
+                           @elseif ($attendance->attendance_status == 'half_day')
+                              <img src="{{ url('public/admin/images/half_day_leave.svg') }}" alt="Half Day">
+                           @elseif ($attendance->attendance_status == 'holiday')
+                              <img src="{{ url('public/admin/images/Holiday.svg') }}" alt="Holiday Day">
+                           @endif
+                        @endif
                      @endif
                   @endforeach
                </tr>
-               @empty
-               <tr>
-                  <td colspan="{{ count($days) + 6 }}" class="text-center">No Employee Attendances found</td>
-               </tr>
-               @endforelse
+               @endforeach
             </tbody>
          </table>
       </div>
@@ -225,7 +224,7 @@
          <div class="modal-body">
             <form action="#" id="employee_attendances" method="POST">
                <input type="hidden" id="attendances_employee_id" name="employee_id" value="" />
-               <!-- <input type="hidden" id="date" name="submission_date" value="" /> -->
+               <!--<input type="hidden" id="date" name="submission_date" value="" /> -->
                <div class="form-group">
                   <label for="attendanceStatus">Attendance Status For<span class="text-danger">*</span></label>
                   <select class="form-control" name="attendance_status" id="attendanceStatus">
