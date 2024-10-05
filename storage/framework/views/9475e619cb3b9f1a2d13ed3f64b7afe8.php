@@ -105,7 +105,7 @@
 <div class="row">
    <div class="col-lg-12">
       <div class="table-responsive">
-         <table id="example16" class="rwd-table cloud-path">
+         <table id="example10" class="rwd-table cloud-path">
             <thead>
                <tr>
                   <th>Sr No.</th>
@@ -115,6 +115,7 @@
                   <th>Sift</th>
                   <th>Sift Type</th>
                   <?php $__currentLoopData = $days; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+
                   <?php
                   $date = \Carbon\Carbon::create($year, $month, $day);
                   $dayOfWeek = $date->format('D'); 
@@ -122,6 +123,7 @@
                   $isSunday = $dayOfWeek === 'Sun';
                   $isLastSaturday = $dayOfWeek === 'Sat' && $day == $lastSaturday;
                   ?>
+
                   <th class="<?php echo e($isSunday ? 'text-danger' : ($isLastSaturday ? 'text-primary' : '')); ?>">
                      <?php echo e($dayNumber); ?> <?php echo e($dayOfWeek); ?>
 
@@ -130,10 +132,8 @@
                </tr>
             </thead>
             <tbody>
-               <?php
-               $count = 1;
-               ?>
-               <?php $__empty_1 = true; $__currentLoopData = $get_employee_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $employee): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+               <?php $count = 1; ?>
+               <?php $__currentLoopData = $get_employee_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $employee): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                <tr>
                   <td><?php echo e($count++); ?>.</td>
                   <td><?php echo e($employee->unique_employee_id); ?></td>
@@ -148,26 +148,30 @@
                   </td>
                   <td><?php echo e($employee->name); ?></td>
                   <td><?php echo e($employee['employees_attendance_detail']['0']['sift'] ?? '-'); ?></td>
-                  <td class="batch-time"><?php echo e($employee['employees_attendance_detail'][0]['sift_type'] ?? '-'); ?></td>
+                  <td><?php echo e($employee['employees_attendance_detail'][0]['sift_type'] ?? '-'); ?></td>
                   <?php $__currentLoopData = $days; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+
                   <?php
                   $date = \Carbon\Carbon::create($year, $month, $day)->format('Y-m-d');
                   $attendance = $employee->employees_attendance_detail->first(function ($att) use ($date) {
                   return \Carbon\Carbon::parse($att->submission_date)->format('Y-m-d') === $date;
                   });
+
                   $punchIn = null;
                   $punchOut = null;
                   $formattedDuration = null;
+
                   if ($attendance) {
-                  $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
-                  $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
-                  if ($punchOut) {
-                  $duration = $punchIn->diff($punchOut);
-                  $hours = $duration->h;
-                  $minutes = $duration->i;
-                  $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
+                        $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
+                        $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
+                     if ($punchOut) {
+                        $duration = $punchIn->diff($punchOut);
+                        $hours = $duration->h;
+                        $minutes = $duration->i;
+                        $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
+                     }
                   }
-                  }
+
                   $isAttendanceMissing = !$attendance;
                   $isSunday = in_array($day, $sundays);
                   $isLastSaturday = $day == $lastSaturday;
@@ -176,80 +180,35 @@
                   <td>
                      <?php if($isAttendanceMissing && !$isHoliday): ?> 
                      <button type="button" class="studentss-punch-in-buton employee_attendance" data-employee_id="<?php echo e($employee->id); ?>" data-missing_date="<?php echo e($date); ?>" data-employee_name="<?php echo e($employee->name); ?>" data-toggle="modal" data-target="#editAttendance">
-                     <img src="<?php echo url('public/admin/images/edit.svg'); ?>"
-                        alt="Edit Icon">
+                        <img src="<?php echo url('public/admin/images/edit.svg'); ?>" alt="Edit Icon">
                      </button>
                      <?php endif; ?>
-                     <!-- Show Holiday Icon -->
+                     <!--show holiday icon-->
                      <?php if($isHoliday): ?>
-                     <?php if($isSunday): ?>
-                     <img src="<?php echo e(url('public/admin/images/sunday.svg')); ?>" alt="Holiday">
-                     <?php elseif($isLastSaturday): ?>
-                     <img src="<?php echo e(url('public/admin/images/saturday.svg')); ?>" alt="Holiday">
-                     <?php endif; ?>
+                        <?php if($isSunday): ?>
+                           <img src="<?php echo e(url('public/admin/images/sunday.svg')); ?>" alt="Holiday">
+                        <?php elseif($isLastSaturday): ?>
+                           <img src="<?php echo e(url('public/admin/images/saturday.svg')); ?>" alt="Holiday">
+                        <?php endif; ?>
                      <?php else: ?>
-                     <?php if($attendance): ?>
-                     <?php if($attendance->attendance_status == 'present'): ?>
-                     <img src="<?php echo e(url('public/admin/images/present_icon.svg')); ?>" alt="Present">
-                     <p class="student-attendance-duration"><?php echo e($formattedDuration ?? 'N/A'); ?></p>
-                     <?php elseif($attendance->attendance_status == 'absent'): ?>
-                     <img src="<?php echo e(url('public/admin/images/absent_icon.svg')); ?>" alt="Absent">
-                     <?php elseif($attendance->attendance_status == 'leave'): ?>
-                     <img src="<?php echo e(url('public/admin/images/leave_icon.svg')); ?>" alt="Leave">
-                     <?php elseif($attendance->attendance_status == 'half_day'): ?>
-                     <img src="<?php echo e(url('public/admin/images/half_day_leave.svg')); ?>" alt="Half Day">
-                     <?php elseif($attendance->attendance_status == 'holiday'): ?>
-                     <img src="<?php echo e(url('public/admin/images/Holiday.svg')); ?>" alt="Holiday Day">
-                     <?php endif; ?>
-                     <?php endif; ?>
+                        <?php if($attendance): ?>
+                           <?php if($attendance->attendance_status == 'present'): ?>
+                              <img src="<?php echo e(url('public/admin/images/present_icon.svg')); ?>" alt="Present">
+                              <p class="student-attendance-duration"><?php echo e($formattedDuration ?? 'N/A'); ?></p>
+                           <?php elseif($attendance->attendance_status == 'absent'): ?>
+                              <img src="<?php echo e(url('public/admin/images/absent_icon.svg')); ?>" alt="Absent">
+                           <?php elseif($attendance->attendance_status == 'leave'): ?>
+                              <img src="<?php echo e(url('public/admin/images/leave_icon.svg')); ?>" alt="Leave">
+                           <?php elseif($attendance->attendance_status == 'half_day'): ?>
+                              <img src="<?php echo e(url('public/admin/images/half_day_leave.svg')); ?>" alt="Half Day">
+                           <?php elseif($attendance->attendance_status == 'holiday'): ?>
+                              <img src="<?php echo e(url('public/admin/images/Holiday.svg')); ?>" alt="Holiday Day">
+                           <?php endif; ?>
+                        <?php endif; ?>
                      <?php endif; ?>
                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                   <!--start employee attendance boxes-->
-   <div class="boxes-wrapper student-attendance-header">
-      <div class="box">
-         <img src="<?php echo e(url('public/admin/images/working_hours.svg')); ?>" alt="Working Hours">
-         <h3>Working Hours</h3>
-         <p><?php echo e(number_format($total_present_hours, 2)); ?> Hrs</p>
-      </div>
-      <div class="box">
-         <img src="<?php echo e(url('public/admin/images/present_icon.svg')); ?>" alt="Present">
-         <h3>Presents</h3>
-         <p><?php echo e($total_present_days); ?></p>
-      </div>
-      <div class="box">
-         <img src="<?php echo e(url('public/admin/images/absent_icon.svg')); ?>" alt="Absent">
-         <h3>Absent</h3>
-         <p><?php echo e($total_absent_days); ?></p>
-      </div>
-      <div class="box">
-         <img src="<?php echo e(url('public/admin/images/leave_icon.svg')); ?>" alt="Leave">
-         <h3>Leave</h3>
-         <p><?php echo e($total_leave_days); ?></p>
-      </div>
-      <div class="box">
-         <img src="<?php echo e(url('public/admin/images/half_day_leave.svg')); ?>" alt="Half Day">
-         <h3>Half Day</h3>
-         <p><?php echo e($total_half_day); ?></p>
-      </div>
-      <div class="box">
-         <img src="<?php echo e(url('public/admin/images/holiday.svg')); ?>" alt="Holidays">
-         <h3>Holidays</h3>
-         <p><?php echo e($total_holidays); ?></p>
-      </div>
-      <div class="box">
-         <img src="<?php echo e(url('public/admin/images/total_days_in_month.svg')); ?>" alt="daysInMonth">
-         <h3>Days in month</h3>
-         <p><?php echo e($daysInMonth); ?></p>
-      </div>
-   </div>
-   <!--end employee attendance boxes--></div>
                </tr>
-               
-               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-               <tr>
-                  <td colspan="<?php echo e(count($days) + 6); ?>" class="text-center">No Employee Attendances found</td>
-               </tr>
-               <?php endif; ?>
+               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </tbody>
          </table>
       </div>
@@ -268,7 +227,7 @@
          <div class="modal-body">
             <form action="#" id="employee_attendances" method="POST">
                <input type="hidden" id="attendances_employee_id" name="employee_id" value="" />
-               <!-- <input type="hidden" id="date" name="submission_date" value="" /> -->
+               <!--<input type="hidden" id="date" name="submission_date" value="" /> -->
                <div class="form-group">
                   <label for="attendanceStatus">Attendance Status For<span class="text-danger">*</span></label>
                   <select class="form-control" name="attendance_status" id="attendanceStatus">

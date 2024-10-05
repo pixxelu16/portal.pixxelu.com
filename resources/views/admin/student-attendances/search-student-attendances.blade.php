@@ -135,6 +135,7 @@
             <tbody>
                @php $count = 1; @endphp
                @forelse ($get_student_detail as $student)
+               @if($get_student_detail->first()->student_attendance_detail->count() > 0)
                <tr>
                   <td>{{ $count++ }}.</td>
                   <td>{{ $student->id }}</td>
@@ -222,9 +223,18 @@
                   </td>
                   @endforeach
                </tr>
+               @else
+               <tr>
+                  <td colspan="20" class="no-attendance-fond">
+                     "No student attendance records found for the selected month and year."
+                  </td>
+               </tr>
+               @endif
                @empty
                <tr>
-                  <td colspan="{{ count($days) + 6 }}" class="text-center">No Student Attendances found</td>
+                  <td colspan="20" class="no-attendance-fond">
+                     "No attendance records found for the selected, Please select an student name first."
+                  </td>
                </tr>
                @endforelse
             </tbody>

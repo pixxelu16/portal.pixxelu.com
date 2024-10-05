@@ -138,6 +138,7 @@
             <tbody>
                <?php $count = 1; ?>
                <?php $__empty_1 = true; $__currentLoopData = $get_student_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+               <?php if($get_student_detail->first()->student_attendance_detail->count() > 0): ?>
                <tr>
                   <td><?php echo e($count++); ?>.</td>
                   <td><?php echo e($student->id); ?></td>
@@ -225,9 +226,18 @@
                   </td>
                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                </tr>
+               <?php else: ?>
+               <tr>
+                  <td colspan="20" class="no-attendance-fond">
+                     "No student attendance records found for the selected month and year."
+                  </td>
+               </tr>
+               <?php endif; ?>
                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                <tr>
-                  <td colspan="<?php echo e(count($days) + 6); ?>" class="text-center">No Student Attendances found</td>
+                  <td colspan="20" class="no-attendance-fond">
+                     "No attendance records found for the selected, Please select an student name first."
+                  </td>
                </tr>
                <?php endif; ?>
             </tbody>

@@ -2057,9 +2057,8 @@ table.dataTable thead .sorting_asc {
 }
 .add-new-student-pic img {
     width: 100% !important;
-    border-radius: 50%;
-    height: 100%;
-    object-fit: contain;
+	border-radius: 50%;
+	height: 100%;
 }
 .date-tbl {
 	font-size: 11px;
@@ -3636,3 +3635,8 @@ div#editSlryModal {
     color: #ffffff;
 }
 /*end super admin employee edit pay salary css*/
+
+td.no-attendance-fond {
+    color: red !important;
+    font-size: 14px;
+}

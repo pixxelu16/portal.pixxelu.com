@@ -145,7 +145,7 @@
                   </td>
                   <td>{{ $student->name }}</td>
                   <td>{{ $student['student_attendance_detail']['0']['batch'] ?? '-'}}</td>
-                  <td class="batch-time">{{ $student['student_attendance_detail']['0']['batch_time'] ?? '-'}}</td>
+                  <td>{{ $student['student_attendance_detail']['0']['batch_time'] ?? '-'}}</td>
                   @foreach ($days as $day)
 
                   @php

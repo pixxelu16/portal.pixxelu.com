@@ -215,6 +215,8 @@ class AttendanceController extends Controller
                         ->whereMonth('submission_date', $month);
                 }
             ])->get();
+        //echo "<pre>"; print_r($get_employee_detail->toArray());exit;
+
 
         //Get attendance details
         $total_present_hours = 0;
