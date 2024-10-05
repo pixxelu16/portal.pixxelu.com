@@ -105,7 +105,7 @@
 <div class="row">
    <div class="col-lg-12">
       <div class="table-responsive">
-         <table id="example10" class="rwd-table cloud-path">
+         <table id="example16" class="rwd-table cloud-path">
             <thead>
                <tr>
                   <th>Sr No.</th>
@@ -204,7 +204,47 @@
                      <?php endif; ?>
                      <?php endif; ?>
                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                   <!--start employee attendance boxes-->
+   <div class="boxes-wrapper student-attendance-header">
+      <div class="box">
+         <img src="<?php echo e(url('public/admin/images/working_hours.svg')); ?>" alt="Working Hours">
+         <h3>Working Hours</h3>
+         <p><?php echo e(number_format($total_present_hours, 2)); ?> Hrs</p>
+      </div>
+      <div class="box">
+         <img src="<?php echo e(url('public/admin/images/present_icon.svg')); ?>" alt="Present">
+         <h3>Presents</h3>
+         <p><?php echo e($total_present_days); ?></p>
+      </div>
+      <div class="box">
+         <img src="<?php echo e(url('public/admin/images/absent_icon.svg')); ?>" alt="Absent">
+         <h3>Absent</h3>
+         <p><?php echo e($total_absent_days); ?></p>
+      </div>
+      <div class="box">
+         <img src="<?php echo e(url('public/admin/images/leave_icon.svg')); ?>" alt="Leave">
+         <h3>Leave</h3>
+         <p><?php echo e($total_leave_days); ?></p>
+      </div>
+      <div class="box">
+         <img src="<?php echo e(url('public/admin/images/half_day_leave.svg')); ?>" alt="Half Day">
+         <h3>Half Day</h3>
+         <p><?php echo e($total_half_day); ?></p>
+      </div>
+      <div class="box">
+         <img src="<?php echo e(url('public/admin/images/holiday.svg')); ?>" alt="Holidays">
+         <h3>Holidays</h3>
+         <p><?php echo e($total_holidays); ?></p>
+      </div>
+      <div class="box">
+         <img src="<?php echo e(url('public/admin/images/total_days_in_month.svg')); ?>" alt="daysInMonth">
+         <h3>Days in month</h3>
+         <p><?php echo e($daysInMonth); ?></p>
+      </div>
+   </div>
+   <!--end employee attendance boxes--></div>
                </tr>
+               
                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                <tr>
                   <td colspan="<?php echo e(count($days) + 6); ?>" class="text-center">No Employee Attendances found</td>
