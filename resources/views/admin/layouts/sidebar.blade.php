@@ -28,17 +28,17 @@
             <a class="nav-link dropdown-toggle {{ request()->is('admin/all-employees-attendance-list') || request()->is('admin/all-students-attendance-list') ? 'active' : '' }}" 
                href="#" id="attendanceDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="{{ url('public/admin/images/attendance.svg') }}" alt="attendance"/>
-            <span class="link-name">Attendance</span>
+            <span class="link-name">Attendances</span>
             </a>
             <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
                <li class="{{ request()->is('admin/all-employees-attendance-list') ? 'active' : '' }}">
                   <a class="dropdown-item" href="{{ url('admin/all-employees-attendance-list') }}">
-                  Staff 
+                  Employees 
                   </a>
                </li>
                <li class="{{ request()->is('admin/all-students-attendance-list') ? 'active' : '' }}">
                   <a class="dropdown-item" href="{{ url('admin/all-students-attendance-list') }}">
-                  Student
+                  Students
                   </a>
                </li>
             </ul>

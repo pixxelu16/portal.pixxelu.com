@@ -28,17 +28,17 @@
             <a class="nav-link dropdown-toggle <?php echo e(request()->is('admin/all-employees-attendance-list') || request()->is('admin/all-students-attendance-list') ? 'active' : ''); ?>" 
                href="#" id="attendanceDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="<?php echo e(url('public/admin/images/attendance.svg')); ?>" alt="attendance"/>
-            <span class="link-name">Attendance</span>
+            <span class="link-name">Attendances</span>
             </a>
             <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
                <li class="<?php echo e(request()->is('admin/all-employees-attendance-list') ? 'active' : ''); ?>">
                   <a class="dropdown-item" href="<?php echo e(url('admin/all-employees-attendance-list')); ?>">
-                  Staff 
+                  Employees 
                   </a>
                </li>
                <li class="<?php echo e(request()->is('admin/all-students-attendance-list') ? 'active' : ''); ?>">
                   <a class="dropdown-item" href="<?php echo e(url('admin/all-students-attendance-list')); ?>">
-                  Student
+                  Students
                   </a>
                </li>
             </ul>
