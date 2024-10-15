@@ -23,9 +23,10 @@ class ExportStudents implements FromCollection, ShouldAutoSize, WithHeadings, Wi
      */
     public function collection()
     {
-        // Filter students based on the selected course type
+        //Get students deatils
         $query = User::where('user_type', 'Student')->where('user_status', 'Active');
 
+        //Filter students acc course type
         if ($this->courseType !== 'all') {
             $query->where('course_type', $this->courseType);
         }
@@ -38,6 +39,7 @@ class ExportStudents implements FromCollection, ShouldAutoSize, WithHeadings, Wi
         $monthlyFeesSum = 0;
         $data = [];
 
+        //Get students Fees
         foreach ($students_detail as $student) {
             $totalFees = $student->total_fees;
             $paidFees = $student->student_fees_detail->sum('user_fees');
@@ -47,7 +49,7 @@ class ExportStudents implements FromCollection, ShouldAutoSize, WithHeadings, Wi
             $paidFeesSum += $paidFees;
             $remainingFeesSum += $remainingFees;
 
-            // Calculate monthly fees
+            //Calculate monthly fees
             switch ($student->course_duration) {
                 case '1 Year':
                     $months = 12;
@@ -97,7 +99,7 @@ class ExportStudents implements FromCollection, ShouldAutoSize, WithHeadings, Wi
             ];
         }
 
-        // Append the total sums row
+        //Append the total sums row
         $data[] = [
             'id' => '',
             'name' => '',
@@ -129,15 +131,13 @@ class ExportStudents implements FromCollection, ShouldAutoSize, WithHeadings, Wi
         return collect($data);
     }
 
-    // Function for heading CSV file
-    public function headings(): array
-    {
+    //Function for heading CSV file
+    public function headings(): array {
         return ['Registration No', 'Name', 'Email', 'Dob', 'Gender', 'Father Name', 'Father Phone Number', 'Student Phone Number', 'Marital Status', 'Category', 'Address', 'District', 'State', 'Pin Code', 'Qualification', 'Course Type', 'Course Duration', 'Course Joining Date', 'Batch Timing', 'Course Completion Date', 'Total Fees', 'Paid Fees', 'Remaining Fees', 'Monthly Fees(Down Payment)', 'Status'];
     }
 
-    // Function for header sum fees
-    public function registerEvents(): array
-    {
+    //Function for header sum fees
+    public function registerEvents(): array {
         return [
             AfterSheet::class => function (AfterSheet $event) {
                 $highestRow = $event->sheet->getHighestRow();

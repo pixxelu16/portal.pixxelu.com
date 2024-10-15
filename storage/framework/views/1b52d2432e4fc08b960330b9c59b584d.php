@@ -73,12 +73,31 @@
          <!--<a href="<?php echo e(url('super-admin/add-student-previous-fees')); ?>" class="add-pervious"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add Previous Fees</a>-->
       </div>
    </div>
+   <!--start export order filter-->
+   <form action="<?php echo e(url('super-admin/export-students')); ?>" method="GET">
+      <div class="filter-admin-csv">
+         <select name="course_type" id="course_type" class="types">
+            <option value="" disabled selected>Students CSV Course Type</option>
+            <option value="all">All Students</option>
+            <option value="Web Designing">Web Designing</option>
+            <option value="Web Development">Web Development</option>
+            <option value="PHP Development">PHP Development</option>
+            <option value="Digital Marketing">Digital Marketing</option>
+            <option value="Full Stack Development">Full Stack Development</option>
+            <option value="Graphic">Graphic</option>
+         </select>
+         <div class="form-group">
+            <button class="btn btn-success" type="submit">Export</button>
+         </div>
+      </div>
+   </form>
+   <!--end export order filter-->
    <div class="scrolling-data-table">
       <div class="">
       <table id="example1" class="rwd-table cloud-path">
             <thead>
                <tr class="">
-                  <th>S. No</th>
+                  <th>S.No</th>
                   <th>Registration ID</th>
                   <th>Image</th>
                   <th>Name</th>
