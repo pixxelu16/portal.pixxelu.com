@@ -67,12 +67,35 @@
             <option value="Graphic">Graphic</option>
          </select>
          <!--end filter student status acc course-->
-         <a href="<?php echo e(url('admin/export-student')); ?>" class="export"><img src="<?php echo e(url('public/admin/images/csv-file.svg')); ?>"></a>
+         <!-- <a href="<?php echo e(url('admin/export-student')); ?>" class="export"><img src="<?php echo e(url('public/admin/images/csv-file.svg')); ?>"></a> -->
          <a href="<?php echo e(url('admin/all-students-trash-list')); ?>" class="export"><img src="<?php echo e(url('public/admin/images/trash.svg')); ?>"></a>
          <a href="<?php echo e(url('admin/add-new-student')); ?>"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add New Student</a>
          <!-- <a href="<?php echo e(url('admin/add-student-previous-fees')); ?>" class="add-pervious"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add Previous Fees</a> -->
-      </div>
-   </div>
+         </div>
+         </div> 
+         <!--start export order filter-->
+      <form action="<?php echo e(url('admin/export-student')); ?>" method="GET">
+         <div class="filter-admin-csv">
+         <select name="course_type" id="course_type" class="types">
+            <option value="" disabled selected>Select CSV Type</option>
+            <option value="all">All</option>
+            <option value="Web Designing">Web Designing</option>
+            <option value="Web Development">Web Development</option>
+            <option value="PHP Development">PHP Development</option>
+            <option value="Digital Marketing">Digital Marketing</option>
+            <option value="Full Stack Development">Full Stack Development</option>
+            <option value="Graphic">Graphic</option>
+         </select>
+
+
+
+            <div class="form-group">
+               <button class="btn btn-success" type="submit">Export</button>
+            </div>
+         </div>
+      </form>
+      <!--end export order filter-->
+
    <div class="scrolling-data-table">
       <div class="">
          <table id="example1" class="rwd-table cloud-path">

@@ -3,7 +3,6 @@
 namespace App\Exports;
 
 use App\Models\User;
-use App\Models\StudentFees;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -12,18 +11,31 @@ use Maatwebsite\Excel\Events\AfterSheet;
 
 class ExportStudents implements FromCollection, ShouldAutoSize, WithHeadings, WithEvents
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection() 
+    protected $courseType;
+
+    public function __construct($courseType)
     {
-        $students_detail = User::where('user_type', 'Student')->where('user_status', 'Active')->get();
+        $this->courseType = $courseType;
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function collection()
+    {
+        // Filter students based on the selected course type
+        $query = User::where('user_type', 'Student')->where('user_status', 'Active');
+
+        if ($this->courseType !== 'all') {
+            $query->where('course_type', $this->courseType);
+        }
+
+        $students_detail = $query->get();
 
         $totalFeesSum = 0;
         $paidFeesSum = 0;
         $remainingFeesSum = 0;
         $monthlyFeesSum = 0;
-
         $data = [];
 
         foreach ($students_detail as $student) {
@@ -35,7 +47,7 @@ class ExportStudents implements FromCollection, ShouldAutoSize, WithHeadings, Wi
             $paidFeesSum += $paidFees;
             $remainingFeesSum += $remainingFees;
 
-            //Calculate monthly fees
+            // Calculate monthly fees
             switch ($student->course_duration) {
                 case '1 Year':
                     $months = 12;
@@ -53,12 +65,8 @@ class ExportStudents implements FromCollection, ShouldAutoSize, WithHeadings, Wi
                     $months = 0;
             }
 
-            if ($months > 0) {
-                $monthlyFees = $remainingFees / $months;
-                $monthlyFeesSum += $monthlyFees;
-            } else {
-                $monthlyFees = 0;
-            }
+            $monthlyFees = ($months > 0) ? $remainingFees / $months : 0;
+            $monthlyFeesSum += $monthlyFees;
 
             $data[] = [
                 'id' => $student->id,
@@ -114,7 +122,7 @@ class ExportStudents implements FromCollection, ShouldAutoSize, WithHeadings, Wi
             'total_fees' => $totalFeesSum,
             'paid_fees' => $paidFeesSum,
             'remaining_fees' => $remainingFeesSum,
-            'Monthly Fees(Down Payment)' => round($monthlyFeesSum), 
+            'Monthly Fees(Down Payment)' => round($monthlyFeesSum),
             'user_status' => '',
         ];
 
