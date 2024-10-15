@@ -113,7 +113,7 @@ Route::group(['middleware' => 'auth'], function() {
        Route::get('super-admin/add-new-stock', [App\Http\Controllers\SuperAdmin\StudentController::class, 'add_new_stock']);
        //Route::post('super-admin/submit-stock', [App\Http\Controllers\SuperAdmin\StudentController::class, 'submit_stock'])->name('super.admin.submit.stock');
        //export students record
-       Route::get('super-admin/export-student', [App\Http\Controllers\SuperAdmin\ExportStudentController::class, 'export_students']);
+       Route::get('super-admin/export-students', [App\Http\Controllers\SuperAdmin\ExportStudentController::class, 'export_students']);
        //export students monthly fees record
        Route::get('super-admin/export-students-paid-fees', [App\Http\Controllers\SuperAdmin\ExportStudentController::class, 'export_students_paid_fees'])->name('super.admin.export.paid.fees');
        Route::get('super-admin/export-students-pending-fees', [App\Http\Controllers\SuperAdmin\ExportStudentController::class, 'export_students_pending_fees'])->name('super.admin.export.pending.fees');

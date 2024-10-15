@@ -3646,6 +3646,7 @@ td.no-attendance-fond {
 	display: flex;
 	justify-content: flex-end;
 	margin: 0px 0px 10px;
+    margin: 0px 15px 5px 0px;
 }
 
 .filter-admin-csv #course_type {
@@ -3665,3 +3666,4 @@ td.no-attendance-fond {
 	margin: 0px 6px 0px;
 }
 /*end csv css*/
+

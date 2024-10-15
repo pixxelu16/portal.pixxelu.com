@@ -1,4 +1,3 @@
- 
 <?php $__env->startSection('content'); ?>
 <div class="space-remove"></div>
 <div class="title-subheading">
@@ -6,59 +5,28 @@
    <div class="notification-green">
       <p><?php echo e(Session::get('success')); ?></p>
    </div>
-   <?php endif; ?>    <?php if(Session::has('unsuccess')): ?>
+   <?php endif; ?> 
+   <?php if(Session::has('unsuccess')): ?>
    <div class="notification-red">
       <p><?php echo e(Session::get('unsuccess')); ?></p>
    </div>
    <?php endif; ?>
-   <!--start six boxes students information-->
-   <div class="boxes-wrapperers">
-      <div class="box">
-         <h3>Total Students</h3>
-         <p><?php echo e($is_total_students); ?></p>
-      </div>
-      <div class="box">
-         <h3>Web Designing</h3>
-         <p><?php echo e($is_web_designing_students); ?></p>
-      </div>
-      <div class="box">
-         <h3>Web Development</h3>
-         <p><?php echo e($is_web_development_students); ?></p>
-      </div>
-      <div class="box">
-         <h3>Php Development</h3>
-         <p><?php echo e($is_php); ?></p>
-      </div>
-      <div class="box">
-         <h3>Full Stack Development</h3>
-         <p><?php echo e($is_full_stack_development); ?></p>
-      </div>
-      <div class="box">
-         <h3>Digital Marketing</h3>
-         <p><?php echo e($digital_marketing); ?></p>
-      </div>
-      <div class="box">
-         <h3>Graphic</h3>
-         <p><?php echo e($is_graphic); ?></p>
-      </div>
-   </div>
-   <!--end six boxes students information-->
-   <h2>All Students Listing</h2>
+   <h2>Search Students List According Fees</h2>
 </div>
 <div class="main-table">
    <div class="data-table-listing">
       <div class="btn-pixxelu">
-         <!--start filter student status acc fees-->
+         <!--start filter student acc status fees-->
          <select name="fees_status" id="search_student_fees_status" class="search-student-list">
-            <option value="" disabled selected>Monthly Fees Status</option>
+            <option value ="" disabled selected>Monthly Fees Status</option>
             <option value="Paid">Paid</option>
             <option value="Pending">Pending</option>
             <option value="Overdue">Overdue</option>
          </select>
-         <!--end filter student status acc fees-->
-         <!--start filter student status acc course-->
+         <!--end filter student acc status fees-->
+         <!--start filter student acc course-->
          <select name="course_type" id="search_student_list" class="search-student-list">
-            <option value="" disabled selected>Select Course Type</option>
+            <option value ="" disabled selected>Select Course Type</option>
             <option value="Web Designing">Web Designing</option>
             <option value="Web Development">Web Development</option>
             <option value="PHP Development">PHP Development</option>
@@ -66,38 +34,22 @@
             <option value="Full Stack Development">Full Stack Development</option>
             <option value="Graphic">Graphic</option>
          </select>
-         <!--end filter student status acc course-->
-         <!-- <a href="<?php echo e(url('admin/export-student')); ?>" class="export"><img src="<?php echo e(url('public/admin/images/csv-file.svg')); ?>"></a> -->
+         <!--end filter student acc to course-->
+         <!--export students monthly paid fees list -->
+         <a href="<?php echo e(route('admin.export.paid.fees')); ?>" class="export"><img src="<?php echo e(url('public/admin/images/csv-file.svg')); ?>">Paid</a>
+         <!--export students monthly pending fees list -->
+         <a href="<?php echo e(route('admin.export.pending.fees')); ?>" class="export"><img src="<?php echo e(url('public/admin/images/csv-file.svg')); ?>">Pending</a>
          <a href="<?php echo e(url('admin/all-students-trash-list')); ?>" class="export"><img src="<?php echo e(url('public/admin/images/trash.svg')); ?>"></a>
          <a href="<?php echo e(url('admin/add-new-student')); ?>"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add New Student</a>
-         <!-- <a href="<?php echo e(url('admin/add-student-previous-fees')); ?>" class="add-pervious"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add Previous Fees</a> -->
+         <!--<a href="<?php echo e(url('admin/add-student-previous-fees')); ?>" class="add-pervious"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add Previous Fees</a>-->
       </div>
-   </div> 
-   <!--start export order filter-->
-   <form action="<?php echo e(url('admin/export-student')); ?>" method="GET">
-      <div class="filter-admin-csv">
-         <select name="course_type" id="course_type" class="types">
-            <option value="" disabled selected>Students CSV Course Type</option>
-            <option value="all">All Students</option>
-            <option value="Web Designing">Web Designing</option>
-            <option value="Web Development">Web Development</option>
-            <option value="PHP Development">PHP Development</option>
-            <option value="Digital Marketing">Digital Marketing</option>
-            <option value="Full Stack Development">Full Stack Development</option>
-            <option value="Graphic">Graphic</option>
-         </select>
-         <div class="form-group">
-            <button class="btn btn-success" type="submit">Export</button>
-         </div>
-      </div>
-   </form>
-   <!--end export order filter-->
+   </div>
    <div class="scrolling-data-table">
-      <div class="">
-         <table id="example1" class="rwd-table cloud-path">
+      <div class="card-body">
+      <table id="example1" class="rwd-table cloud-path">
             <thead>
                <tr class="">
-                  <th>S.No</th>
+                  <th>S. No</th>
                   <th>Registration ID</th>
                   <th>Image</th>
                   <th>Name</th>
@@ -119,7 +71,7 @@
                   $currentMonth = Carbon::now()->month;
                   $currentYear = Carbon::now()->year;
                ?>
-               <?php $__currentLoopData = $get_students_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+               <?php $__currentLoopData = $get_students_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                   <?php 
                      $total_fees = $student->total_fees;
                      $pay_fees = 0;
@@ -166,17 +118,17 @@
                   <td class="lights-green-color"><span>PHP Development</span></td>
                   <?php elseif($student->course_type == 'Web Development'): ?>
                   <td class="light-yellow-color"><span>Web Development</span></td>
-                  <?php elseif($student->course_type == 'Web Designing'): ?>
-                  <td class="light-pink-color"><span>Web Designing</span></td>
                   <?php elseif($student->course_type == 'Digital Marketing'): ?>
                   <td class="light-organge-color"><span>Digital Marketing</span></td>
+                  <?php elseif($student->course_type == 'Web Designing'): ?>
+                  <td class="light-pink-color"><span>Web Designing</span></td>
                   <?php elseif($student->course_type == 'Graphic Designing'): ?>
                   <td class="light-cyan-color"><span>Graphic Designing</span></td>
                   <?php else: ?>
                   <td></td>
                   <?php endif; ?>
                   <td><?php echo e($student->course_duration); ?></td>
-                  <?php if($student->total_fees): ?>
+                   <?php if($student->total_fees): ?>
                   <td>
                      Rs <?php echo e(number_format($student->total_fees)); ?> 
                      <div class="box-pay">
@@ -285,68 +237,67 @@
       </div>
       <!--start student pay fees model-->
       <div class="modal fade pay-modal" id="myModal" role="dialog">
-         <div class="modal-dialog">
-            <div class="modal-content">
-               <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title"><span class="student_name_pay_fees"></span>Wants to pay fees</h4>
-               </div>
-               <div class="modal-body">
-                  <form action="#" id="is_create_student_fee" Method="POST">
-                     <input id="model_student_id" type="hidden" value="" name="student_id">
-                     <input type="text" id="fees_amount" name="fees_amount" placeholder="Amount" />
-                     <select name="payment_type" id="payment_type">
-                        <option value="">Payment Type</option>
-                        <option value="online">Online</option>
-                        <option value="cash">Cash</option>
-                     </select>
-                     <select name="first_payment_type" id="first_payment_type">
-                        <option value="">First Payment Type</option>
-                        <option value="down_payment">Down Payment</option>
-                        <option value="monthly">Monthly</option>
-                     </select>
-                     <div class="button-save"><button type="submit" class="disable-submit">Save</button></div>
-                  </form>
-                  <div class="loader com_ajax_loader" style="display:none;">
-                     <img src="<?php echo e(url('public/admin/images/200w.gif')); ?>" />
-                  </div>
-               </div>
-               <div class="student_fee_responce"></div>
+      <div class="modal-dialog">
+         <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+               <h4 class="modal-title"><span class="student_name_pay_fees"></span>Wants to pay fees</h4>
             </div>
+            <div class="modal-body">
+               <form action="#" id="is_create_student_fee" Method="POST">
+                  <input id="model_student_id" type="hidden" value="" name="student_id">
+                  <input type="text" id="fees_amount" name="fees_amount" placeholder="Amount"/>                     
+                  <select name="payment_type" id="payment_type">
+                     <option value="">Payment Type</option>
+                     <option value="online">Online</option>
+                     <option value="cash">Cash</option>
+                  </select>
+                  <select name="first_payment_type" id="first_payment_type">
+                     <option value="">First Payment Type</option>
+                     <option value="down_payment">Down Payment</option>
+                     <option value="monthly">Monthly</option>
+                  </select>
+                  <div class="button-save"><button type="submit" class="disable-submit">Save</button></div>
+               </form>
+               <div class="loader com_ajax_loader" style="display:none;">
+                  <img src="<?php echo e(url('public/admin/images/200w.gif')); ?>" /> 
+               </div>
+            </div>
+            <div class="student_fee_responce"></div>
          </div>
       </div>
-      <!--end student pay fees model-->
-      <!--start student trash model-->
-      <div class="modal" id="modeal_student_id" role="dialog">
-         <div class="modal-dialog">
-            <div class="modal-content">
-               <div class="modal-header-trash">
-                  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                  </button>
-                  <h4 class="modal-title">Trash student record</h4>
-               </div>
-               <div class="modal-body">
-                  <form action="#" id="trash_student_form" Method="POST">
-                     <input id="trash_student_id" type="hidden" value="" name="student_id">
-                     <p>Please select your student status</p>
-                     <input type="radio" id="Leave" name="user_status" value="Leave">
-                     <label for="leave">Due to some reason student leave.</label><br>
-                     <input type="radio" id="Completed" name="user_status" value="Completed">
-                     <label for="completed">Student course are completed.</label><br>
-                     <div class="button-saves"><button type="submit"
-                        class="disable-submit is_delete_trash_record">Save</button></div>
-                  </form>
-                  <div class="loader com_ajax_loader" style="display:none;">
-                     <img src="<?php echo e(url('public/admin/images/200w.gif')); ?>" />
-                  </div>
-               </div>
-               <div class="trash_responce"></div>
-            </div>
-         </div>
-      </div>
-      <!--end student trash model-->
    </div>
+   <!--end student pay fees model-->
+   <!--start student trash model-->
+   <div class="modal" id="modeal_student_id" role="dialog">
+      <div class="modal-dialog">
+         <div class="modal-content">
+            <div class="modals-header">
+               <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+               </button>
+               <h4 class="modal-title">Trash student record</h4>
+            </div>
+            <div class="modal-body">
+               <form action="#" id="trash_student_form" Method="POST">
+                  <input id="trash_student_id" type="hidden" value="" name="student_id">                   
+                  <p>Please select your student status</p>
+                  <input type="radio" id="Leave" name="user_status" value="Leave">
+                  <label for="leave">Due to some reason student leave.</label><br>
+                  <input type="radio" id="Completed" name="user_status" value="Completed">
+                  <label for="completed">Student course are completed.</label><br>
+                  <div class="button-saves"><button type="submit" class="disable-submit is_delete_trash_record">Save</button></div>
+               </form>
+               <div class="loader com_ajax_loader" style="display:none;">
+                  <img src="<?php echo e(url('public/admin/images/200w.gif')); ?>" /> 
+               </div>
+            </div>
+            <div class="trash_responce"></div>
+         </div>
+      </div>
+   </div>
+  <!--end student trash model-->
+</div>
 </div>
 </div>
 </div>
@@ -360,16 +311,19 @@
    </div>
 </div>
 <script>
-   function openNav() {
-      document.getElementById("myNav").style.width = "68%";
-      document.querySelector('.overlay').classList.remove('hide');
-      document.querySelector('.loader').style.display = "block";
-   }
-   function closeNav() {
-      document.getElementById("myNav").style.width = "0%";
-      document.querySelector('.overlay').classList.add('hide');
-      document.querySelector('.loader').style.display = "none";
-   }
+function openNav() {
+   document.getElementById("myNav").style.width = "68%";
+   document.querySelector('.overlay').classList.remove('hide');
+   document.querySelector('.loader').style.display = "block"; 
+}
+function closeNav() {
+   document.getElementById("myNav").style.width = "0%";
+   document.querySelector('.overlay').classList.add('hide');
+   document.querySelector('.loader').style.display = "none"; 
+}
 </script>
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/admin/students/all-students-list.blade.php ENDPATH**/ ?>
+
+
+
+<?php echo $__env->make('admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/admin/students/search-students-fees-list.blade.php ENDPATH**/ ?>

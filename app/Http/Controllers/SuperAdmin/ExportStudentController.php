@@ -12,8 +12,10 @@ use App\Exports\PendingExportStudentsFees;
 class ExportStudentController extends Controller
 {
     //Function for export students record
-    public function export_students() {
-        return Excel::download(new ExportStudents, 'all_students_list.xlsx');
+    public function export_students(Request $request) {
+        //Get request inputs
+        $courseType = $request->get('course_type', 'all');
+        return Excel::download(new ExportStudents($courseType), 'all_students_list.xlsx');
     }
 
     //Function for export students monthly paid fees record

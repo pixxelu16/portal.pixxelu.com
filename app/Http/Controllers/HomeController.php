@@ -26,7 +26,7 @@ class HomeController extends Controller
     $user = Auth::user();
         //Check if user type Super_Admin or not
         if($user->user_type == 'Super_Admin'){
-            return redirect('super-admin/dashboard');
+            return redirect('super-admin/all-students-list');
         //Check if user type Admin or not
         } elseif ($user->user_type == 'Admin'){
             return redirect('admin/all-students-list');
