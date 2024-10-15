@@ -115,6 +115,11 @@
                   <th>Sift</th>
                   <th>Sift Type</th>
                   <?php $__currentLoopData = $days; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                  <th>Total Hours</th>
+                  <th>P</th>
+                  <th>A</th>
+                  <th>L</th>
+                  <th>H</th>
 
                   <?php
                   $date = \Carbon\Carbon::create($year, $month, $day);
@@ -207,6 +212,11 @@
                         <?php endif; ?>
                      <?php endif; ?>
                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                  <td class="total-hours">148</td>
+                <td class="attendance-summary">20</td>
+                <td class="attendance-summary">2</td>
+                <td class="attendance-summary">1</td>
+                <td class="attendance-summary">1</td>
                </tr>
                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </tbody>

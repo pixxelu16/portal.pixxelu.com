@@ -1,64 +1,33 @@
-@extends('admin.layouts.master') 
-@section('content')
+ 
+<?php $__env->startSection('content'); ?>
 <div class="space-remove"></div>
 <div class="title-subheading">
-   @if (Session::has('success'))
+   <?php if(Session::has('success')): ?>
    <div class="notification-green">
-      <p>{{ Session::get('success') }}</p>
+      <p><?php echo e(Session::get('success')); ?></p>
    </div>
-   @endif    @if (Session::has('unsuccess'))
+   <?php endif; ?> 
+   <?php if(Session::has('unsuccess')): ?>
    <div class="notification-red">
-      <p>{{ Session::get('unsuccess') }}</p>
+      <p><?php echo e(Session::get('unsuccess')); ?></p>
    </div>
-   @endif
-   <!--start six boxes students information-->
-   <div class="boxes-wrapperers">
-      <div class="box">
-         <h3>Total Students</h3>
-         <p>{{ $is_total_students }}</p>
-      </div>
-      <div class="box">
-         <h3>Web Designing</h3>
-         <p>{{ $is_web_designing_students }}</p>
-      </div>
-      <div class="box">
-         <h3>Web Development</h3>
-         <p>{{ $is_web_development_students }}</p>
-      </div>
-      <div class="box">
-         <h3>Php Development</h3>
-         <p>{{ $is_php }}</p>
-      </div>
-      <div class="box">
-         <h3>Full Stack Development</h3>
-         <p>{{ $is_full_stack_development }}</p>
-      </div>
-      <div class="box">
-         <h3>Digital Marketing</h3>
-         <p>{{ $digital_marketing }}</p>
-      </div>
-      <div class="box">
-         <h3>Graphic</h3>
-         <p>{{ $is_graphic }}</p>
-      </div>
-   </div>
-   <!--end six boxes students information-->
-   <h2>All Students Listing</h2>
+   <?php endif; ?>
+   <h2>Search Students List According Course</h2>
 </div>
 <div class="main-table">
    <div class="data-table-listing">
       <div class="btn-pixxelu">
-         <!--start filter student status acc fees-->
+         <!--start filter student acc status fees-->
          <select name="fees_status" id="search_student_fees_status" class="search-student-list">
-            <option value="" disabled selected>Monthly Fees Status</option>
+            <option value ="" disabled selected>Monthly Fees Status</option>
             <option value="Paid">Paid</option>
             <option value="Pending">Pending</option>
             <option value="Overdue">Overdue</option>
          </select>
-         <!--end filter student status acc fees-->
-         <!--start filter student status acc course-->
+         <!--end filter student acc status fees-->
+         <!--start filter student acc course-->
          <select name="course_type" id="search_student_list" class="search-student-list">
-            <option value="" disabled selected>Select Course Type</option>
+            <option value ="" disabled selected>Select Course Type</option>
             <option value="Web Designing">Web Designing</option>
             <option value="Web Development">Web Development</option>
             <option value="PHP Development">PHP Development</option>
@@ -66,39 +35,16 @@
             <option value="Full Stack Development">Full Stack Development</option>
             <option value="Graphic">Graphic</option>
          </select>
-         <!--end filter student status acc course-->
-         <!-- <a href="{{ url('admin/export-student') }}" class="export"><img src="{{ url('public/admin/images/csv-file.svg') }}"></a> -->
-         <a href="{{ url('admin/all-students-trash-list') }}" class="export"><img src="{{ url('public/admin/images/trash.svg') }}"></a>
-         <a href="{{ url('admin/add-new-student') }}"><img src="{{ url('public/admin/images/pluse.svg') }}">Add New Student</a>
-         <!-- <a href="{{ url('admin/add-student-previous-fees') }}" class="add-pervious"><img src="{{ url('public/admin/images/pluse.svg') }}">Add Previous Fees</a> -->
-         </div>
-         </div> 
-         <!--start export order filter-->
-      <form action="{{ url('admin/export-student') }}" method="GET">
-         <div class="filter-admin-csv">
-         <select name="course_type" id="course_type" class="types">
-            <option value="" disabled selected>Select CSV Type</option>
-            <option value="all">All</option>
-            <option value="Web Designing">Web Designing</option>
-            <option value="Web Development">Web Development</option>
-            <option value="PHP Development">PHP Development</option>
-            <option value="Digital Marketing">Digital Marketing</option>
-            <option value="Full Stack Development">Full Stack Development</option>
-            <option value="Graphic">Graphic</option>
-         </select>
-
-
-
-            <div class="form-group">
-               <button class="btn btn-success" type="submit">Export</button>
-            </div>
-         </div>
-      </form>
-      <!--end export order filter-->
-
+         <!--end filter student acc course-->
+         <a href="<?php echo e(url('admin/export-student')); ?>" class="export"><img src="<?php echo e(url('public/admin/images/csv-file.svg')); ?>"></a>
+         <a href="<?php echo e(url('admin/all-students-trash-list')); ?>" class="export"><img src="<?php echo e(url('public/admin/images/trash.svg')); ?>"></a>
+         <a href="<?php echo e(url('admin/add-new-student')); ?>"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add New Student</a>
+         <!--<a href="<?php echo e(url('admin/add-student-previous-fees')); ?>" class="add-pervious"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add Previous Fees</a>-->
+      </div>
+   </div>
    <div class="scrolling-data-table">
-      <div class="">
-         <table id="example1" class="rwd-table cloud-path">
+      <div class="card-body">
+      <table id="example1" class="rwd-table cloud-path">
             <thead>
                <tr class="">
                   <th>S. No</th>
@@ -117,100 +63,102 @@
                </tr>
             </thead>
             <tbody>
-               @php 
+               <?php 
                   $count = 1;
                   use Carbon\Carbon;
                   $currentMonth = Carbon::now()->month;
                   $currentYear = Carbon::now()->year;
-               @endphp
-               @foreach($get_students_detail as $student)
-                  @php 
+               ?>
+               <?php $__currentLoopData = $get_students_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                  <?php 
                      $total_fees = $student->total_fees;
                      $pay_fees = 0;
-                     @endphp
-                     @if(isset($student->student_fees_detail))
-                  @foreach($student->student_fees_detail as $fees)
-                     @php 
+                     ?>
+                     <?php if(isset($student->student_fees_detail)): ?>
+                  <?php $__currentLoopData = $student->student_fees_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fees): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                     <?php 
                         $total_fees = $student->total_fees;
                         $pay_fees += $fees['user_fees'];
                         $submissionMonths[] = Carbon::parse($fees['submission_date'])->month;
-                     @endphp
-                  @endforeach 
-               @endif                 
+                     ?>
+                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
+               <?php endif; ?>                 
                <tr>
-                  <td>{{ $count++ }}</td>
-                  <td>{{ $student->id }} </td>
+                  <td><?php echo e($count++); ?></td>
+                  <td><?php echo e($student->id); ?> </td>
                   <td data-th="Image">
-                     @if($student->user_pic)
-                     <div class="user-image"> <img src="{{ url('public/uploads/users/' . $student->user_pic)}}" alt="">
-                     @else
-                     <img src="{{ url('public/uploads/users/default_user.png') }}" alt="">
+                     <?php if($student->user_pic): ?>
+                     <div class="user-image"> <img src="<?php echo e(url('public/uploads/users/' . $student->user_pic)); ?>" alt="">
+                     <?php else: ?>
+                     <img src="<?php echo e(url('public/uploads/users/default_user.png')); ?>" alt="">
                      </div>
-                     @endif                           
+                     <?php endif; ?>                           
                   </td>
                   <td>
                      <span onclick="openNav()"><a href="#" class="student-link"
-                        data-student_id="{{ $student->id }}">{{ $student->name }}</a></span>
+                        data-student_id="<?php echo e($student->id); ?>"><?php echo e($student->name); ?></a></span>
                   </td>
                   <td>
-                     @if($student->student_phone_no)
-                     <a href="https://wa.me/{{ str_replace(['+', '-', ' '], '', $student->student_phone_no) }}"
+                     <?php if($student->student_phone_no): ?>
+                     <a href="https://wa.me/<?php echo e(str_replace(['+', '-', ' '], '', $student->student_phone_no)); ?>"
                         target="_blank">
-                     {{ substr($student->student_phone_no, 0, 5) }}-{{ substr($student->student_phone_no, 5) }}
+                     <?php echo e(substr($student->student_phone_no, 0, 5)); ?>-<?php echo e(substr($student->student_phone_no, 5)); ?>
+
                      </a>
-                     @else
+                     <?php else: ?>
                      -
-                     @endif
+                     <?php endif; ?>
                   </td>
-                  <td>{{ \Carbon\Carbon::parse($student->course_joining_date)->format('d M Y') }}</td>
-                  @if($student->course_type == 'Full Stack Development')
+                  <td><?php echo e(\Carbon\Carbon::parse($student->course_joining_date)->format('d M Y')); ?></td>
+                  <?php if($student->course_type == 'Full Stack Development'): ?>
                   <td class="lights-blue-color"><span>Full Stack Development</span></td>
-                  @elseif($student->course_type == 'PHP Development')
+                  <?php elseif($student->course_type == 'PHP Development'): ?>
                   <td class="lights-green-color"><span>PHP Development</span></td>
-                  @elseif($student->course_type == 'Web Development')
+                  <?php elseif($student->course_type == 'Web Development'): ?>
                   <td class="light-yellow-color"><span>Web Development</span></td>
-                  @elseif($student->course_type == 'Web Designing')
+                  <?php elseif($student->course_type == 'Web Designing'): ?>
                   <td class="light-pink-color"><span>Web Designing</span></td>
-                  @elseif($student->course_type == 'Digital Marketing')
+                  <?php elseif($student->course_type == 'Digital Marketing'): ?>
                   <td class="light-organge-color"><span>Digital Marketing</span></td>
-                  @elseif($student->course_type == 'Graphic Designing')
+                  <?php elseif($student->course_type == 'Graphic Designing'): ?>
                   <td class="light-cyan-color"><span>Graphic Designing</span></td>
-                  @else
+                  <?php else: ?>
                   <td></td>
-                  @endif
-                  <td>{{ $student->course_duration }}</td>
-                  @if($student->total_fees)
+                  <?php endif; ?>
+                  <td><?php echo e($student->course_duration); ?></td>
+                   <?php if($student->total_fees): ?>
                   <td>
-                     Rs {{ number_format($student->total_fees) }} 
+                     Rs <?php echo e(number_format($student->total_fees)); ?> 
                      <div class="box-pay">
                         <button type="button" class="pay-fes-buton student_pay_fees"
-                           data-student_id="{{ $student->id }}" data-student_name="{{ $student->name }}" data-toggle="modal" data-target="#myModal">Pay
+                           data-student_id="<?php echo e($student->id); ?>" data-student_name="<?php echo e($student->name); ?>" data-toggle="modal" data-target="#myModal">Pay
                         Fee</button>
                      </div>
                   </td>
-                  @else
+                  <?php else: ?>
                   <td>N/A</td>
-                  @endif
+                  <?php endif; ?>
                   <td>
-                     @if(isset($student->student_fees_detail))
-                     @php      $last_record = $student->student_fees_detail->last(); @endphp
-                     @if($last_record)
-                     Rs {{ number_format($last_record->user_fees) }}<br>
-                     <span class="date-tbl">{{ Carbon::parse($last_record->submission_date)->format('d M Y') }}</span>
-                     @else
+                     <?php if(isset($student->student_fees_detail)): ?>
+                     <?php      $last_record = $student->student_fees_detail->last(); ?>
+                     <?php if($last_record): ?>
+                     Rs <?php echo e(number_format($last_record->user_fees)); ?><br>
+                     <span class="date-tbl"><?php echo e(Carbon::parse($last_record->submission_date)->format('d M Y')); ?></span>
+                     <?php else: ?>
                      -<br>
-                     @endif
-                     @endif
+                     <?php endif; ?>
+                     <?php endif; ?>
                   </td>
                   <td>
-                  @if($pay_fees == 0)
+                  <?php if($pay_fees == 0): ?>
                      -
-                  @else
-                     Rs {{ number_format($total_fees - $pay_fees) }}
-                  @endif
+                  <?php else: ?>
+                     Rs <?php echo e(number_format($total_fees - $pay_fees)); ?>
+
+                  <?php endif; ?>
                </td>
 
-                  @php
+                  <?php
                      $isPaid = false;
                      $isPending = false;
                      $isOverdue = false;
@@ -248,40 +196,40 @@
                   if (isset($student->total_fees) && $student->total_fees == $pay_fees) {
                      $payment_completed = true;
                   }
-                  @endphp
-                  @if($noPayment == true)
+                  ?>
+                  <?php if($noPayment == true): ?>
                   <td>-</td>
-                  @elseif($isOverdue)
+                  <?php elseif($isOverdue): ?>
                   <td class="yellow-color"><span>Overdue</span></td>
-                  @elseif($isPending)
+                  <?php elseif($isPending): ?>
                   <td class="red-color"><span>Pending</span></td>
-                  @elseif($payment_completed)
+                  <?php elseif($payment_completed): ?>
                   <td class="ligth-green-color"><span>Fees Complete</span></td>
-                  @else
+                  <?php else: ?>
                   <td class="green-colors"><span>Paid</span></td>
-                  @endif
+                  <?php endif; ?>
                   <td>
                      <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle action-fee-design" type="button"
                            data-bs-toggle="dropdown" aria-expanded="false"> <img
-                           src="{{ url('public/admin/images/ellips.svg') }}" alt="ellips" /> </button>
+                           src="<?php echo e(url('public/admin/images/ellips.svg')); ?>" alt="ellips" /> </button>
                         <ul class="dropdown-menu pay-fees-submit">
                            <form class="drop-don-list">
                               <li>
-                                 <!-- <a href="{{ url('admin/single-student-detail', $student->id) }}"><img src="{{ url('public/admin/images/ico-1.png') }}">View Student Detail</a> -->
+                                 <!-- <a href="<?php echo e(url('admin/single-student-detail', $student->id)); ?>"><img src="<?php echo e(url('public/admin/images/ico-1.png')); ?>">View Student Detail</a> -->
                               </li>
-                              <li><a href="{{ url('admin/edit-student', $student->id) }}"><img
-                                 src="{{ url('public/admin/images/ico-4.png') }}">Edit</a></li>
-                              <!-- <li><button type="submit" class="is_trash_student_record" data-id="{{ $student->id }}"><img src="{{ url('public/admin/images/ico-5.png') }}">Trash</button></li> -->
-                              <li class="student_trash_record" data-student_id="{{ $student->id }}">
-                                 <img src="{{ url('public/admin/images/ico-5.png') }}" alt="Trash Icon"> Trash
+                              <li><a href="<?php echo e(url('admin/edit-student', $student->id)); ?>"><img
+                                 src="<?php echo e(url('public/admin/images/ico-4.png')); ?>">Edit</a></li>
+                              <!-- <li><button type="submit" class="is_trash_student_record" data-id="<?php echo e($student->id); ?>"><img src="<?php echo e(url('public/admin/images/ico-5.png')); ?>">Trash</button></li> -->
+                              <li class="student_trash_record" data-student_id="<?php echo e($student->id); ?>">
+                                 <img src="<?php echo e(url('public/admin/images/ico-5.png')); ?>" alt="Trash Icon"> Trash
                               </li>
                            </form>
                         </ul>
                      </div>
                   </td>
                </tr>
-               @endforeach 
+               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
             </tbody>
          </table>
       </div>
@@ -296,7 +244,7 @@
                <div class="modal-body">
                   <form action="#" id="is_create_student_fee" Method="POST">
                      <input id="model_student_id" type="hidden" value="" name="student_id">
-                     <input type="text" id="fees_amount" name="fees_amount" placeholder="Amount" />
+                     <input type="text" id="fees_amount" name="fees_amount" placeholder="Amount"/>                     
                      <select name="payment_type" id="payment_type">
                         <option value="">Payment Type</option>
                         <option value="online">Online</option>
@@ -306,11 +254,11 @@
                         <option value="">First Payment Type</option>
                         <option value="down_payment">Down Payment</option>
                         <option value="monthly">Monthly</option>
-                     </select>
+                     </select> 
                      <div class="button-save"><button type="submit" class="disable-submit">Save</button></div>
                   </form>
                   <div class="loader com_ajax_loader" style="display:none;">
-                     <img src="{{ url('public/admin/images/200w.gif') }}" />
+                     <img src="<?php echo e(url('public/admin/images/200w.gif')); ?>" /> 
                   </div>
                </div>
                <div class="student_fee_responce"></div>
@@ -322,7 +270,7 @@
       <div class="modal" id="modeal_student_id" role="dialog">
          <div class="modal-dialog">
             <div class="modal-content">
-               <div class="modal-header-trash">
+               <div class="modals-header">
                   <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                   </button>
@@ -330,17 +278,16 @@
                </div>
                <div class="modal-body">
                   <form action="#" id="trash_student_form" Method="POST">
-                     <input id="trash_student_id" type="hidden" value="" name="student_id">
+                     <input id="trash_student_id" type="hidden" value="" name="student_id">                   
                      <p>Please select your student status</p>
                      <input type="radio" id="Leave" name="user_status" value="Leave">
                      <label for="leave">Due to some reason student leave.</label><br>
                      <input type="radio" id="Completed" name="user_status" value="Completed">
                      <label for="completed">Student course are completed.</label><br>
-                     <div class="button-saves"><button type="submit"
-                        class="disable-submit is_delete_trash_record">Save</button></div>
+                     <div class="button-saves"><button type="submit" class="disable-submit is_delete_trash_record">Save</button></div>
                   </form>
                   <div class="loader com_ajax_loader" style="display:none;">
-                     <img src="{{ url('public/admin/images/200w.gif') }}" />
+                     <img src="<?php echo e(url('public/admin/images/200w.gif')); ?>" /> 
                   </div>
                </div>
                <div class="trash_responce"></div>
@@ -356,21 +303,22 @@
    <div class="overlay-content">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
       <div class="loader com_ajax_loaders" style="display: none;">
-         <img src="{{ url('public/admin/images/index.svg') }}" />
+         <img src="<?php echo e(url('public/admin/images/index.svg')); ?>" />
       </div>
       <div class="student_detail_response"></div>
    </div>
 </div>
 <script>
-   function openNav() {
-      document.getElementById("myNav").style.width = "68%";
-      document.querySelector('.overlay').classList.remove('hide');
-      document.querySelector('.loader').style.display = "block";
-   }
-   function closeNav() {
-      document.getElementById("myNav").style.width = "0%";
-      document.querySelector('.overlay').classList.add('hide');
-      document.querySelector('.loader').style.display = "none";
-   }
+function openNav() {
+   document.getElementById("myNav").style.width = "68%";
+   document.querySelector('.overlay').classList.remove('hide');
+   document.querySelector('.loader').style.display = "block"; 
+}
+function closeNav() {
+   document.getElementById("myNav").style.width = "0%";
+   document.querySelector('.overlay').classList.add('hide');
+   document.querySelector('.loader').style.display = "none"; 
+}
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\pixxelu-student-portal-new\resources\views/admin/students/search-students-list.blade.php ENDPATH**/ ?>
