@@ -188,14 +188,35 @@
                   <td>N/A</td>
                   @endif
                   <td>
-                     @if(isset($student->student_fees_detail))
-                     @php      $last_record = $student->student_fees_detail->last(); @endphp
-                     @if($last_record)
-                     Rs {{ number_format($last_record->user_fees) }}<br>
-                     <span class="date-tbl">{{ Carbon::parse($last_record->submission_date)->format('d M Y') }}</span>
+                     @if(isset($student->student_fees_detail) && $student->student_fees_detail->isNotEmpty())
+                        @php
+                           //Get the current month and year
+                           $currentMonth = now()->format('m');
+                           $currentYear = now()->format('Y');
+
+                           //Filter payments for the current month that are either cash or online
+                           $currentMonthPayments = $student->student_fees_detail->filter(function ($record) use ($currentMonth, $currentYear) {
+                              $submissionDate = \Carbon\Carbon::parse($record->submission_date);
+                              return $submissionDate->format('m') == $currentMonth && 
+                                    $submissionDate->format('Y') == $currentYear && 
+                                    ($record->payment_type == 'cash' || $record->payment_type == 'online');
+                           });
+
+                           $totalFees = 0;
+
+                           //Sum fees
+                           foreach ($currentMonthPayments as $payment) {
+                              $totalFees += $payment->user_fees; 
+                           }
+                        @endphp
+                        @if($totalFees > 0)
+                              Rs {{ number_format($totalFees) }}<br>
+                              <span class="date-tbl">{{ Carbon::parse($payment->submission_date)->format('d M Y') }}</span>
+                        @else
+                              -<br>  
+                        @endif
                      @else
-                     -<br>
-                     @endif
+                        -<br>  
                      @endif
                   </td>
                   <td>
@@ -205,7 +226,6 @@
                      Rs {{ number_format($total_fees - $pay_fees) }}
                   @endif
                </td>
-
                   @php
                      $isPaid = false;
                      $isPending = false;
@@ -215,35 +235,36 @@
                      $payment_completed = false;
 
                      if (isset($student->student_fees_detail)) {
-                     foreach ($student->student_fees_detail as $fees) {
-                     $submissionMonth = Carbon::parse($fees['submission_date'])->format('m');
-                     $submissionYear = Carbon::parse($fees['submission_date'])->format('Y');
-                     $lastPaymentDate = Carbon::parse($fees['submission_date']);
+                        foreach ($student->student_fees_detail as $fees) {
+                           $submissionMonth = Carbon::parse($fees['submission_date'])->format('m');
+                           $submissionYear = Carbon::parse($fees['submission_date'])->format('Y');
+                           $lastPaymentDate = Carbon::parse($fees['submission_date']);
 
-                     //Check if the fees for the current month and year are paid
-                     if ($submissionMonth == $currentMonth && $submissionYear == $currentYear && !is_null($fees['user_fees'])) {
-                        $isPaid = true;
-                        break;
-                     }
-                     }
-
-                     //Check if the last payment date is more than 45 days ago
-                     if ($lastPaymentDate && $lastPaymentDate->diffInDays(Carbon::now()) > 45) {
-                         $isOverdue = true;
-                        } else {
-                         $isPending = !$isPaid;
+                           //Check if the fees for the current month and year are paid
+                           if ($submissionMonth == $currentMonth && $submissionYear == $currentYear && !is_null($fees['user_fees'])) {
+                                 $isPaid = true;
+                                 break;
+                           }
                         }
-                     } 
 
-                     //check user total fees
-                     if (!empty($student->total_fees) && $student->total_fees !== 0)  {
+                        //Check if user fees are completed
+                        if (isset($student->total_fees) && $student->total_fees == $pay_fees) {
+                           $payment_completed = true;
+                           
+                        } else {
+                           //Check if the last payment date is more than 45 days ago and the total fees are not equal to paid fees
+                           if ($lastPaymentDate && $lastPaymentDate->diffInDays(Carbon::now()) > 45 && $student->total_fees !== $pay_fees) {
+                                 $isOverdue = true;
+                           } else {
+                                 $isPending = !$isPaid;
+                           }
+                        }
+                     }
+
+                     //Check if user total fees is set and not zero
+                     if (!empty($student->total_fees) && $student->total_fees !== 0) {
                         $noPayment = false;
                      }
-
-                  //check user fees completed or not
-                  if (isset($student->total_fees) && $student->total_fees == $pay_fees) {
-                     $payment_completed = true;
-                  }
                   @endphp
                   @if($noPayment == true)
                   <td>-</td>

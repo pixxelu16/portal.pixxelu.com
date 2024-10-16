@@ -66,4 +66,11 @@ class LoginController extends Controller
             ]);
         }
     }
+
+    protected function authenticated(Request $request, $user) {
+        //Check if user access is exists or not
+        if ($user->access_type === 'Inquery') {
+            return redirect()->route('admin.students.list'); 
+        }
+    }
 }
