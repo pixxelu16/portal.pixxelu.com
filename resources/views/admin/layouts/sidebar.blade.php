@@ -1,10 +1,42 @@
 <nav>
    <div class="logo-name">
       <div class="logo-image">
-         <i class="uil uil-bars sidebar-toggle"><img src="{{ url('public/admin/images/Menu.svg') }}" alt=""></i>
+         <i class="uil uil-bars sidebar-toggle">
+         <img src="{{ url('public/admin/images/Menu.svg') }}" alt="">
+         </i>
       </div>
    </div>
    <div class="menu-items">
+      @if(Auth::user()->access_type == 'Inquery')
+      <ul class="nav-links">
+         <li class="{{ request()->is('admin/all-inqueries-list') ? 'active' : '' }}">
+            <a href="{{ url('admin/all-inqueries-list') }}">
+            <img src="{{ url('public/admin/images/all_inquries.svg') }}" alt="inqueries" />
+            <span class="link-name">All Inqueries</span>
+            </a>
+         </li>
+         <li class="nav-item">
+            <a class="dropdown-item" href="{{ route('logout') }}"
+               onclick="event.preventDefault();
+               document.getElementById('logout-form').submit();">
+            <img src="{{ url('public/admin/images/logout.svg') }}" alt="logout" />
+            {{ __('Logout') }}
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+               @csrf
+            </form>
+         </li>
+      </ul>
+      <li class="mode">
+         <a href="#">
+         <i class="uil uil-moon"></i>
+         <span class="link-name">Dark Mode</span>
+         </a>
+         <div class="mode-toggle">
+            <span class="switch"></span>
+         </div>
+      </li>
+      @else
       <ul class="nav-links">
          <li class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
             <a href="{{ url('admin/dashboard') }}">
@@ -18,14 +50,8 @@
             <span class="link-name">All Students</span>
             </a>
          </li>
-         <!--<li class="{{ request()->is('admin/all-employees-attendance-list') ? 'active' : '' }}">-->
-         <!--   <a href="{{ url('admin/all-employees-attendance-list') }}">-->
-         <!--      <img src="{{ url('public/admin/images/attendance.svg') }}" alt="attendance" />-->
-         <!--      <span class="link-name">Attendance</span>-->
-         <!--   </a>-->
-         <!--</li>-->
          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle {{ request()->is('admin/all-employees-attendance-list') || request()->is('admin/all-students-attendance-list') ? 'active' : '' }}" 
+            <a class="nav-link dropdown-toggle {{ request()->is('admin/all-employees-attendance-list') || request()->is('admin/all-students-attendance-list') ? 'active' : '' }}"
                href="#" id="attendanceDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="{{ url('public/admin/images/attendance.svg') }}" alt="attendance"/>
             <span class="link-name">Attendances</span>
@@ -33,7 +59,7 @@
             <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
                <li class="{{ request()->is('admin/all-employees-attendance-list') ? 'active' : '' }}">
                   <a class="dropdown-item" href="{{ url('admin/all-employees-attendance-list') }}">
-                  Employees 
+                  Employees
                   </a>
                </li>
                <li class="{{ request()->is('admin/all-students-attendance-list') ? 'active' : '' }}">
@@ -49,33 +75,16 @@
             <span class="link-name">All Employees</span>
             </a>
          </li>
-         <!-- <li class="{{ request()->is('admin/leads') ? 'active' : '' }}">
-            <a href="#">
-               <img src="{{ url('public/admin/images/leads.svg') }}" alt="leads" />
-               <span class="link-name">Leads</span>
-            </a>
-            </li> -->
-         <li class="{{ request()->is('admin/all-inqueries-list') ? 'active' : '' }}">
-            <a href="{{ url('admin/all-inqueries-list') }}">
-            <img src="{{ url('public/admin/images/all_inquries.svg') }}" alt="inqueries" />
-            <span class="link-name">All Inqueries</span>
-            </a>
-         </li>
       </ul>
       <ul class="logout-mode">
          <li><a href="#">
-            <img src="{{ url('public/admin/images/help.svg') }}" alt="leads" />
+            <img src="{{ url('public/admin/images/help.svg') }}" alt="help" />
             <span class="link-name">Help</span>
             </a>
-         </li> 
-         <!-- <li><a href="#">
-            <img src="{{ url('public/admin/images/setting.svg') }}" alt="setting" />
-            <span class="link-name">Settings</span>
-            </a>
-         </li> -->
+         </li>
          <li class="{{ request()->is('admin/setting') ? 'active' : '' }}">
             <a href="{{ url('admin/setting') }}">
-            <img src="{{ url('public/admin/images/setting.svg') }}" alt="leads" />
+            <img src="{{ url('public/admin/images/setting.svg') }}" alt="settings" />
             <span class="link-name">Settings</span>
             </a>
          </li>
@@ -83,7 +92,7 @@
             <a class="dropdown-item" href="{{ route('logout') }}"
                onclick="event.preventDefault();
                document.getElementById('logout-form').submit();">
-            <img src="{{ url('public/admin/images/logout.svg') }}" alt="leads" />
+            <img src="{{ url('public/admin/images/logout.svg') }}" alt="logout" />
             {{ __('Logout') }}
             </a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -100,5 +109,6 @@
             </div>
          </li>
       </ul>
+      @endif
    </div>
 </nav>
