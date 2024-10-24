@@ -107,7 +107,7 @@ Route::group(['middleware' => 'auth'], function() {
        Route::post('super-admin/update-inquery/{id}', [App\Http\Controllers\SuperAdmin\InqueryController::class, 'update_inquery'])->name('super.admin.update.inquery');
        Route::get('super-admin/delete-inquery/{id}', [App\Http\Controllers\SuperAdmin\InqueryController::class, 'delete_inquery']);
        //export inqueries
-       Route::get('super-admin/export-inqueries', [App\Http\Controllers\Inquery\ExportInqueryController::class, 'export_inqueries']);        
+       Route::get('super-admin/export-inqueries', [App\Http\Controllers\ExportInqueryController::class, 'export_inqueries']);        
        //stocks 
        Route::get('super-admin/all-stocks-list', [App\Http\Controllers\SuperAdmin\StudentController::class, 'all_stocks_list']);
        Route::get('super-admin/add-new-stock', [App\Http\Controllers\SuperAdmin\StudentController::class, 'add_new_stock']);
@@ -188,7 +188,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('admin/update-inquery/{id}', [App\Http\Controllers\Admin\InqueryController::class, 'update_inquery'])->name('admin.update.inquery');
         Route::get('admin/delete-inquery/{id}', [App\Http\Controllers\Admin\InqueryController::class, 'delete_inquery']);
         //export inqueries
-        Route::get('admin/export-inqueries', [App\Http\Controllers\Inquery\ExportInqueryController::class, 'export_inqueries']);        
+        Route::get('admin/export-inqueries', [App\Http\Controllers\ExportInqueryController::class, 'export_inqueries']);        
         //stocks 
         Route::get('admin/all-stocks-list', [App\Http\Controllers\Admin\StudentController::class, 'all_stocks_list']);
         Route::get('admin/add-new-stock', [App\Http\Controllers\Admin\StudentController::class, 'add_new_stock']);
