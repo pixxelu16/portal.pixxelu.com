@@ -35,11 +35,30 @@
             <option value="Graphic Designing">Graphic Designing</option>
             <option value="Full Stack Development">Full Stack Development</option>
          </select>
-         <a href="<?php echo e(url('admin/export-inqueries')); ?>" class="export"><img src="<?php echo e(url('public/admin/images/csv-file.svg')); ?>"></a>
+         <!-- <a href="<?php echo e(url('admin/export-inqueries')); ?>" class="export"><img src="<?php echo e(url('public/admin/images/csv-file.svg')); ?>"></a> -->
          <a href="<?php echo e(url('admin/all-converted-inqueries-list')); ?>">Converted Inqueries</a>
          <a href="<?php echo e(url('admin/add-new-inquery')); ?>"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add New Inquery</a>
       </div>
    </div>
+   <!--start export inqueries filter-->
+   <form action="<?php echo e(url('admin/export-inqueries')); ?>" method="GET">
+      <div class="filter-admin-csv">
+         <select name="course_type" id="course_type" class="types">
+            <option value="" disabled selected>Inqueries CSV</option>
+            <option value="all">All Inqueries</option>
+            <option value="Web Designing">Web Designing</option>
+            <option value="Web Development">Web Development</option>
+            <option value="PHP Development">PHP Development</option>
+            <option value="Digital Marketing">Digital Marketing</option>
+            <option value="Full Stack Development">Full Stack Development</option>
+            <option value="Graphic">Graphic</option>
+         </select>
+         <div class="form-group">
+            <button class="btn btn-success" type="submit">Export</button>
+         </div>
+      </div>
+   </form>
+   <!--end export inqueries filter-->
    <div class="scrolling-data-table">
       <div class="card-body">
          <table id="example1" class="rwd-table cloud-path">

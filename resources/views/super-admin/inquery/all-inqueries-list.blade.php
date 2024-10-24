@@ -38,12 +38,31 @@
          </select>
          <!--end filter acc course-->
          <!--start main header meenu-->
-         <a href="{{ url('super-admin/export-inqueries') }}" class="export"><img src="{{ url('public/admin/images/csv-file.svg') }}"></a>
+         <!-- <a href="{{ url('super-admin/export-inqueries') }}" class="export"><img src="{{ url('public/admin/images/csv-file.svg') }}"></a> -->
          <a href="{{ url('super-admin/all-converted-inqueries-list') }}">Converted Inqueries</a>
          <a href="{{ url('super-admin/add-new-inquery') }}"><img src="{{ url('public/admin/images/pluse.svg') }}">Add New Inquery</a>
          <!--end main header meenu-->
       </div>
    </div>
+      <!--start export inqueries filter-->
+      <form action="{{ url('super-admin/export-inqueries') }}" method="GET">
+      <div class="filter-admin-csv">
+         <select name="course_type" id="course_type" class="types">
+            <option value="" disabled selected>Inqueries CSV</option>
+            <option value="all">All Inqueries</option>
+            <option value="Web Designing">Web Designing</option>
+            <option value="Web Development">Web Development</option>
+            <option value="PHP Development">PHP Development</option>
+            <option value="Digital Marketing">Digital Marketing</option>
+            <option value="Full Stack Development">Full Stack Development</option>
+            <option value="Graphic">Graphic</option>
+         </select>
+         <div class="form-group">
+            <button class="btn btn-success" type="submit">Export</button>
+         </div>
+      </div>
+   </form>
+   <!--end export inqueries filter-->
    <div class="scrolling-data-table">
       <div class="card-body">
          <table id="example1" class="rwd-table cloud-path">

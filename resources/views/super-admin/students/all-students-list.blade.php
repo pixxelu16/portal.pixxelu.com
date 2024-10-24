@@ -67,7 +67,7 @@
             <option value="Graphic">Graphic</option>
             <option value="Full Stack Development">Full Stack Development</option>
          </select>
-         <a href="{{ url('super-admin/export-student') }}" class="export"><img src="{{ url('public/admin/images/csv-file.svg') }}"></a>
+         <!--<a href="{{ url('super-admin/export-student') }}" class="export"><img src="{{ url('public/admin/images/csv-file.svg') }}"></a>-->
          <a href="{{ url('super-admin/all-students-trash-list') }}" class="export"><img src="{{ url('public/admin/images/trash.svg') }}"></a>
          <a href="{{ url('super-admin/add-new-student') }}"><img src="{{ url('public/admin/images/pluse.svg') }}">Add New Student</a>
          <!--<a href="{{ url('super-admin/add-student-previous-fees') }}" class="add-pervious"><img src="{{ url('public/admin/images/pluse.svg') }}">Add Previous Fees</a>-->
