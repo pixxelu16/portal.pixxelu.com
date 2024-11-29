@@ -321,6 +321,7 @@ $('body').on('click', '.edit_employee_slry', function() {
     var employee_name = $(this).data('employee_name');
     var salary_month = $(this).data('salary_month');
     var salary_amount = $(this).data('salary_amount');
+    // alert (salary_amount); return false;
    
     //apend values
     $('#employee_id').val(employee_id);
