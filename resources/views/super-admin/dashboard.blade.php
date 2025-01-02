@@ -218,84 +218,61 @@
    }
 </script>
 @endsection
+<!--start students monthly fees chart-->
 <script>
    var currentYear = new Date().getFullYear();
    document.addEventListener('DOMContentLoaded', function () {
-       const chartOptions = {
-           chart: {
-               renderTo: 'students_monthly_fees_detail'
-           },
-           title: {
-               text: 'Students Monthly Fees Detail, ' + currentYear,
-               align: 'center'
-           },
-           credits: {
-               enabled: false 
-           },
-           colors: [
-               '#4caefe', '#3fbdf3', '#35c3e8', '#2bc9dc', '#20cfe1',
-               '#16d4e6', '#0dd9db', '#03dfd0', '#00e4c5', '#00e9ba',
-               '#00eeaf', '#23e274'
-           ],
-           xAxis: {
-               categories: [
-                   'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
-                   'Oct', 'Nov', 'Dec'
-               ]
-           },
-           series: [{
-               type: 'column',
-               name: 'This Month Total Students Fees Rs',
-               borderRadius: 5,
-               colorByPoint: true,
-               data: [
-                  {{$jan_month_fees_detail}}, 
-                  {{$feb_month_fees_detail}}, 
-                  {{$march_month_fees_detail}}, 
-                  {{$april_month_fees_detail}}, 
-                  {{$may_month_fees_detail}}, 
-                  {{$june_month_fees_detail}}, 
-                  {{$july_month_fees_detail}}, 
-                  {{$august_month_fees_detail}},
-                  {{$sept_month_fees_detail}}, 
-                  {{$oct_month_fees_detail}}, 
-                  {{$nov_month_fees_detail}}, 
-                  {{$dec_month_fees_detail}}
-               ],
-               showInLegend: false
-           }]
-       };
+      const chartOptions = {
+         chart: {
+            renderTo: 'students_monthly_fees_detail'
+         },
+         title: {
+            text: 'Students Monthly Fees Detail, ' + currentYear,
+            align: 'center'
+         },
+         credits: {
+            enabled: false 
+         },
+         colors: [
+            '#4caefe', '#3fbdf3', '#35c3e8', '#2bc9dc', '#20cfe1',
+            '#16d4e6', '#0dd9db', '#03dfd0', '#00e4c5', '#00e9ba',
+            '#00eeaf', '#23e274'
+         ],
+         xAxis: {
+            categories: [
+                  'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
+                  'October', 'November', 'December'
+            ]
+         },
+         series: [{
+            type: 'column',
+            name: 'This Month Total Students Fees Rs',
+            borderRadius: 5,
+            colorByPoint: true,
+            data: [
+               {{ $jan_month_fees_detail }}, 
+               {{ $feb_month_fees_detail }}, 
+               {{ $march_month_fees_detail }}, 
+               {{ $april_month_fees_detail }}, 
+               {{ $may_month_fees_detail }}, 
+               {{ $june_month_fees_detail }}, 
+               {{ $july_month_fees_detail }}, 
+               {{ $august_month_fees_detail }},
+               {{ $sept_month_fees_detail }}, 
+               {{ $oct_month_fees_detail }}, 
+               {{ $nov_month_fees_detail }}, 
+               {{ $dec_month_fees_detail }}
+            ],
+            showInLegend: false
+         }]
+      };
        
-       var chart = new Highcharts.Chart(chartOptions);
-   
-       document.getElementById('plain').addEventListener('click', () => {
-           chart.update({
-               chart: {
-                   inverted: false,
-                   polar: false
-               }
-           });
-       });
-   
-       document.getElementById('inverted').addEventListener('click', () => {
-           chart.update({
-               chart: {
-                   inverted: true,
-                   polar: false
-               }
-           });
-       });
-   
-       document.getElementById('polar').addEventListener('click', () => {
-           chart.update({
-               chart: {
-                   inverted: false,
-                   polar: true
-               }
-           });
-       });
+      var chart = new Highcharts.Chart(chartOptions);
    });
 </script>
+<!--end students monthly fees chart-->
+
+<!--start total students chart-->
 <script>
    document.addEventListener('DOMContentLoaded', function () {
        Highcharts.chart('total_students_detail', {
@@ -303,13 +280,13 @@
                type: 'spline'
            },
            title: {
-               text: 'Students Enrollments per Month - 2023 & 2024'
+               text: 'Students Enrollments per Month - 2023, 2024 & 2025'
            },
            xAxis: {
                categories: [
-                   'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-               ],
+                   'January', 'February', 'March', 'April', 'May', 'June',
+                   'July', 'August', 'September', 'October', 'November', 'December'
+               ], 
                accessibility: {
                    description: 'Months of the year'
                }
@@ -339,45 +316,157 @@
            credits: {
                enabled: false  
            },
+           //start students enrollments 2025//
            series: [{
-               name: 'Enrollments 2023',
+               name: 'Enrollments 2025',
                marker: {
-                   symbol: 'circle'
+                   symbol: 'circle',
+                   fillColor: 'green',  
+                   lineColor: 'green',  
+                   lineWidth: 2         
                },
                data: [
-                   {{$jan_month_student_detail_2023}},
-                   {{$feb_month_student_detail_2023}},
-                   {{$march_month_student_detail_2023}},
-                   {{$april_month_student_detail_2023}},
-                   {{$may_month_student_detail_2023}},
-                   {{$june_month_student_detail_2023}},
-                   {{$july_month_student_detail_2023}},
-                   {{$august_month_student_detail_2023}},
-                   {{$sep_month_student_detail_2023}},
-                   {{$oct_month_student_detail_2023}},
-                   {{$nov_month_student_detail_2023}},
-                   {{$dec_month_student_detail_2023}}
+                  {{ $jan_month_student_detail_2025 }},
+                  {{ $feb_month_student_detail_2025 }},
+                  {{ $march_month_student_detail_2025 }},
+                  {{ $april_month_student_detail_2025 }},
+                  {{ $may_month_student_detail_2025 }},
+                  {{ $june_month_student_detail_2025 }},
+                  {{ $july_month_student_detail_2025 }},
+                  {{ $august_month_student_detail_2025 }},
+                  {{ $sep_month_student_detail_2025 }},
+                  {{ $oct_month_student_detail_2025 }},
+                  {{ $nov_month_student_detail_2025 }},
+                  {{ $dec_month_student_detail_2025 }}
                ]
-           }, {
+            }, 
+            //end students enrollments 2025//
+            //start students enrollments 2024//
+            {
                name: 'Enrollments 2024',
                marker: {
-                   symbol: 'square'
+                   symbol: 'square',
+                   fillColor: 'blue',  
+                   lineColor: 'blue',  
+                   lineWidth: 2
                },
                data: [
-                   {{$jan_month_student_detail_2024}},
-                   {{$feb_month_student_detail_2024}},
-                   {{$march_month_student_detail_2024}},
-                   {{$april_month_student_detail_2024}},
-                   {{$may_month_student_detail_2024}},
-                   {{$june_month_student_detail_2024}},
-                   {{$july_month_student_detail_2024}},
-                   {{$august_month_student_detail_2024}},
-                   {{$sep_month_student_detail_2024}},
-                   {{$oct_month_student_detail_2024}},
-                   {{$nov_month_student_detail_2024}},
-                   {{$dec_month_student_detail_2024}}
+                   {{ $jan_month_student_detail_2024 }},
+                   {{ $feb_month_student_detail_2024 }},
+                   {{ $march_month_student_detail_2024 }},
+                   {{ $april_month_student_detail_2024 }},
+                   {{ $may_month_student_detail_2024 }},
+                   {{ $june_month_student_detail_2024 }},
+                   {{ $july_month_student_detail_2024 }},
+                   {{ $august_month_student_detail_2024 }},
+                   {{ $sep_month_student_detail_2024 }},
+                   {{ $oct_month_student_detail_2024 }},
+                   {{ $nov_month_student_detail_2024 }},
+                   {{ $dec_month_student_detail_2024 }}
                ]
-           }]
+            }, 
+            //end students enrollments 2024//
+            //start students enrollments 2023//
+            {
+               name: 'Enrollments 2023',
+               marker: {
+                   symbol: 'circle',
+                   fillColor: 'purple',  
+                   lineColor: 'purple',  
+                   lineWidth: 2
+               },
+               data: [
+                  {{ $jan_month_student_detail_2023 }},
+                  {{ $feb_month_student_detail_2023 }},
+                  {{ $march_month_student_detail_2023 }},
+                  {{ $april_month_student_detail_2023 }},
+                  {{ $may_month_student_detail_2023 }},
+                  {{ $june_month_student_detail_2023 }},
+                  {{ $july_month_student_detail_2023 }},
+                  {{ $august_month_student_detail_2023 }},
+                  {{ $sep_month_student_detail_2023 }},
+                  {{ $oct_month_student_detail_2023 }},
+                  {{ $nov_month_student_detail_2023 }},
+                  {{ $dec_month_student_detail_2023 }}
+               ]
+            }, 
+            //end students enrollments 2023//
+            //start total students 2025//
+            {
+               name: 'Total Students 2025',
+               marker: {
+                   symbol: 'diamond',
+                   fillColor: 'green',  
+                   lineColor: 'green',  
+                   lineWidth: 2         
+               },
+               data: [
+                  {{ $jan_month_student_detail_2025 }},
+                  {{ $feb_month_student_detail_2025 }},
+                  {{ $march_month_student_detail_2025 }},
+                  {{ $april_month_student_detail_2025 }},
+                  {{ $may_month_student_detail_2025 }},
+                  {{ $june_month_student_detail_2025 }},
+                  {{ $july_month_student_detail_2025 }},
+                  {{ $august_month_student_detail_2025 }},
+                  {{ $sep_month_student_detail_2025 }},
+                  {{ $oct_month_student_detail_2025 }},
+                  {{ $nov_month_student_detail_2025 }},
+                  {{ $dec_month_student_detail_2025 }}
+               ]
+            },
+            //end total students 2025//
+            //start total students 2024//
+            {
+               name: 'Total Students 2024',
+               marker: {
+                   symbol: 'diamond',
+                   fillColor: 'blue',  
+                   lineColor: 'blue',  
+                   lineWidth: 2         
+               },
+               data: [
+                  {{ $jan_month_student_detail_2024 }},
+                  {{ $feb_month_student_detail_2024 }},
+                  {{ $march_month_student_detail_2024 }},
+                  {{ $april_month_student_detail_2024 }},
+                  {{ $may_month_student_detail_2024 }},
+                  {{ $june_month_student_detail_2024 }},
+                  {{ $july_month_student_detail_2024 }},
+                  {{ $august_month_student_detail_2024 }},
+                  {{ $sep_month_student_detail_2024 }},
+                  {{ $oct_month_student_detail_2024 }},
+                  {{ $nov_month_student_detail_2024 }},
+                  {{ $dec_month_student_detail_2024 }}
+               ]
+            }, 
+            //end total students 2024//
+            //start total students 2023//
+            {
+               name: 'Total Students 2023',
+               marker: {
+                   symbol: 'diamond',
+                   fillColor: 'purple',  
+                   lineColor: 'purple',  
+                   lineWidth: 2         
+               },
+               data: [
+                  {{ $jan_month_student_detail_2023 }},
+                  {{ $feb_month_student_detail_2023 }},
+                  {{ $march_month_student_detail_2023 }},
+                  {{ $april_month_student_detail_2023 }},
+                  {{ $may_month_student_detail_2023 }},
+                  {{ $june_month_student_detail_2023 }},
+                  {{ $july_month_student_detail_2023 }},
+                  {{ $august_month_student_detail_2023 }},
+                  {{ $sep_month_student_detail_2023 }},
+                  {{ $oct_month_student_detail_2023 }},
+                  {{ $nov_month_student_detail_2023 }},
+                  {{ $dec_month_student_detail_2023 }}
+               ]
+            }]
+            //end total students 2023//
        });
    });
 </script>
+<!--end total students chart-->
