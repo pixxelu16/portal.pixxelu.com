@@ -20,7 +20,7 @@ class EmployeeController extends Controller
 {
     //Function for show all employees list
     public function all_employees_list() {
-        $get_employees_detail = User::where('user_type', 'Employee')->Orderby('ID', 'ASC')->with('emloyees_salary__detail','emloyees_salary_increment_detail')->get();
+        $get_employees_detail = User::where('user_type', 'Employee')->where('user_status', 'Active')->Orderby('ID', 'ASC')->with('emloyees_salary__detail','emloyees_salary_increment_detail')->get();
         return view('super-admin.employees.all-employees-list', compact('get_employees_detail'));
     }
 
