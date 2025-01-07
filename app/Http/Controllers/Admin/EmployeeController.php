@@ -13,7 +13,7 @@ class EmployeeController extends Controller
 {
     //Function for show all employees list
     public function all_employees_list() {
-        $get_employees_detail = User::where('user_type', 'Employee')->Orderby('ID', 'ASC')->get();
+        $get_employees_detail = User::where('user_type', 'Employee')->where('user_status', 'Active')->Orderby('ID', 'ASC')->get();
         return view('admin.employees.all-employees-list', compact('get_employees_detail'));
     }
 

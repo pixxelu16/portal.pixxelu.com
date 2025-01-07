@@ -124,25 +124,35 @@ class EmployeeAttendanceController extends Controller
         $daysInMonth = Carbon::create($year, $month, 1)->daysInMonth;
         $days = range(1, $daysInMonth);
 
-        //Get all Sundays and last Saturday of the month
+        //Calculate Sundays and the last Saturday of the month
         $sundays = [];
+        $secondSaturday = null;
         $lastSaturday = null;
 
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $date = Carbon::create($year, $month, $day);
 
-            //Check for Sundays
             if ($date->isSunday()) {
-                $sundays[] = $day;
+                $sundays[] = $day; 
             }
 
-            //Check for the last Saturday
-            if ($date->isSaturday() && $day >= ($daysInMonth - 6)) {
-                $lastSaturday = $day;
+            if ($date->isSaturday()) {
+                $weekNumber = $date->weekOfMonth;
+
+                // Identify the second Saturday
+                if ($weekNumber === 2) {
+                    $secondSaturday = $day;
+                }
+
+                // Identify the last Saturday
+                if ($day >= ($daysInMonth - 6)) {
+                    $lastSaturday = $day;
+                }
             }
         }
-        //Get total holidays all Sundays and last Saturday
-        $total_holidays = count($sundays) + ($lastSaturday ? 1 : 0);
+
+        //Calculate total holidays (Sundays + Second Saturday + Last Saturday)
+        $total_holidays = count($sundays) + ($secondSaturday ? 1 : 0) + ($lastSaturday ? 1 : 0);
 
         return view('admin.employee-attendances.all-employees-attendance-list', compact('get_employee_detail', 'months', 'days', 'month', 'year', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays', 'daysInMonth'));
     }
@@ -293,25 +303,35 @@ class EmployeeAttendanceController extends Controller
         $daysInMonth = Carbon::create($year, $month, 1)->daysInMonth;
         $days = range(1, $daysInMonth);
 
-        //Get all Sundays and last Saturday of the month
+        //Calculate Sundays and the last Saturday of the month
         $sundays = [];
+        $secondSaturday = null;
         $lastSaturday = null;
 
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $date = Carbon::create($year, $month, $day);
 
-            //Check for Sundays
             if ($date->isSunday()) {
-                $sundays[] = $day;
+                $sundays[] = $day; 
             }
 
-            //Check for the last Saturday
-            if ($date->isSaturday() && $day >= ($daysInMonth - 6)) {
-                $lastSaturday = $day;
+            if ($date->isSaturday()) {
+                $weekNumber = $date->weekOfMonth;
+
+                // Identify the second Saturday
+                if ($weekNumber === 2) {
+                    $secondSaturday = $day;
+                }
+
+                // Identify the last Saturday
+                if ($day >= ($daysInMonth - 6)) {
+                    $lastSaturday = $day;
+                }
             }
         }
-        //Get total holidays all Sundays and last Saturday
-        $total_holidays = count($sundays) + ($lastSaturday ? 1 : 0);
+
+        //Calculate total holidays (Sundays + Second Saturday + Last Saturday)
+        $total_holidays = count($sundays) + ($secondSaturday ? 1 : 0) + ($lastSaturday ? 1 : 0);
 
         return view('admin.employee-attendances.search-employee-attendances', compact('get_employee_detail', 'get_employee_name', 'months', 'days', 'month', 'year', 'daysInMonth', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays'));
     }
