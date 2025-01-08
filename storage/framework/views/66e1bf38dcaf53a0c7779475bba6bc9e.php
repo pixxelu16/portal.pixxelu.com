@@ -30,14 +30,13 @@
       <!--<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">-->
       <!-- Charts scripts -->
       <script src="https://code.highcharts.com/highcharts.js"></script>
-      <script src="https://code.highcharts.com/highcharts.js"></script>
       <!-- End Charts scripts -->
-      <title>Pixxelu Portal</title>
+      <title>Pixxelu Student Portal</title>
    </head>
    <body>
-      <?php echo $__env->make('super-admin.layouts.sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+      <?php echo $__env->make('student.layouts.sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
       <section class="dashboard">
-         <?php echo $__env->make('super-admin.layouts.top-bar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+         <?php echo $__env->make('student.layouts.top-bar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
          <?php echo $__env->yieldContent('content'); ?>
          <div class="footer-code">
             <div class="copyright-code">
@@ -45,13 +44,13 @@
             </div>
          </div>
       </section>
-      <script> 
+      <script>
          var base_url = '<?php echo e(url("/")); ?>'; 
-      </script>  
-      <script src="<?php echo e(url('public/admin/js/super-admin-custom-ajax.js')); ?>"></script>
+      </script>
+       <script src="<?php echo e(url('public/admin/js/student-custom-ajax.js')); ?>"></script>  
+      <script src="<?php echo e(url('public/admin/js/custom-ajax.js')); ?>"></script>
       <script src="<?php echo e(url('public/admin/js/script.js')); ?>"></script>
       <script src="<?php echo e(url('public/admin/js/custom-script.js')); ?>"></script>
-      <script src="<?php echo e(url('public/admin/js/super-admin-custom-script.js')); ?>"></script>
       <script src="<?php echo e(url('public/admin/js/bootstrap.min.js')); ?>"></script>
       <script src="<?php echo e(url('public/admin/js/bootstrap.bundle.min.js')); ?>"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -70,31 +69,5 @@
             });
          });
       </script>
-      <script>
-         $(document).ready(function() {
-            $('#example10').DataTable({
-                  aLengthMenu: [
-                     [10, 20, 50, 100, 200, -1],
-                     [10, 20, 50, 100, 200, "All"]
-                  ],
-                  iDisplayLength: 10
-            });
-         });
-      </script>
-      <script>
-         // Get all the <li> elements
-         const navLinks = document.querySelectorAll('.nav-links li');
-         
-         // Add click event listener to each <li>
-         navLinks.forEach(link => {
-             link.addEventListener('click', function () {
-                 // Remove 'active' class from all <li>
-                 navLinks.forEach(nav => nav.classList.remove('active'));
-         
-                 // Add 'active' class to the clicked <li>
-                 this.classList.add('active');
-             });
-         });
-      </script>
    </body>
-</html><?php /**PATH C:\xampp\htdocs\pixxelu-student-portal-new\resources\views/super-admin/layouts/master.blade.php ENDPATH**/ ?>
+</html><?php /**PATH C:\xampp\htdocs\pixxelu-student-portal-new\resources\views/student/layouts/master.blade.php ENDPATH**/ ?>

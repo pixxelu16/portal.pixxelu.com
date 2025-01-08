@@ -270,16 +270,16 @@
                   <label for="batch">Batch <span class="text-danger">*</span></label>
                   <select class="form-control" name="batch" id="batch">
                      <option value ="" disabled selected>Select Batch</option>
-                     <option value="Morning">Morning</option>
-                     <option value="Evening">Evening</option>
+                     <option value="morning">Morning</option>
+                     <option value="evening">Evening</option>
                   </select>
                </div>
                <div class="form-group">
                   <label for="batch_time">Batch Timings <span class="text-danger">*</span></label>
                   <select class="form-control" name="batch_time" id="batch_time">
                      <option value="" disabled selected>Select Batch Timing</option>
-                     <option value="9:30 AM - 1:30 PM">9:30 AM - 1:30 PM</option>
-                     <option value="2:30 PM - 6:00 PM">2:30 PM - 6:00 PM</option>
+                     <option value="9:45 AM - 1:30 PM">9:45 AM - 1:30 PM</option>
+                     <option value="2:15 PM - 6:00 PM">2:15 PM - 6:00 PM</option>
                   </select>
                </div>
                <div class="form-group">

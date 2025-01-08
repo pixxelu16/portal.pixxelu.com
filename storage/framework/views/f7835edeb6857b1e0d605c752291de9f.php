@@ -1,8 +1,7 @@
-@extends('student.layouts.master')
-@section('content')
-@php
+<?php $__env->startSection('content'); ?>
+<?php
 use Carbon\Carbon;
-@endphp
+?>
 <div class="space-remove"></div>
 <!-- <div class="title-subheading">
    <h2>Personal Details</h2>
@@ -11,41 +10,41 @@ use Carbon\Carbon;
    <div class="name-user">
       <div class="student-name">
          <div class="edit-student-detail">
-            <li><a href="{{ url('student/profile') }}"><i class="fa-solid fa-pencil"></i></a></li>
+            <li><a href="<?php echo e(url('student/profile')); ?>"><i class="fa-solid fa-pencil"></i></a></li>
          </div>
          <div class="profile-user-popup">
-            @if($get_student_detail->user_pic)
-            <img src="{{ url('public/uploads/users/'. $get_student_detail->user_pic)}}" alt="">
-            @else
-            <img src="{{ url('public/uploads/users/user_pic')}}" alt="">
-            @endif               
+            <?php if($get_student_detail->user_pic): ?>
+            <img src="<?php echo e(url('public/uploads/users/'. $get_student_detail->user_pic)); ?>" alt="">
+            <?php else: ?>
+            <img src="<?php echo e(url('public/uploads/users/user_pic')); ?>" alt="">
+            <?php endif; ?>               
          </div>
          <div class="student-attendance">
             <div class="box-pay">
-               <button type="button" class="student-punch-in-buton student_punch_in_attendances" data-student_id="{{ $get_student_detail->id }}" data-student_name="{{ $get_student_detail->name }}" data-toggle="modal" data-target="#punchInModel">Punch in
+               <button type="button" class="student-punch-in-buton student_punch_in_attendances" data-student_id="<?php echo e($get_student_detail->id); ?>" data-student_name="<?php echo e($get_student_detail->name); ?>" data-toggle="modal" data-target="#punchInModel">Punch in
             </div>
             <div class="box-pay">
-               <button type="button" class="student-punch-out-buton student_punch_out_attendance" data-student_id="{{ $get_student_detail->id }}" data-student_name="{{ $get_student_detail->name }}" data-toggle="modal" data-target="#punchOutModel">Punch Out
+               <button type="button" class="student-punch-out-buton student_punch_out_attendance" data-student_id="<?php echo e($get_student_detail->id); ?>" data-student_name="<?php echo e($get_student_detail->name); ?>" data-toggle="modal" data-target="#punchOutModel">Punch Out
             </div>
          </div>
-         <h3>{{ $get_student_detail->name ?? '-' }}</h3>
-         <p>{{ $get_student_detail->email ?? '-' }}</p>
-         <p>{{ substr($get_student_detail->student_phone_no ?? '', 0, 5) . '-' . substr($get_student_detail->student_phone_no ?? '', 5) }}</span></p>
-         <p><em>Joining Date:-</em> {{ Carbon::parse($get_student_detail->course_joining_date)->format('d F Y') ?? '-' }}</p>
+         <h3><?php echo e($get_student_detail->name ?? '-'); ?></h3>
+         <p><?php echo e($get_student_detail->email ?? '-'); ?></p>
+         <p><?php echo e(substr($get_student_detail->student_phone_no ?? '', 0, 5) . '-' . substr($get_student_detail->student_phone_no ?? '', 5)); ?></span></p>
+         <p><em>Joining Date:-</em> <?php echo e(Carbon::parse($get_student_detail->course_joining_date)->format('d F Y') ?? '-'); ?></p>
       </div>
       <div class="info-student">
          <h4>Information</h4>
       </div>
       <div class="detail-info">
-         <p><em>Registration no:-</em> <span>{{ $get_student_detail->id ?? '-' }}</span></p>
-         <p><em>Father's name:-</em> <span>{{ $get_student_detail->father_name ?? '-' }}</span></p>
-         <p><em>Father's phone no:-</em><span>{{ substr($get_student_detail->father_phone_no ?? '', 0, 5) . '-' . substr($get_student_detail->father_phone_no ?? '', 5) }}</span></p>
-         <p><em>Batch timing:-</em><span>{{ $get_student_detail->batch_timing ?? '-' }}</span></p>
-         <p><em>Date of birth:-</em><span>{{ Carbon::parse($get_student_detail->dob)->format('d F Y') ?? '-' }}</span></p>
-         <p><em>Sex:-</em><span>{{ $get_student_detail->gender ?? '-' }}</span></p>
-         <p><em>Category:-</em><span>{{ $get_student_detail->category ?? '-' }}</span></p>
-         <p><em>Adhar card no:-</em><span>{{ $get_student_detail->aadhaar_no ?? '-' }}</span></p>
-         <p><em>Current Address:-</em><span>{{ $get_student_detail->address }}, {{ $get_student_detail->district }}, {{ $get_student_detail->state }} ({{ $get_student_detail->pin_code }})</span></p>
+         <p><em>Registration no:-</em> <span><?php echo e($get_student_detail->id ?? '-'); ?></span></p>
+         <p><em>Father's name:-</em> <span><?php echo e($get_student_detail->father_name ?? '-'); ?></span></p>
+         <p><em>Father's phone no:-</em><span><?php echo e(substr($get_student_detail->father_phone_no ?? '', 0, 5) . '-' . substr($get_student_detail->father_phone_no ?? '', 5)); ?></span></p>
+         <p><em>Batch timing:-</em><span><?php echo e($get_student_detail->batch_timing ?? '-'); ?></span></p>
+         <p><em>Date of birth:-</em><span><?php echo e(Carbon::parse($get_student_detail->dob)->format('d F Y') ?? '-'); ?></span></p>
+         <p><em>Sex:-</em><span><?php echo e($get_student_detail->gender ?? '-'); ?></span></p>
+         <p><em>Category:-</em><span><?php echo e($get_student_detail->category ?? '-'); ?></span></p>
+         <p><em>Adhar card no:-</em><span><?php echo e($get_student_detail->aadhaar_no ?? '-'); ?></span></p>
+         <p><em>Current Address:-</em><span><?php echo e($get_student_detail->address); ?>, <?php echo e($get_student_detail->district); ?>, <?php echo e($get_student_detail->state); ?> (<?php echo e($get_student_detail->pin_code); ?>)</span></p>
       </div>
    </div>
    <div class="table-all">
@@ -62,8 +61,8 @@ use Carbon\Carbon;
                   </tr>
                </thead>
                <tbody class="scroll">
-                  @if($get_student_detail)
-                  @php
+                  <?php if($get_student_detail): ?>
+                  <?php
                   $count = 1;
                   $totalFees = $get_student_detail->total_fees; 
                   $paidFees = 0;
@@ -82,66 +81,67 @@ use Carbon\Carbon;
                   $monthsToShow = 24;
                   }
                   $currentDate = Carbon::parse($course_joining_date);
-                  @endphp
-                  @for ($i = 0; $i < $monthsToShow; $i++)
-                  @php
+                  ?>
+                  <?php for($i = 0; $i < $monthsToShow; $i++): ?>
+                  <?php
                   $fee_detail = $get_student_detail->student_fees_detail->first(function($fee) use ($currentDate) {
                   return Carbon::parse($fee->submission_date)->month == $currentDate->month &&
                   Carbon::parse($fee->submission_date)->year == $currentDate->year;
                   });
-                  @endphp
+                  ?>
                   <tr>
-                     <td>{{ $count++ }}.</td>
-                     <td>{{ $currentDate->format('M Y') }}</td>
+                     <td><?php echo e($count++); ?>.</td>
+                     <td><?php echo e($currentDate->format('M Y')); ?></td>
                      <td>
                         <table>
                            <tbody>
                               <tr class="amount-table">
                                  <td class="bold-amount">
-                                    @if($fee_detail)
-                                    {{ $fee_detail->user_fees }}
-                                    @php
+                                    <?php if($fee_detail): ?>
+                                    <?php echo e($fee_detail->user_fees); ?>
+
+                                    <?php
                                     $paidFees += $fee_detail->user_fees;
-                                    @endphp
-                                    @if($fee_detail->payment_type == 'cash')
+                                    ?>
+                                    <?php if($fee_detail->payment_type == 'cash'): ?>
                                  <td>(Cash)</td>
-                                 @elseif($fee_detail->payment_type == 'online')
+                                 <?php elseif($fee_detail->payment_type == 'online'): ?>
                                  <td>(Online)</td>
-                                 @else
+                                 <?php else: ?>
                                  <td></td>
-                                 @endif
-                                 @else
+                                 <?php endif; ?>
+                                 <?php else: ?>
                                  <td>-</td>
-                                 @endif
+                                 <?php endif; ?>
                                  </td>
                               </tr>
                            </tbody>
                         </table>
                      </td>
                   </tr>
-                  @php
+                  <?php
                   $currentDate->addMonth();
-                  @endphp
-                  @endfor
+                  ?>
+                  <?php endfor; ?>
                </tbody>
                <tfoot>
                   <tr class="tfooter">
                      <td class="space" colspan="2"><span style="color: black;">Total Fees:</span></td>
-                     <td><strong>{{ number_format($totalFees, 0) }}</strong></td>
+                     <td><strong><?php echo e(number_format($totalFees, 0)); ?></strong></td>
                   </tr>
                   <tr class="tfooter">
                      <td class="space" colspan="2"><span style="color: green;">Paid Fees:</span></td>
-                     <td><strong style="color: green;">{{ number_format($paidFees, 0) }}</strong></td>
+                     <td><strong style="color: green;"><?php echo e(number_format($paidFees, 0)); ?></strong></td>
                   </tr>
                   <tr class="tfooter">
                      <td class="space" colspan="2"><span style="color: red;">Remaining Fees:</span></td>
-                     <td><strong style="color: red;">{{ number_format($totalFees - $paidFees, 0) }}</strong></td>
+                     <td><strong style="color: red;"><?php echo e(number_format($totalFees - $paidFees, 0)); ?></strong></td>
                   </tr>
                </tfoot>
             </table>
          </div>
          </div>
-         @endif -->
+         <?php endif; ?> -->
          <!--end student monthly fees table-->
          <!--start student assign accessories table-->
          <div class="table-qualification">
@@ -156,23 +156,23 @@ use Carbon\Carbon;
                   </tr>
                </thead>
                <tbody>
-                  @if($get_student_detail && $get_student_detail->student_assign_accessories->isNotEmpty())
-                  @php
+                  <?php if($get_student_detail && $get_student_detail->student_assign_accessories->isNotEmpty()): ?>
+                  <?php
                   $count = 1;
-                  @endphp
-                  @foreach($get_student_detail->student_assign_accessories as $accessories)
+                  ?>
+                  <?php $__currentLoopData = $get_student_detail->student_assign_accessories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $accessories): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                   <tr>
-                     <td>{{ $count++ }}.</td>
-                     <td>{{ $accessories->keyboard_assigned }}</td>
-                     <td>{{ $accessories->mouse_assigned }}</td>
-                     <td>{{ Carbon::parse($accessories->created_at)->format('d M Y') }}</td>
+                     <td><?php echo e($count++); ?>.</td>
+                     <td><?php echo e($accessories->keyboard_assigned); ?></td>
+                     <td><?php echo e($accessories->mouse_assigned); ?></td>
+                     <td><?php echo e(Carbon::parse($accessories->created_at)->format('d M Y')); ?></td>
                   </tr>
-                  @endforeach
-                  @else
+                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                  <?php else: ?>
                   <tr>
                      <td colspan="4">No accessories assigned</td>
                   </tr>
-                  @endif
+                  <?php endif; ?>
                </tbody>
             </table>
          </div>
@@ -191,24 +191,24 @@ use Carbon\Carbon;
                   </tr>
                </thead>
                <tbody>
-                  @if($get_student_damage_accessories && $get_student_damage_accessories->isNotEmpty())
-                  @php
+                  <?php if($get_student_damage_accessories && $get_student_damage_accessories->isNotEmpty()): ?>
+                  <?php
                   $count = 1;
-                  @endphp
-                  @foreach($get_student_damage_accessories as $accessories)
+                  ?>
+                  <?php $__currentLoopData = $get_student_damage_accessories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $accessories): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                   <tr>
-                     <td>{{ $count++ }}.</td>
-                     <td>{{ $accessories->keyboard_damage }}</td>
-                     <td>{{ $accessories->mouse_damage }}</td>
-                     <td>{{ Carbon::parse($accessories->created_at)->format('d M Y') }}</td>
-                     <td>{{ $accessories->remark }}</td>
+                     <td><?php echo e($count++); ?>.</td>
+                     <td><?php echo e($accessories->keyboard_damage); ?></td>
+                     <td><?php echo e($accessories->mouse_damage); ?></td>
+                     <td><?php echo e(Carbon::parse($accessories->created_at)->format('d M Y')); ?></td>
+                     <td><?php echo e($accessories->remark); ?></td>
                   </tr>
-                  @endforeach
-                  @else
+                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                  <?php else: ?>
                   <tr>
                      <td colspan="5">No accessories damaged</td>
                   </tr>
-                  @endif
+                  <?php endif; ?>
                </tbody>
             </table>
          </div>
@@ -244,8 +244,8 @@ use Carbon\Carbon;
                            <label for="batch_time">Batch Timings <span class="text-danger">*</span></label>
                            <select class="form-control" name="batch_time" id="batch_time" required>
                               <option value="" disabled selected>Select Batch Timing</option>
-                              <option value="9:45 AM - 1:30 PM">9:45 AM - 1:30 PM</option>
-                              <option value="2:15 PM - 6:00 PM">2:15 PM - 6:00 PM</option>
+                              <option value="9:45 am - 1:30 pm">9:45 am - 1:30 pm</option>
+                              <option value="2:15 am - 6:00 pm">2:15 am - 6:00 pm</option>
                            </select>
                         </div>
                         <div class="form-group">
@@ -261,7 +261,7 @@ use Carbon\Carbon;
                         </div>
                      </form>
                      <div class="loader com_ajax_loader" style="display:none;">
-                        <img src="{{ url('public/admin/images/200w.gif') }}" /> 
+                        <img src="<?php echo e(url('public/admin/images/200w.gif')); ?>" /> 
                      </div>
                      <div class="employee_attendance_responce"></div>
                   </div>
@@ -291,7 +291,7 @@ use Carbon\Carbon;
                         </div>
                      </form>
                      <div class="loader com_ajax_loader" style="display:none;">
-                        <img src="{{ url('public/admin/images/200w.gif') }}" /> 
+                        <img src="<?php echo e(url('public/admin/images/200w.gif')); ?>" /> 
                      </div>
                      <div class="student_attendance_responce"></div>
                   </div>
@@ -323,4 +323,5 @@ use Carbon\Carbon;
    const attendanceStatus = document.getElementById('attendanceStatus');
    attendanceStatus.innerHTML = `<option value="present" selected>Present</option>`;
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('student.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\pixxelu-student-portal-new\resources\views/student/dashboard.blade.php ENDPATH**/ ?>

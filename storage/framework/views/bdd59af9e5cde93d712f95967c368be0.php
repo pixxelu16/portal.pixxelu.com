@@ -148,7 +148,7 @@
                <input type="hidden" id="models_employee_id" name="employee_id" value="" />
                <div class="form-group">
                   <label for="attendanceStatus">Attendance Status <span class="text-danger">*</span></label>
-                  <select class="form-control" name="attendance_status" id="attendanceStatus">
+                  <select class="form-control" name="attendance_status" id="attendance_status">
                      <option value ="" disabled selected>Select Status</option>
                      <option value="present">Present</option>
                      <option value="half_day">Half Day</option>
@@ -159,20 +159,20 @@
                </div>
                <div class="form-group">
                   <label for="shift">Shift <span class="text-danger">*</span></label>
-                  <select class="form-control" name="sift" id="shift">
+                  <select class="form-control" name="sift" id="sift">
                      <option value ="" disabled selected>Select Shift</option>
-                     <option value="Morning">Morning</option>
-                     <option value="Evening">Evening</option>
-                     <option value="Night">Night</option>
+                     <option value="morning">Morning</option>
+                     <option value="evening">Evening</option>
+                     <option value="night">Night</option>
                   </select>
                </div>
                <div class="form-group">
                   <label for="shiftType">Shift Type <span class="text-danger">*</span></label>
-                  <select class="form-control" name="sift_type" id="shiftType">
+                  <select class="form-control" name="sift_type" id="sift_type">
                      <option value ="" disabled selected>Select type</option>
-                     <option value="Full Day">Full Day</option>
-                     <option value="Half Day">Half Day</option>
-                     <option value="Quarter Day">Quarter Day</option>
+                     <option value="full_day">Full Day</option>
+                     <option value="half_day">Half Day</option>
+                     <option value="quarter_day">Quarter Day</option>
                   </select>
                </div>
                <div class="form-group">
