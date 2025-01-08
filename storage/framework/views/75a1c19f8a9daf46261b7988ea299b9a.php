@@ -12,9 +12,9 @@
    </div>
    <?php endif; ?>
    <div class ="search-header">
-      <h2 class="attendance-header">All Employees Monthly Attendance List:-  <?php echo e(date('F Y')); ?></h2>
+      <h2 class="attendance-header">All Students Monthly Attendance List:-  <?php echo e(date('F Y')); ?></h2>
    </div>
-   <!--start employee attendance boxes-->
+   <!--start student attendance boxes-->
    <div class="boxes-wrapper student-attendance-header">
       <div class="box">
          <img src="<?php echo e(url('public/admin/images/working_hours.svg')); ?>" alt="Working Hours">
@@ -52,17 +52,17 @@
          <p><?php echo e($daysInMonth); ?></p>
       </div>
    </div>
-   <!--end employee attendance boxes-->
+   <!--end student attendance boxes-->
 </div>
 <!--start search filter-->
-<form action="<?php echo e(url('super-admin/search-employee-attendance')); ?>" method="GET">
+<form action="<?php echo e(url('admin/search-student-attendance')); ?>" method="GET">
    <div class="row search-all-students-attendance">
       <div class="col-sm-6 col-md-3">
          <div class="input-block mb-3 form-focus">
-            <select class="select floating" name="employee_name">
-               <option value="">Select Employee Name</option>
-               <?php $__currentLoopData = $get_employee_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $employee): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-               <option value="<?php echo e($employee->name); ?>">(<?php echo e($employee->unique_employee_id); ?>) <?php echo e($employee->name); ?></option>
+            <select class="select floating" name="student_name">
+               <option value="">Select Student Name</option>
+               <?php $__currentLoopData = $get_student_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+               <option value="<?php echo e($student->name); ?>">(<?php echo e($student->id); ?>) <?php echo e($student->name); ?></option>
                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
          </div>
@@ -105,15 +105,16 @@
    <div class="col-lg-12">
       <div class="table-responsive">
          <table id="example10" class="rwd-table cloud-path">
-            <thead>
+             <thead>
                <tr>
                   <th>Sr No.</th>
-                  <th>Employee ID</th>
+                  <th>Registration ID</th>
                   <th>Image</th>
                   <th>Name</th>
-                  <th>Sift</th>
-                  <th>Sift Type</th>
+                  <th>Batch</th>
+                  <th>Batch Timing</th>
                   <?php $__currentLoopData = $days; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+
                   <?php
                   $date = \Carbon\Carbon::create($year, $month, $day);
                   $dayOfWeek = $date->format('D'); 
@@ -121,6 +122,7 @@
                   $isSunday = $dayOfWeek === 'Sun';
                   $isLastSaturday = $dayOfWeek === 'Sat' && $day == $lastSaturday;
                   ?>
+
                   <th class="<?php echo e($isSunday ? 'text-danger' : ($isLastSaturday ? 'text-primary' : '')); ?>">
                      <?php echo e($dayNumber); ?> <?php echo e($dayOfWeek); ?>
 
@@ -129,44 +131,48 @@
                </tr>
             </thead>
             <tbody>
-               <?php
-               $count = 1;
-               ?>
-               <?php $__empty_1 = true; $__currentLoopData = $get_employee_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $employee): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+               <?php $count = 1; ?>
+               <?php $__empty_1 = true; $__currentLoopData = $get_student_detail; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                <tr>
                   <td><?php echo e($count++); ?>.</td>
-                  <td><?php echo e($employee->unique_employee_id); ?></td>
+                  <td><?php echo e($student->id); ?></td>
                   <td data-th="Image">
-                     <?php if($employee->user_pic): ?>
+                     <?php if($student->user_pic): ?>
                      <div class="user-image">
-                        <img src="<?php echo e(url('public/uploads/employees/'. $employee->user_pic)); ?>" alt="">
+                        <img src="<?php echo e(url('public/uploads/users/'. $student->user_pic)); ?>" alt="">
                      </div>
                      <?php else: ?>
-                     <img src="<?php echo e(url('public/uploads/employees/default_user.png')); ?>" alt="">
+                     <img src="<?php echo e(url('public/uploads/users/default_user.png')); ?>" alt="">
                      <?php endif; ?>
                   </td>
-                  <td><?php echo e($employee->name); ?></td>
-                  <td><?php echo e($employee['employees_attendance_detail']['0']['sift'] ?? '-'); ?></td>
-                  <td class="batch-time"><?php echo e($employee['employees_attendance_detail'][0]['sift_type'] ?? '-'); ?></td>
+                  <td><?php echo e($student->name); ?></td>
+                  <td><?php echo e($student['student_attendance_detail']['0']['batch'] ?? '-'); ?></td>
+                  <td><?php echo e($student['student_attendance_detail']['0']['batch_time'] ?? '-'); ?></td>
                   <?php $__currentLoopData = $days; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+
                   <?php
                   $date = \Carbon\Carbon::create($year, $month, $day)->format('Y-m-d');
-                  $attendance = $employee->employees_attendance_detail->first(function ($att) use ($date) {
+                  $attendance = $student->student_attendance_detail->first(function ($att) use ($date) {
                   return \Carbon\Carbon::parse($att->submission_date)->format('Y-m-d') === $date;
                   });
+                  
+                  //Get punch in and out
                   $punchIn = null;
                   $punchOut = null;
                   $formattedDuration = null;
+
                   if ($attendance) {
-                  $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
-                  $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
-                  if ($punchOut) {
-                  $duration = $punchIn->diff($punchOut);
-                  $hours = $duration->h;
-                  $minutes = $duration->i;
-                  $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
+                     $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
+                     $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
+
+                     if ($punchOut) {
+                        $duration = $punchIn->diff($punchOut);
+                        $hours = $duration->h;
+                        $minutes = $duration->i;
+                        $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
+                     }
                   }
-                  }
+                  //check if any student not filled attendance
                   $isAttendanceMissing = !$attendance;
                   $isSunday = in_array($day, $sundays);
                   $isLastSaturday = $day == $lastSaturday;
@@ -174,39 +180,39 @@
                   ?>
                   <td>
                      <?php if($isAttendanceMissing && !$isHoliday): ?> 
-                     <button type="button" class="studentss-punch-in-buton employee_attendance" data-employee_id="<?php echo e($employee->id); ?>" data-missing_date="<?php echo e($date); ?>" data-employee_name="<?php echo e($employee->name); ?>" data-toggle="modal" data-target="#editAttendance">
+                     <button type="button" class="studentss-punch-in-buton student_attendance" data-student_id="<?php echo e($student->id); ?>" data-missing_date="<?php echo e($date); ?>" data-student_name="<?php echo e($student->name); ?>" data-toggle="modal" data-target="#editStudentAttendance">
                      <img src="<?php echo url('public/admin/images/edit.svg'); ?>"
                         alt="Edit Icon">
                      </button>
                      <?php endif; ?>
-                     <!-- Show Holiday Icon -->
+                     <!--show holiday icon -->
                      <?php if($isHoliday): ?>
-                     <?php if($isSunday): ?>
-                     <img src="<?php echo e(url('public/admin/images/sunday.svg')); ?>" alt="Holiday">
-                     <?php elseif($isLastSaturday): ?>
-                     <img src="<?php echo e(url('public/admin/images/saturday.svg')); ?>" alt="Holiday">
-                     <?php endif; ?>
-                     <?php else: ?>
-                     <?php if($attendance): ?>
-                     <?php if($attendance->attendance_status == 'present'): ?>
-                     <img src="<?php echo e(url('public/admin/images/present_icon.svg')); ?>" alt="Present">
-                     <p class="student-attendance-duration"><?php echo e($formattedDuration ?? 'N/A'); ?></p>
-                     <?php elseif($attendance->attendance_status == 'absent'): ?>
-                     <img src="<?php echo e(url('public/admin/images/absent_icon.svg')); ?>" alt="Absent">
-                     <?php elseif($attendance->attendance_status == 'leave'): ?>
-                     <img src="<?php echo e(url('public/admin/images/leave_icon.svg')); ?>" alt="Leave">
-                     <?php elseif($attendance->attendance_status == 'half_day'): ?>
-                     <img src="<?php echo e(url('public/admin/images/half_day_leave.svg')); ?>" alt="Half Day">
-                     <?php elseif($attendance->attendance_status == 'holiday'): ?>
-                     <img src="<?php echo e(url('public/admin/images/Holiday.svg')); ?>" alt="Holiday Day">
-                     <?php endif; ?>
-                     <?php endif; ?>
+                        <?php if($isSunday): ?>
+                              <img src="<?php echo e(url('public/admin/images/sunday.svg')); ?>" alt="Holiday">
+                           <?php elseif($isLastSaturday): ?>
+                              <img src="<?php echo e(url('public/admin/images/saturday.svg')); ?>" alt="Holiday">
+                        <?php endif; ?>
+                           <?php else: ?>
+                           <?php if($attendance): ?>
+                              <?php if($attendance->attendance_status == 'present'): ?>
+                                    <img src="<?php echo e(url('public/admin/images/present_icon.svg')); ?>" alt="Present">
+                                    <p class="student-attendance-duration"><?php echo e($formattedDuration ?? 'N/A'); ?></p>
+                                 <?php elseif($attendance->attendance_status == 'absent'): ?>
+                                    <img src="<?php echo e(url('public/admin/images/absent_icon.svg')); ?>" alt="Absent">
+                                 <?php elseif($attendance->attendance_status == 'leave'): ?>
+                                    <img src="<?php echo e(url('public/admin/images/leave_icon.svg')); ?>" alt="Leave">
+                                 <?php elseif($attendance->attendance_status == 'half_day'): ?>
+                                    <img src="<?php echo e(url('public/admin/images/half_day_leave.svg')); ?>" alt="Half Day">
+                                 <?php elseif($attendance->attendance_status == 'holiday'): ?>
+                                    <img src="<?php echo e(url('public/admin/images/Holiday.svg')); ?>" alt="Holiday Day">
+                              <?php endif; ?>
+                           <?php endif; ?>
                      <?php endif; ?>
                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                </tr>
                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                <tr>
-                  <td colspan="<?php echo e(count($days) + 6); ?>" class="text-center">No Employee Attendances found</td>
+                  <td colspan="<?php echo e(count($days) + 6); ?>" class="text-center">No Student Attendances found</td>
                </tr>
                <?php endif; ?>
             </tbody>
@@ -214,20 +220,19 @@
       </div>
    </div>
 </div>
-<!--start employee punch in attendance modal-->
-<div class="modal" id="editAttendance">
+<!--start student edit attendance modal-->
+<div class="modal" id="editStudentAttendance">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
          <div class="modal-header-damage">
-            <h4 class="modal-title">Edit Attendance For <span class="employee_attendances"></h4>
+            <h4 class="modal-title">Edit Attendance For <span class="student_attendances"></h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
          </div>
          <div class="modal-body">
-            <form action="#" id="employee_attendances" method="POST">
-               <input type="hidden" id="attendances_employee_id" name="employee_id" value="" />
-               <!-- <input type="hidden" id="date" name="submission_date" value="" /> -->
+            <form action="#" id="student_attendances" method="POST">
+               <input type="hidden" id="attendances_student_id" name="student_id" value="" />
                <div class="form-group">
                   <label for="attendanceStatus">Attendance Status For<span class="text-danger">*</span></label>
                   <select class="form-control" name="attendance_status" id="attendanceStatus">
@@ -240,21 +245,19 @@
                   </select>
                </div>
                <div class="form-group">
-                  <label for="sift">Shift<span class="text-danger">*</span></label>
-                  <select class="form-control" name="sift" id="sift">
-                     <option value ="" disabled selected>Select Shift</option>
+                  <label for="batch">Batch <span class="text-danger">*</span></label>
+                  <select class="form-control" name="batch" id="batch">
+                     <option value ="" disabled selected>Select Batch</option>
                      <option value="Morning">Morning</option>
                      <option value="Evening">Evening</option>
-                     <option value="Night">Night</option>
                   </select>
                </div>
                <div class="form-group">
-                  <label for="shiftType">Shift Type <span class="text-danger">*</span></label>
-                  <select class="form-control" name="sift_type" id="sift_type">
-                     <option value ="" disabled selected>Select Shift type</option>
-                     <option value="Full Day">Full Day</option>
-                     <option value="Half Day">Half Day</option>
-                     <option value="Quarter Day">Quarter Day</option>
+                  <label for="batch_time">Batch Timings <span class="text-danger">*</span></label>
+                  <select class="form-control" name="batch_time" id="batch_time">
+                     <option value="" disabled selected>Select Batch Timing</option>
+                     <option value="9:30 AM - 1:30 PM">9:30 AM - 1:30 PM</option>
+                     <option value="2:30 PM - 6:00 PM">2:30 PM - 6:00 PM</option>
                   </select>
                </div>
                <div class="form-group">
@@ -266,21 +269,39 @@
                   <input type="time" class="form-control" name="punch_in_time" id="punch_in_time">
                </div>
                <div class="form-group">
-                  <label for="punchOutTime">Punch Out Time <span class="text-danger">*</span></label>
-                  <input type="time" class="form-control" name="punch_out_time" id="punchOutTime">
+                  <label for="punch_out_time">Punch Out Time <span class="text-danger">*</span></label>
+                  <input type="time" class="form-control" name="punch_out_time" id="punch_out_time">
                </div>
                <div class="modal-footer">
-                  <button type="submit" class="btn btn-primary is_create_employee_punch_in_attendance">Update</button>
+                  <button type="submit" class="btn btn-primary is_create_student_attendance">Update</button>
                </div>
             </form>
             <div class="loader com_ajax_loader" style="display:none;">
                <img src="<?php echo e(url('public/admin/images/200w.gif')); ?>" /> 
             </div>
-            <div class="employee_attendance_responce"></div>
+            <div class="student_attendance_responce"></div>
          </div>
       </div>
    </div>
 </div>
-<!--end employee punch in attendance modal-->
+<!--end student edit attendance modal-->
+<script>
+//Function for current time in punch in and punch out
+function setCurrentTimeInIST() {
+   //Get current time in IST
+   var currentISTTime = new Date().toLocaleTimeString('en-US', {
+      timeZone: 'Asia/Kolkata',
+      hour12: false, 
+      hour: '2-digit',
+      minute: '2-digit'
+   });
+   //Set the current time for punch In
+   document.getElementById('punch_in_time').value = currentISTTime;
+   //Set the current time for punch Out
+   document.getElementById('punch_out_time').value = currentISTTime;
+}
+//Set the current time when the page loads
+window.onload = setCurrentTimeInIST;
+</script>
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('super-admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\pixxelu-student-portal-new\resources\views/super-admin/employee-attendances/all-employees-attendance-list.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\pixxelu-student-portal-new\resources\views/admin/student-attendances/all-students-attendance-list.blade.php ENDPATH**/ ?>
