@@ -34,6 +34,7 @@
                   <th>Phone No</th>
                   <th>Address</th>
                   <th>Course Type</th>
+                  <th>Visit</th>
                   <th>Inqury Date</th>
                   <th>Status</th>
                   <!-- <th>Action</th> -->
@@ -63,6 +64,7 @@
                   @else
                   <td></td>
                   @endif
+                  <td>{{ $list->visit }} </td>
                   <td>{{ \Carbon\Carbon::parse($list->created_at)->format('d M Y') }}</td>
                   @if($list->status == 'Active') 
                   <td class="green-color"><span>Active</span></td>
