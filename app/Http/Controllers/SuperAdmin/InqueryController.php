@@ -63,6 +63,7 @@ class InqueryController extends Controller
             'address' => $request->address,
             'course_type' => $request->course_type,
             'priority' => $request->priority,
+            'visit' => $request->visit,
             'total_fees' => $request->total_fees,
             'status' => 'Active',
         ]);
@@ -98,6 +99,7 @@ class InqueryController extends Controller
             'address' => $request->address,
             'course_type' => $request->course_type,
             'priority' => $request->priority,
+            'visit' => $request->visit,
             'total_fees' => $request->total_fees,
             'status' => $request->status,
         ]);

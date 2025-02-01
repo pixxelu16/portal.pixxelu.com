@@ -10,7 +10,7 @@
    </div>
    <script>
       setTimeout(function() {
-            window.location.href = "<?php echo e(url('admin/all-inqueries-list')); ?>";
+            window.location.href = "<?php echo e(url('super-admin/all-inqueries-list')); ?>";
       }, 2000); 
    </script>
    <?php endif; ?> 
@@ -20,7 +20,7 @@
    </div>
    <?php endif; ?>
    <div class="login-form">
-      <form action="<?php echo e(route('admin.update.inquery', $inquery->id)); ?>" Method="POST">
+      <form action="<?php echo e(route('super.admin.update.inquery', $inquery->id)); ?>" Method="POST">
          <?php echo csrf_field(); ?> 
          <div class="form-group display-column">
             <div class="form-design first-name">
@@ -40,7 +40,7 @@
             <div class="form-design mail">
                <label for="course_type">Course</label>
                <select class="form-control" name="course_type" id="course_type">
-                  <option value ="" disabled selected>Select Course Type</option>
+                  <option value ="" disabled selected>Select Course</option>
                   <option value="Web Designing" <?php if($inquery->course_type == 'Web Designing'): ?> selected <?php endif; ?>>Web Designing</option>
                   <option value="Web Development"<?php if($inquery->course_type == 'Web Development'): ?> selected <?php endif; ?>>Web Development</option>
                   <option value="PHP Development" <?php if($inquery->course_type == 'PHP Development'): ?> selected <?php endif; ?>>PHP Development</option>
@@ -52,7 +52,7 @@
             <div class="form-design fees">
                <label for="status">Priority</label>
                <select class="form-control" name="priority" id="User Status">
-                  <option value ="" disabled selected>Select Priority Type</option>
+                  <option value ="" disabled selected>Select Priority</option>
                   <option value="hot" <?php if($inquery->priority == 'hot'): ?> selected <?php endif; ?>>Hot</option>
                   <option value="cold" <?php if($inquery->priority == 'cold'): ?> selected <?php endif; ?>>Cold</option>
                   <option value="warm" <?php if($inquery->priority == 'warm'): ?> selected <?php endif; ?>>Warm</option>
@@ -79,7 +79,7 @@
             <div class="form-design mail">
                <label for="status">Status</label>
                <select class="form-control" name="status" id="User Status">
-                  <option value ="" disabled selected>Select Status Type</option>
+                  <option value ="" disabled selected>Select Status</option>
                   <option value="Active" <?php if($inquery->status == 'Active'): ?> selected <?php endif; ?>>Active</option>
                   <option value="Office_Visited" <?php if($inquery->status == 'Office_Visited'): ?> selected <?php endif; ?>>Office Visited</option>
                   <option value="Closed" <?php if($inquery->status == 'Closed'): ?> selected <?php endif; ?>>Closed</option>
@@ -111,4 +111,4 @@
    });
 </script>
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\pixxelu-student-portal-new\resources\views/admin/inquery/edit-inquery.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('super-admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\pixxelu-student-portal-new\resources\views/super-admin/inquery/edit-inquery.blade.php ENDPATH**/ ?>

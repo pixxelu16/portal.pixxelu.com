@@ -1,72 +1,5 @@
 @extends('admin.layouts.master') 
 @section('content')
-<style>
-   /* Google */
-.light-blue-color {
-    background-color: #4A90E2;
-    color: white;
-}
-
-/* Instagram */
-.light-purple-color {
-    background-color: #E1306C;
-    color: white;
-}
-
-/* Facebook */
-.light-blue-green-color {
-    background-color: #3B5998;
-    color: white;
-}
-
-/* Office-Visit */
-.light-gray-color {
-    background-color: #B0B0B0;
-    color: white;
-}
-
-/* Website */
-.light-dark-blue-color {
-    background-color: #1A73E8;
-    color: white;
-}
-
-/* YouTube */
-.light-red-color {
-    background-color: #FF0000;
-    color: white;
-}
-
-/* Walk-in */
-.light-brown-color {
-    background-color: #A52A2A;
-    color: white;
-}
-
-/* Email */
-.light-yellow-color {
-    background-color: #F5A623;
-    color: white;
-}
-
-/* WhatsApp */
-.light-green-color {
-    background-color: #25D366;
-    color: white;
-}
-
-/* SMS */
-.light-orange-color {
-    background-color: #FF6F00;
-    color: white;e
-}
-
-/* Other */
-.light-pink-color {
-    background-color: #F48FB1;
-    color: white;
-}
-</style>
 <div class="space-remove"></div>
 <div class="title-subheading">
    @if (Session::has('success'))
@@ -169,27 +102,27 @@
                   <td></td>
                   @endif
                   @if($list->visit == 'Google') 
-                     <td class="light-blue-color"><span>Google</span></td>
+                     <td class="lights-blue-color"><span>Google</span></td>
                   @elseif($list->visit == 'Instagram') 
-                     <td class="light-purple-color"><span>Instagram</span></td>
+                     <td class="lights-green-color"><span>Instagram</span></td>
                   @elseif($list->visit == 'Facebook') 
-                     <td class="light-blue-green-color"><span>Facebook</span></td>
+                     <td class="light-yellow-color"><span>Facebook</span></td>
                   @elseif($list->visit == 'Office-Visit') 
-                     <td class="light-gray-color"><span>Office-Visit</span></td>
+                     <td class="light-organge-color"><span>Office-Visit</span></td>
                   @elseif($list->visit == 'Website') 
-                     <td class="light-dark-blue-color"><span>Website</span></td>
+                     <td class="light-pink-color"><span>Website</span></td>
                   @elseif($list->visit == 'YouTube') 
-                     <td class="light-red-color"><span>YouTube</span></td>
+                     <td class="light-cyan-color"><span>YouTube</span></td>
                   @elseif($list->visit == 'Walk-in') 
                      <td class="light-brown-color"><span>Walk-in</span></td>
                   @elseif($list->visit == 'Email') 
                      <td class="light-yellow-color"><span>Email</span></td>
                   @elseif($list->visit == 'WhatsApp') 
-                     <td class="light-green-color"><span>WhatsApp</span></td>
+                     <td class="lights-green-color"><span>WhatsApp</span></td>
                   @elseif($list->visit == 'SMS') 
-                     <td class="light-orange-color"><span>SMS</span></td>
+                     <td class="light-organge-color"><span>SMS</span></td>
                   @elseif($list->visit == 'Other') 
-                     <td class="light-pink-color"><span>Other</span></td>
+                     <td class="light-cyan-color"><span>Other</span></td>
                   @else
                      <td></td>
                   @endif
@@ -206,8 +139,8 @@
                   <td>{{ $list->total_fees ?? '-'}} </td>
                   @if($list->status == 'Active') 
                   <td class="green-color"><span>Active</span></td>
-                  @elseif($list->status == 'Office_Visited') 
-                  <td class="pink-color"><span>Office Visited</span></td>
+                  @elseif($list->status == 'Office-Visit') 
+                  <td class="pink-color"><span>Office-Visit</span></td>
                   @elseif($list->status == 'Closed')
                   <td class="red-color"><span>Closed</span></td>
                   @elseif($list->status == 'Converted')

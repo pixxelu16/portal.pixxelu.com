@@ -41,7 +41,7 @@
             <div class="form-design mail">
                <label for="course_type">Course</label>
                <select class="form-control" name="course_type" id="course_type">
-                  <option value ="" disabled selected>Select Course Type</option>
+                  <option value ="" disabled selected>Select Course</option>
                   <option value="Web Designing" @if($inquery->course_type == 'Web Designing') selected @endif>Web Designing</option>
                   <option value="Web Development"@if($inquery->course_type == 'Web Development') selected @endif>Web Development</option>
                   <option value="PHP Development" @if($inquery->course_type == 'PHP Development') selected @endif>PHP Development</option>
@@ -53,28 +53,44 @@
             <div class="form-design fees">
                <label for="status">Priority</label>
                <select class="form-control" name="priority" id="User Status">
-                  <option value ="" disabled selected>Select Priority Type</option>
+                  <option value ="" disabled selected>Select Priority</option>
                   <option value="hot" @if($inquery->priority == 'hot') selected @endif>Hot</option>
                   <option value="cold" @if($inquery->priority == 'cold') selected @endif>Cold</option>
                   <option value="warm" @if($inquery->priority == 'warm') selected @endif>Warm</option>
                </select>
             </div>
             <div class="form-design fees">
-               <label for="total_fees">Total Fees</label>
-               <input type="text" id="total_fees" name="total_fees" value="{{$inquery->total_fees}}" placeholder="Enter Total Fees">
+               <label for="visit">Visit</label>
+               <select class="form-control" name="visit" id="visit">
+                  <option value="" disabled selected>Select Visit</option>
+                  <option value="Google" @if($inquery->visit == 'Google') selected @endif>Google</option>
+                  <option value="Instagram" @if($inquery->visit == 'Instagram') selected @endif>Instagram</option>
+                  <option value="Facebook" @if($inquery->visit == 'Facebook') selected @endif>Facebook</option>
+                  <option value="Office-Visit" @if($inquery->visit == 'Office-Visit') selected @endif>Office-Visit</option>
+                  <option value="Website" @if($inquery->visit == 'Website') selected @endif>Website</option>
+                  <option value="YouTube" @if($inquery->visit == 'YouTube') selected @endif>YouTube</option>
+                  <option value="Email" @if($inquery->visit == 'Email') selected @endif>Email</option>
+                  <option value="WhatsApp" @if($inquery->visit == 'WhatsApp') selected @endif>WhatsApp</option>
+                  <option value="SMS" @if($inquery->visit == 'SMS') selected @endif>SMS</option>
+                  <option value="Other" @if($inquery->visit == 'Other') selected @endif>Other</option>
+               </select>
             </div>
          </div>
          <div class="form-group display-column">
             <div class="form-design mail">
                <label for="status">Status</label>
                <select class="form-control" name="status" id="User Status">
-                  <option value ="" disabled selected>Select Status Type</option>
+                  <option value ="" disabled selected>Select Status</option>
                   <option value="Active" @if($inquery->status == 'Active') selected @endif>Active</option>
                   <option value="Office_Visited" @if($inquery->status == 'Office_Visited') selected @endif>Office Visited</option>
                   <option value="Closed" @if($inquery->status == 'Closed') selected @endif>Closed</option>
                   <option value="Converted" @if($inquery->status == 'Converted') selected @endif>Converted</option>
                   <option value="Hot_Lead" @if($inquery->status == 'Hot_Lead') selected @endif>Hot Lead</option>
                </select>
+            </div>
+            <div class="form-design fees">
+               <label for="total_fees">Total Fees</label>
+               <input type="text" id="total_fees" name="total_fees" value="{{$inquery->total_fees}}" placeholder="Enter Total Fees">
             </div>
          </div>
          <div class="form-button">
