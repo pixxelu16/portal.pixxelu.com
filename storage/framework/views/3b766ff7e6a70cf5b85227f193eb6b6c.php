@@ -1,5 +1,5 @@
-@extends('admin.layouts.master') 
-@section('content')
+ 
+<?php $__env->startSection('content'); ?>
 <style>
    /* Google */
 .light-blue-color {
@@ -58,7 +58,7 @@
 /* SMS */
 .light-orange-color {
     background-color: #FF6F00;
-    color: white;e
+    color: white;
 }
 
 /* Other */
@@ -69,16 +69,16 @@
 </style>
 <div class="space-remove"></div>
 <div class="title-subheading">
-   @if (Session::has('success'))
+   <?php if(Session::has('success')): ?>
    <div class="notification-green">
-      <p>{{ Session::get('success') }}</p>
+      <p><?php echo e(Session::get('success')); ?></p>
    </div>
-   @endif 
-   @if (Session::has('unsuccess'))
+   <?php endif; ?> 
+   <?php if(Session::has('unsuccess')): ?>
    <div class="notification-red">
-      <p>{{ Session::get('unsuccess') }}</p>
+      <p><?php echo e(Session::get('unsuccess')); ?></p>
    </div>
-   @endif
+   <?php endif; ?>
    <h2>All Inqueries Listing</h2>
 </div>
 <div class="main-table">
@@ -102,13 +102,13 @@
             <option value="Graphic Designing">Graphic Designing</option>
             <option value="Full Stack Development">Full Stack Development</option>
          </select>
-         <!-- <a href="{{ url('admin/export-inqueries') }}" class="export"><img src="{{ url('public/admin/images/csv-file.svg') }}"></a> -->
-         <a href="{{ url('admin/all-converted-inqueries-list') }}">Converted Inqueries</a>
-         <a href="{{ url('admin/add-new-inquery') }}"><img src="{{ url('public/admin/images/pluse.svg') }}">Add New Inquery</a>
+         <!-- <a href="<?php echo e(url('admin/export-inqueries')); ?>" class="export"><img src="<?php echo e(url('public/admin/images/csv-file.svg')); ?>"></a> -->
+         <a href="<?php echo e(url('admin/all-converted-inqueries-list')); ?>">Converted Inqueries</a>
+         <a href="<?php echo e(url('admin/add-new-inquery')); ?>"><img src="<?php echo e(url('public/admin/images/pluse.svg')); ?>">Add New Inquery</a>
       </div>
    </div>
    <!--start export inqueries filter-->
-   <form action="{{ url('admin/export-inqueries') }}" method="GET">
+   <form action="<?php echo e(url('admin/export-inqueries')); ?>" method="GET">
       <div class="filter-admin-csv">
          <select name="course_type" id="course_type" class="types">
             <option value="" disabled selected>Inqueries CSV</option>
@@ -145,89 +145,90 @@
                </tr>
             </thead>
             <tbody>
-               @php $count = 1; 
-               @endphp
-               @foreach($all_inqueries_list as $list)   
+               <?php $count = 1; 
+               ?>
+               <?php $__currentLoopData = $all_inqueries_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $list): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>   
                <tr>
-                  <td>{{ $count++ }}</td>
-                  <td>{{ $list->name }} </td>
-                  <td><a href="https://wa.me/{{ str_replace(['+', '-', ' '], '', $list->mobile) }}" target="_blank">{{ substr($list->mobile, 0, 5) . '-' . substr($list->mobile, 5) }}</a></td>
-                  <td>{{ $list->address ??'-' }}</td>
-                  @if($list->course_type == 'Full Stack Development') 
+                  <td><?php echo e($count++); ?></td>
+                  <td><?php echo e($list->name); ?> </td>
+                  <td><a href="https://wa.me/<?php echo e(str_replace(['+', '-', ' '], '', $list->mobile)); ?>" target="_blank"><?php echo e(substr($list->mobile, 0, 5) . '-' . substr($list->mobile, 5)); ?></a></td>
+                  <td><?php echo e($list->address ??'-'); ?></td>
+                  <?php if($list->course_type == 'Full Stack Development'): ?> 
                   <td class="lights-blue-color"><span>Full Stack Development</span></td>
-                  @elseif($list->course_type == 'PHP Development')
+                  <?php elseif($list->course_type == 'PHP Development'): ?>
                   <td class="lights-green-color"><span>PHP Development</span></td>
-                  @elseif($list->course_type == 'Web Development')
+                  <?php elseif($list->course_type == 'Web Development'): ?>
                   <td class="light-yellow-color"><span>Web Development</span></td>
-                  @elseif($list->course_type == 'Digital Marketing')
+                  <?php elseif($list->course_type == 'Digital Marketing'): ?>
                   <td class="light-organge-color"><span>Digital Marketing</span></td>
-                  @elseif($list->course_type == 'Web Designing')
+                  <?php elseif($list->course_type == 'Web Designing'): ?>
                   <td class="light-pink-color"><span>Web Designing</span></td>
-                  @elseif($list->course_type == 'Graphic Designing')
+                  <?php elseif($list->course_type == 'Graphic Designing'): ?>
                   <td class="light-cyan-color"><span>Graphic Designing</span></td>
-                  @else
+                  <?php else: ?>
                   <td></td>
-                  @endif
-                  @if($list->visit == 'Google') 
+                  <?php endif; ?>
+                  <?php if($list->visit == 'Google'): ?> 
                      <td class="light-blue-color"><span>Google</span></td>
-                  @elseif($list->visit == 'Instagram') 
+                  <?php elseif($list->visit == 'Instagram'): ?> 
                      <td class="light-purple-color"><span>Instagram</span></td>
-                  @elseif($list->visit == 'Facebook') 
+                  <?php elseif($list->visit == 'Facebook'): ?> 
                      <td class="light-blue-green-color"><span>Facebook</span></td>
-                  @elseif($list->visit == 'Office-Visit') 
+                  <?php elseif($list->visit == 'Office-Visit'): ?> 
                      <td class="light-gray-color"><span>Office-Visit</span></td>
-                  @elseif($list->visit == 'Website') 
+                  <?php elseif($list->visit == 'Website'): ?> 
                      <td class="light-dark-blue-color"><span>Website</span></td>
-                  @elseif($list->visit == 'YouTube') 
+                  <?php elseif($list->visit == 'YouTube'): ?> 
                      <td class="light-red-color"><span>YouTube</span></td>
-                  @elseif($list->visit == 'Walk-in') 
+                  <?php elseif($list->visit == 'Walk-in'): ?> 
                      <td class="light-brown-color"><span>Walk-in</span></td>
-                  @elseif($list->visit == 'Email') 
+                  <?php elseif($list->visit == 'Email'): ?> 
                      <td class="light-yellow-color"><span>Email</span></td>
-                  @elseif($list->visit == 'WhatsApp') 
+                  <?php elseif($list->visit == 'WhatsApp'): ?> 
                      <td class="light-green-color"><span>WhatsApp</span></td>
-                  @elseif($list->visit == 'SMS') 
+                  <?php elseif($list->visit == 'SMS'): ?> 
                      <td class="light-orange-color"><span>SMS</span></td>
-                  @elseif($list->visit == 'Other') 
+                  <?php elseif($list->visit == 'Other'): ?> 
                      <td class="light-pink-color"><span>Other</span></td>
-                  @else
+                  <?php else: ?>
                      <td></td>
-                  @endif
-                  <td>{{ \Carbon\Carbon::parse($list->created_at)->format('d M Y') }}</td>
-                  @if($list->priority == 'hot') 
+                  <?php endif; ?>
+                  <td><?php echo e(\Carbon\Carbon::parse($list->created_at)->format('d M Y')); ?></td>
+                  <?php if($list->priority == 'hot'): ?> 
                   <td class="priority-hot"><span>Hot</span></td>
-                  @elseif($list->priority == 'cold')
+                  <?php elseif($list->priority == 'cold'): ?>
                   <td class="priority-cold"><span>Cold</span></td>
-                  @elseif($list->priority == 'warm')
+                  <?php elseif($list->priority == 'warm'): ?>
                   <td class="priority-warm"><span>Warm</span></td>
-                  @else
+                  <?php else: ?>
                   <td>-</td>
-                  @endif
-                  <td>{{ $list->total_fees ?? '-'}} </td>
-                  @if($list->status == 'Active') 
+                  <?php endif; ?>
+                  <td><?php echo e($list->total_fees ?? '-'); ?> </td>
+                  <?php if($list->status == 'Active'): ?> 
                   <td class="green-color"><span>Active</span></td>
-                  @elseif($list->status == 'Office_Visited') 
+                  <?php elseif($list->status == 'Office_Visited'): ?> 
                   <td class="pink-color"><span>Office Visited</span></td>
-                  @elseif($list->status == 'Closed')
+                  <?php elseif($list->status == 'Closed'): ?>
                   <td class="red-color"><span>Closed</span></td>
-                  @elseif($list->status == 'Converted')
+                  <?php elseif($list->status == 'Converted'): ?>
                   <td class="purple-color"><span>Converted</span></td>
-                  @else
+                  <?php else: ?>
                   <td></td>
-                  @endif
+                  <?php endif; ?>
                   <td>
-                     <a class="btn btn-info btn-sm" href="{{ url('admin/edit-inquery', $list->id) }}">
-                     <img src="{{ url('public/admin/images/ico-4.png') }}">
+                     <a class="btn btn-info btn-sm" href="<?php echo e(url('admin/edit-inquery', $list->id)); ?>">
+                     <img src="<?php echo e(url('public/admin/images/ico-4.png')); ?>">
                      </a>
-                     <!-- <a class="btn btn-danger btn-sm" href="{{ url('admin/delete-inquery', $list->id) }}">
+                     <!-- <a class="btn btn-danger btn-sm" href="<?php echo e(url('admin/delete-inquery', $list->id)); ?>">
                         <i class="fas fa-trash-alt"></i> Delete
                         </a> -->
                   </td>
                </tr>
-               @endforeach 
+               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
             </tbody>
          </table>
       </div>
    </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\pixxelu-student-portal-new\resources\views/admin/inquery/all-inqueries-list.blade.php ENDPATH**/ ?>
