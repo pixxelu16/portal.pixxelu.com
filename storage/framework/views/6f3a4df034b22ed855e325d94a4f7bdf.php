@@ -1,21 +1,21 @@
 <nav>
    <div class="logo-name">
       <div class="logo-image">
-      <i class="uil uil-bars sidebar-toggle"><img src="<?php echo e(url('public/admin/images/Menu.svg')); ?>" alt=""></i> 
+         <i class="uil uil-bars sidebar-toggle"><img src="<?php echo e(url('public/admin/images/Menu.svg')); ?>" alt=""></i> 
       </div>
    </div>
    <div class="menu-items">
       <ul class="nav-links">
          <li class="<?php echo e(request()->is('admin/dashboard') ? 'active' : ''); ?>">
             <a href="<?php echo e(url('admin/dashboard')); ?>">
-               <img src="<?php echo e(url('public/admin/images/dashboard.svg')); ?>" alt="dashboard" />
-               <span class="link-name">Dashboard</span>
+            <img src="<?php echo e(url('public/admin/images/dashboard.svg')); ?>" alt="dashboard" />
+            <span class="link-name">Dashboard</span>
             </a>
          </li>
-         <li class="<?php echo e(request()->is('admin/all-students-list') ? 'active' : ''); ?>">
+         <li class="<?php echo e(request()->is('admin/all-students-list') || Request::is('admin/edit-student/*') ? 'active' : ''); ?>">
             <a href="<?php echo e(url('admin/all-students-list')); ?>">
-               <img src="<?php echo e(url('public/admin/images/student.svg')); ?>" alt="student" />
-               <span class="link-name">All Students</span>
+            <img src="<?php echo e(url('public/admin/images/student.svg')); ?>" alt="student" />
+            <span class="link-name">All Students</span>
             </a>
          </li>
          <li class="nav-item dropdown">
@@ -39,29 +39,30 @@
          </li>
          <li class="<?php echo e(request()->is('admin/all-employees-list') ? 'active' : ''); ?>">
             <a href="<?php echo e(url('admin/all-employees-list')); ?>">
-               <img src="<?php echo e(url('public/admin/images/staff.svg')); ?>" alt="staff" />
-               <span class="link-name">All Employees</span>
+            <img src="<?php echo e(url('public/admin/images/staff.svg')); ?>" alt="staff" />
+            <span class="link-name">All Employees</span>
             </a>
          </li>
-         <li class="<?php echo e(request()->is('admin/all-inqueries-list') ? 'active' : ''); ?>">
+         <li class="<?php echo e(request()->is('admin/all-inqueries-list') || Request::is('admin/edit-inquery/*') ? 'active' : ''); ?>">
             <a href="<?php echo e(url('admin/all-inqueries-list')); ?>">
-               <img src="<?php echo e(url('public/admin/images/all_inquries.svg')); ?>" alt="inqueries" />
-               <span class="link-name">All Inqueries</span>
+            <img src="<?php echo e(url('public/admin/images/all_inquries.svg')); ?>" alt="inqueries" />
+            <span class="link-name">All Inqueries</span>
             </a>
          </li>
       </ul>
       <ul class="logout-mode">
-         <li><a href="#">
-         <img src="<?php echo e(url('public/admin/images/help.svg')); ?>" alt="leads" />
+         <li class="<?php echo e(request()->is('admin/help') ? 'active' : ''); ?>">
+            <a href="#">
+            <img src="<?php echo e(url('public/admin/images/help.svg')); ?>" alt="leads" />
             <span class="link-name">Help</span>
             </a>
          </li>
-         <li><a href="<?php echo e(url('admin/setting')); ?>">
-         <img src="<?php echo e(url('public/admin/images/setting.svg')); ?>" alt="leads" />
+         <li class="<?php echo e(request()->is('admin/setting') ? 'active' : ''); ?>">
+            <a href="<?php echo e(url('admin/setting')); ?>">
+            <img src="<?php echo e(url('public/admin/images/setting.svg')); ?>" alt="leads" />
             <span class="link-name">Settings</span>
             </a>
          </li>
-
          <li class="nav-item">
             <a class="dropdown-item" href="<?php echo e(route('logout')); ?>"
                onclick="event.preventDefault();
@@ -74,7 +75,6 @@
                <?php echo csrf_field(); ?>
             </form>
          </li>
-
          <li class="mode">
             <a href="#">
             <i class="uil uil-moon"></i>
@@ -85,6 +85,5 @@
             </div>
          </li>
       </ul>
-   </div>  
-</nav>
-<?php /**PATH C:\xampp\htdocs\pixxelu-student-portal-new\resources\views/admin/layouts/sidebar.blade.php ENDPATH**/ ?>
+   </div>
+</nav><?php /**PATH C:\xampp\htdocs\pixxelu-student-portal-new\resources\views/admin/layouts/sidebar.blade.php ENDPATH**/ ?>

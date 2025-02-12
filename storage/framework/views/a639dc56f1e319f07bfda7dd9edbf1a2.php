@@ -63,7 +63,6 @@
                   <option value="Office-Visit">Office-Visit</option>
                   <option value="Website">Website</option>
                   <option value="YouTube">YouTube</option>
-                  <option value="Walk-in">Walk-in</option>
                   <option value="Email">Email</option>
                   <option value="WhatsApp">WhatsApp</option>
                   <option value="SMS">SMS</option>
