@@ -121,6 +121,8 @@ Route::group(['middleware' => 'auth'], function() {
 
     //Admin Only  
     Route::group(['middleware' => 'Admin'], function() { 
+        //Admin generate student fees receipt
+        Route::get('admin/download-receipt/{student_id}', [App\Http\Controllers\Admin\StudentFeesPdfController::class, 'downloadReceipt'])->name('download.receipt');
         //Admin dashboard
         Route::get('admin/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'dashboard']);
         //profile
