@@ -135,7 +135,7 @@
                @endif                 
                <tr>
                   <td>{{ $count++ }}</td>
-                  <td>{{ $student->id }} </td>
+                  <td><a href="{{ url('admin/download-receipt/' . $student->id) }}" target="_blank"><i class="fas fa-download"></i> {{ $student->id }}</a></td>
                   <td data-th="Image">
                      @if($student->user_pic)
                      <div class="user-image"> <img src="{{ url('public/uploads/users/' . $student->user_pic)}}" alt="">

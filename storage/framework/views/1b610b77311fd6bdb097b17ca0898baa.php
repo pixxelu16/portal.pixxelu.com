@@ -120,6 +120,7 @@
                <tr class="sticky">
                   <th>S. No</th>
                   <th>Registration ID</th>
+                  <th>Fee Receipt</th>
                   <th>Image</th>
                   <th>Name</th>
                   <th>Phone No</th>
@@ -136,7 +137,8 @@
                <?php $__currentLoopData = $get_student_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $student): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>    
                <tr>
                   <td><?php echo e($count++); ?></td>
-                  <td><?php echo e($student->id); ?> </td>
+                  <td><?php echo e($student->id); ?></td>
+                  <td><a href="<?php echo e(url('admin/download-receipt/' . $student->id)); ?>" target="_blank"><i class="fas fa-download"></i></a></td>
                   <td data-th="Image">
                      <div class="user-image">
                         <?php if($student->user_pic): ?>
