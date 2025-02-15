@@ -123,6 +123,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::group(['middleware' => 'Admin'], function() { 
         //Admin generate student fees receipt
         Route::get('admin/download-receipt/{student_id}', [App\Http\Controllers\Admin\StudentFeesPdfController::class, 'downloadReceipt'])->name('download.receipt');
+        Route::get('admin/attendance/download-pdf', [App\Http\Controllers\Admin\EmployeeAttendanceController::class, 'downloadAttendancePDF'])->name('attendance.download');
+        Route::get('admin/search/attendance/download-pdf/{unique_employee_id}', [App\Http\Controllers\Admin\EmployeeAttendanceController::class, 'SearchdownloadAttendancePDF'])->name('search.attendance.download');
         //Admin dashboard
         Route::get('admin/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'dashboard']);
         //profile

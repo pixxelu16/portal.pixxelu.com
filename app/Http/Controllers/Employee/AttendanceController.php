@@ -86,13 +86,13 @@ class AttendanceController extends Controller
             '12' => 'December'
         ];
 
-        //Get current month
+       //Get current month
         $daysInMonth = Carbon::create($year, $month, 1)->daysInMonth;
         $days = range(1, $daysInMonth);
 
-        //Get all Sundays and last Saturday of the month
+        //Get all Sundays and alternative Saturdays
         $sundays = [];
-        $lastSaturday = null;
+        $alternativeSaturdays = [];
 
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $date = Carbon::create($year, $month, $day);
@@ -102,15 +102,18 @@ class AttendanceController extends Controller
                 $sundays[] = $day;
             }
 
-            //Check for the last Saturday
-            if ($date->isSaturday() && $day >= ($daysInMonth - 6)) {
-                $lastSaturday = $day;
+            //Check for Saturdays
+            if ($date->isSaturday()) {
+                $weekOfMonth = ceil($day / 7);
+                if (in_array($weekOfMonth, [2, 4, 6])) {
+                    $alternativeSaturdays[] = $day;
+                }
             }
         }
-        //Get total holidays all Sundays and last Saturday
-        $total_holidays = count($sundays) + ($lastSaturday ? 1 : 0);
 
-        return view('employee.attendances.employee-attendance-list', compact('get_employee_detail', 'months', 'days', 'month', 'year', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays', 'daysInMonth'));
+        //Calculate total holidays
+        $total_holidays = count($sundays) + count($alternativeSaturdays);
+        return view('employee.attendances.employee-attendance-list', compact('get_employee_detail', 'months', 'days', 'month', 'year', 'sundays', 'alternativeSaturdays', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays', 'daysInMonth'));
     }
 
     //Function for submit employee punch in attendance
@@ -216,8 +219,6 @@ class AttendanceController extends Controller
                 }
             ])->get();
         //echo "<pre>"; print_r($get_employee_detail->toArray());exit;
-
-
         //Get attendance details
         $total_present_hours = 0;
         $total_present_days = 0;
@@ -277,9 +278,9 @@ class AttendanceController extends Controller
         $daysInMonth = Carbon::create($year, $month, 1)->daysInMonth;
         $days = range(1, $daysInMonth);
 
-        //Get all Sundays and last Saturday of the month
+        //Get all Sundays and alternative Saturdays 
         $sundays = [];
-        $lastSaturday = null;
+        $alternativeSaturdays = [];
 
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $date = Carbon::create($year, $month, $day);
@@ -289,14 +290,18 @@ class AttendanceController extends Controller
                 $sundays[] = $day;
             }
 
-            //Check for the last Saturday
-            if ($date->isSaturday() && $day >= ($daysInMonth - 6)) {
-                $lastSaturday = $day;
+            //Check for Saturdays
+            if ($date->isSaturday()) {
+                //Calculate which Saturday
+                $weekOfMonth = ceil($day / 7);
+                if (in_array($weekOfMonth, [2, 4, 6])) {
+                    $alternativeSaturdays[] = $day;
+                }
             }
         }
-        //Get total holidays all Sundays and last Saturday
-        $total_holidays = count($sundays) + ($lastSaturday ? 1 : 0);
 
-        return view('employee.attendances.search-employee-attendances', compact('get_employee_detail', 'months', 'days', 'month', 'year', 'daysInMonth', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays'));
+        //Calculate total holidays
+        $total_holidays = count($sundays) + count($alternativeSaturdays);
+        return view('employee.attendances.search-employee-attendances', compact('get_employee_detail', 'months', 'days', 'month', 'year', 'daysInMonth', 'sundays', 'alternativeSaturdays', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays'));
     }
 }

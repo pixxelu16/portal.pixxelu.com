@@ -6,13 +6,13 @@
    </div>
    <div class="menu-items">
       <ul class="nav-links">
-         <li class="{{ request()->is('student/dashboard') ? 'active' : '' }}">
+         <li class="{{ request()->is('student/dashboard') || request()->is('student/profile') ? 'active' : '' }}">
             <a href="{{ url('student/dashboard') }}">
             <img src="{{ url('public/admin/images/dashboard.svg') }}" alt="dashboard" />
             <span class="link-name">Dashboard</span>
             </a>
          </li>
-         <li class="{{ request()->is('student/student-attendance-list') ? 'active' : '' }}">
+         <li class="{{ request()->is('student/student-attendance-list') || request()->is('student/search-attendance') ? 'active' : '' }}">
             <a href="{{ url('student/student-attendance-list') }}">
                <img src="{{ url('public/admin/images/attendance.svg') }}" alt="attendance" />
                <span class="link-name">Attendance</span>

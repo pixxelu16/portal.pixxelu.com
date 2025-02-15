@@ -88,9 +88,9 @@ class AttendanceController extends Controller
         $daysInMonth = Carbon::create($year, $month, 1)->daysInMonth;
         $days = range(1, $daysInMonth);
 
-        //Get all Sundays and last Saturday of the month
+        //Get all Sundays and alternative Saturdays 
         $sundays = [];
-        $lastSaturday = null;
+        $alternativeSaturdays = [];
 
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $date = Carbon::create($year, $month, $day);
@@ -100,15 +100,20 @@ class AttendanceController extends Controller
                 $sundays[] = $day;
             }
 
-            //Check for the last Saturday
-            if ($date->isSaturday() && $day >= ($daysInMonth - 6)) {
-                $lastSaturday = $day;
+            //Check for Saturdays
+            if ($date->isSaturday()) {
+                //Calculate which Saturday
+                $weekOfMonth = ceil($day / 7);
+                if (in_array($weekOfMonth, [2, 4, 6])) {
+                    $alternativeSaturdays[] = $day;
+                }
             }
         }
-        //Get total holidays all Sundays and last Saturday
-        $total_holidays = count($sundays) + ($lastSaturday ? 1 : 0);
 
-        return view('student.attendances.student-attendance-list', compact('get_student_detail', 'months', 'days', 'month', 'year', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays', 'daysInMonth'));
+        //Calculate total holidays
+        $total_holidays = count($sundays) + count($alternativeSaturdays);
+
+        return view('student.attendances.student-attendance-list', compact('get_student_detail', 'months', 'days', 'month', 'year', 'sundays', 'alternativeSaturdays', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays', 'daysInMonth'));
     }
 
     //Function for submit student punch in attendance
@@ -274,9 +279,9 @@ class AttendanceController extends Controller
         $daysInMonth = Carbon::create($year, $month, 1)->daysInMonth;
         $days = range(1, $daysInMonth);
 
-        //Get all Sundays and last Saturday of the month
+        //Get all Sundays and alternative Saturdays 
         $sundays = [];
-        $lastSaturday = null;
+        $alternativeSaturdays = [];
 
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $date = Carbon::create($year, $month, $day);
@@ -286,14 +291,19 @@ class AttendanceController extends Controller
                 $sundays[] = $day;
             }
 
-            //Check for the last Saturday
-            if ($date->isSaturday() && $day >= ($daysInMonth - 6)) {
-                $lastSaturday = $day;
+            //Check for Saturdays
+            if ($date->isSaturday()) {
+                //Calculate which Saturday
+                $weekOfMonth = ceil($day / 7);
+                if (in_array($weekOfMonth, [2, 4, 6])) {
+                    $alternativeSaturdays[] = $day;
+                }
             }
         }
-        //Get total holidays all Sundays and last Saturday
-        $total_holidays = count($sundays) + ($lastSaturday ? 1 : 0);
 
-        return view('student.attendances.search-student-attendances', compact('get_student_detail', 'months', 'days', 'month', 'year', 'daysInMonth', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays'));
+        //Calculate total holidays
+        $total_holidays = count($sundays) + count($alternativeSaturdays);
+
+        return view('student.attendances.search-student-attendances', compact('get_student_detail', 'months', 'days', 'month', 'year', 'daysInMonth', 'sundays', 'alternativeSaturdays', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays'));
     }
 }
