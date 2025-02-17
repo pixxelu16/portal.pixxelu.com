@@ -140,13 +140,7 @@
                <?php if($get_employee_detail->first()->employees_attendance_detail->count() > 0): ?>
                <tr>
                   <td><?php echo e($count++); ?>.</td>
-                  <td>
-    <a href="<?php echo e(url('admin/search/attendance/download-pdf/' . $employee->unique_employee_id)); ?>" target="_blank" class="download-icon">
-        <i class="fas fa-download"></i> <?php echo e($employee->unique_employee_id); ?>
-
-    </a>
-</td>
-
+                  <td><?php echo e($employee->unique_employee_id); ?></td>
                   <td data-th="Image">
                      <?php if($employee->user_pic): ?>
                      <div class="user-image">

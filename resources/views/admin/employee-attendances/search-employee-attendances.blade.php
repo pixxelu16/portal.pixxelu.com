@@ -139,7 +139,6 @@
                <tr>
                   <td>{{ $count++ }}.</td>
                   <td>{{ $employee->unique_employee_id }}</td>
-                  <td><a href="{{ url('admin/search/attendance/download-pdf') }}" target="_blank"><i class="fas fa-download"></i> {{ $employee->unique_employee_id }}</a></td>
                   <td data-th="Image">
                      @if($employee->user_pic)
                      <div class="user-image">
