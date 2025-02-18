@@ -20,6 +20,6 @@ class ContactUsController extends Controller
         //Get ajax request
         $contact_id->contact_id;
 
-        echo ($contact_id);exit;
+        echo ($contact_id);exit;s
     }
 }
