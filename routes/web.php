@@ -204,6 +204,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('admin/export-students-pending-fees', [App\Http\Controllers\Admin\ExportStudentController::class, 'export_students_pending_fees'])->name('admin.export.pending.fees');
         //Contact
         Route::get('admin/all-contacts', [App\Http\Controllers\Admin\ContactUsController::class, 'all_contacts']); 
+        Route::get('admin/delete-contact', [App\Http\Controllers\Admin\ContactUsController::class, 'all_contacts']); 
     });
 
     //Student Only 
