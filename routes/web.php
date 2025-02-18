@@ -202,6 +202,8 @@ Route::group(['middleware' => 'auth'], function() {
         //export students monthly fees record
         Route::get('admin/export-students-paid-fees', [App\Http\Controllers\Admin\ExportStudentController::class, 'export_students_paid_fees'])->name('admin.export.paid.fees');
         Route::get('admin/export-students-pending-fees', [App\Http\Controllers\Admin\ExportStudentController::class, 'export_students_pending_fees'])->name('admin.export.pending.fees');
+        //Contact
+        Route::get('admin/all-contacts', [App\Http\Controllers\Admin\ContactUsController::class, 'all_contacts']); 
     });
 
     //Student Only 

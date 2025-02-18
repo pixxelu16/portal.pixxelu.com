@@ -49,6 +49,12 @@
             <span class="link-name">All Inqueries</span>
             </a>
          </li>
+         <li class="<?php echo e(request()->is('admin/all-contacts') ? 'active' : ''); ?>">
+            <a href="<?php echo e(url('admin/all-contacts')); ?>">
+            <img src="<?php echo e(url('public/admin/images/all_inquries.svg')); ?>" alt="contacts" />
+            <span class="link-name">All Contacts</span>
+            </a>
+         </li>
       </ul>
       <ul class="logout-mode">
          <li class="<?php echo e(request()->is('admin/help') ? 'active' : ''); ?>">

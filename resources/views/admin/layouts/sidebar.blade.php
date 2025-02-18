@@ -49,6 +49,12 @@
             <span class="link-name">All Inqueries</span>
             </a>
          </li>
+         <li class="{{ request()->is('admin/all-contacts') ? 'active' : '' }}">
+            <a href="{{ url('admin/all-contacts') }}">
+            <img src="{{ url('public/admin/images/all_inquries.svg') }}" alt="contacts" />
+            <span class="link-name">All Contacts</span>
+            </a>
+         </li>
       </ul>
       <ul class="logout-mode">
          <li class="{{ request()->is('admin/help') ? 'active' : '' }}">
