@@ -1,9 +1,36 @@
 <?php $__env->startSection('content'); ?>
+<style>
+   .search-header {
+  position: relative;
+}
+
+.attendance-header {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.download-icon {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  text-decoration: none;
+  color: #005aff;
+  font-size: 20px;
+  transition: color 0.3s ease;
+}
+
+.download-icon:hover {
+  color: #0056b3;
+}
+
+</style>
 <div class="space-remove"></div>
 <div class="title-subheading">
    <?php if(Session::has('success')): ?>
    <div class="notification-green">
-      <p><?php echo e(Session::get('success')); ?></p>
+      <p><?php echo e(Session::get('success')); ?></p> 
    </div>
    <?php endif; ?> 
    <?php if(Session::has('unsuccess')): ?>
@@ -11,9 +38,16 @@
       <p><?php echo e(Session::get('unsuccess')); ?></p>
    </div>
    <?php endif; ?>
-   <div class ="search-header">
-      <h2 class="attendance-header">All Employees Monthly Attendance List:-  <?php echo e(date('F Y')); ?></h2>
-   </div>
+   <div class="search-header">
+  <h2 class="attendance-header">
+    All Employees Monthly Attendance List:- <?php echo e(date('F Y')); ?>
+
+  </h2>
+  <a href="<?php echo e(url('admin/attendance/download-pdf')); ?>" target="_blank" class="download-icon">
+    <i class="fas fa-download"></i>
+  </a>
+</div>
+
    <!--start employee attendance boxes-->
    <div class="boxes-wrapper student-attendance-header">
       <div class="box">

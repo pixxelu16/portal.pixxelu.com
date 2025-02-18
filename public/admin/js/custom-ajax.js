@@ -634,6 +634,47 @@ $(document).ready(function() {
     });
 });
 
+//Contact record delete
+$(document).ready(function() {
+    //Delete student record
+    $('body').on('click', '.delete_contact_record', function(event) {
+        event.preventDefault();
+        var contact_id = $(this).data('contact_id');        
+        //through sweet alert
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this contact!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                //Call ajax
+                $.ajax({
+                    type: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: base_url + '/admin/delete-contact',
+                    data: { contact_id: contact_id },
+                    //Show success message
+                    success: function(response) {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Contact record Deleted successfully.",
+                            icon: "success"
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                });
+            }
+        });
+    });
+});
+
 
 
 

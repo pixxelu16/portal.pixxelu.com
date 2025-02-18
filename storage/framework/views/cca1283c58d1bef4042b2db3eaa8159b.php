@@ -135,7 +135,7 @@
                <?php endif; ?>                 
                <tr>
                   <td><?php echo e($count++); ?></td>
-                  <td><?php echo e($student->id); ?> </td>
+                  <td><a href="<?php echo e(url('admin/download-receipt/' . $student->id)); ?>" target="_blank"><i class="fas fa-download"></i> <?php echo e($student->id); ?></a></td>
                   <td data-th="Image">
                      <?php if($student->user_pic): ?>
                      <div class="user-image"> <img src="<?php echo e(url('public/uploads/users/' . $student->user_pic)); ?>" alt="">

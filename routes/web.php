@@ -121,6 +121,10 @@ Route::group(['middleware' => 'auth'], function() {
 
     //Admin Only  
     Route::group(['middleware' => 'Admin'], function() { 
+        //Admin generate student fees receipt
+        Route::get('admin/download-receipt/{student_id}', [App\Http\Controllers\Admin\StudentFeesPdfController::class, 'downloadReceipt'])->name('download.receipt');
+        Route::get('admin/attendance/download-pdf', [App\Http\Controllers\Admin\EmployeeAttendanceController::class, 'downloadAttendancePDF'])->name('attendance.download');
+        Route::get('admin/search/attendance/download-pdf/{unique_employee_id}', [App\Http\Controllers\Admin\EmployeeAttendanceController::class, 'SearchdownloadAttendancePDF'])->name('search.attendance.download');
         //Admin dashboard
         Route::get('admin/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'dashboard']);
         //profile
@@ -198,6 +202,9 @@ Route::group(['middleware' => 'auth'], function() {
         //export students monthly fees record
         Route::get('admin/export-students-paid-fees', [App\Http\Controllers\Admin\ExportStudentController::class, 'export_students_paid_fees'])->name('admin.export.paid.fees');
         Route::get('admin/export-students-pending-fees', [App\Http\Controllers\Admin\ExportStudentController::class, 'export_students_pending_fees'])->name('admin.export.pending.fees');
+        //Contact
+        Route::get('admin/all-contacts', [App\Http\Controllers\Admin\ContactUsController::class, 'all_contacts']); 
+        Route::get('admin/delete-contact', [App\Http\Controllers\Admin\ContactUsController::class, 'all_contacts']); 
     });
 
     //Student Only 

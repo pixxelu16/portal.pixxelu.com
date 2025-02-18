@@ -73,6 +73,7 @@
                   <th>Phone No</th>
                   <th>Address</th>
                   <th>Course Type</th>
+                  <th>Visit</th>
                   <th>Inqury Date</th>
                   <th>Priority</th>
                   <th>Total Fees</th>
@@ -101,6 +102,31 @@
                         @elseif($list->course_type == 'Graphic')
                            <td class="lights-blue-color"><span>Graphic Designing</span></td>
                         @else
+                        <td></td>
+                     @endif
+                     @if($list->visit == 'Google') 
+                        <td class="lights-blue-color"><span>Google</span></td>
+                     @elseif($list->visit == 'Instagram') 
+                        <td class="lights-green-color"><span>Instagram</span></td>
+                     @elseif($list->visit == 'Facebook') 
+                        <td class="light-yellow-color"><span>Facebook</span></td>
+                     @elseif($list->visit == 'Office-Visit') 
+                        <td class="light-organge-color"><span>Office-Visit</span></td>
+                     @elseif($list->visit == 'Website') 
+                        <td class="light-pink-color"><span>Website</span></td>
+                     @elseif($list->visit == 'YouTube') 
+                        <td class="light-cyan-color"><span>YouTube</span></td>
+                     @elseif($list->visit == 'Walk-in') 
+                        <td class="light-brown-color"><span>Walk-in</span></td>
+                     @elseif($list->visit == 'Email') 
+                        <td class="light-yellow-color"><span>Email</span></td>
+                     @elseif($list->visit == 'WhatsApp') 
+                        <td class="lights-green-color"><span>WhatsApp</span></td>
+                     @elseif($list->visit == 'SMS') 
+                        <td class="light-organge-color"><span>SMS</span></td>
+                     @elseif($list->visit == 'Other') 
+                        <td class="light-cyan-color"><span>Other</span></td>
+                     @else
                         <td></td>
                      @endif
                      <td>{{ \Carbon\Carbon::parse($list->created_at)->format('d M Y') }}</td>

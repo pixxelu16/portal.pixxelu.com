@@ -6,13 +6,13 @@
    </div>
    <div class="menu-items">
       <ul class="nav-links">
-         <li class="<?php echo e(request()->is('employee/dashboard') ? 'active' : ''); ?>">
+         <li class="<?php echo e(request()->is('employee/dashboard') || request()->is('employee/profile') ? 'active' : ''); ?>">
             <a href="<?php echo e(url('employee/dashboard')); ?>">
             <img src="<?php echo e(url('public/admin/images/dashboard.svg')); ?>" alt="dashboard" />
             <span class="link-name">Dashboard</span>
             </a>
          </li>
-         <li class="<?php echo e(request()->is('employee/employee-attendance-list') ? 'active' : ''); ?>">
+         <li class="<?php echo e(request()->is('employee/employee-attendance-list') || request()->is('employee/search-attendance') ? 'active' : ''); ?>">
             <a href="<?php echo e(url('employee/employee-attendance-list')); ?>">
                <img src="<?php echo e(url('public/admin/images/attendance.svg')); ?>" alt="attendance" />
                <span class="link-name">Attendance</span>

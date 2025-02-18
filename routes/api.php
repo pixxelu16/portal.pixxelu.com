@@ -19,3 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
    
 });
 //Route::post('admin/submit-inquery', [App\Http\Controllers\Api\LeadController::class, 'submit_inquery'])->name('admin.submit.inquery');
+Route::post('create-contact-form', [App\Http\Controllers\Api\ContactUsController::class, 'create_contact']);

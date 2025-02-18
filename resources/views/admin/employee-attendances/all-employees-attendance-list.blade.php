@@ -1,10 +1,37 @@
 @extends('admin.layouts.master')
 @section('content')
+<style>
+   .search-header {
+  position: relative;
+}
+
+.attendance-header {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.download-icon {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  text-decoration: none;
+  color: #005aff;
+  font-size: 20px;
+  transition: color 0.3s ease;
+}
+
+.download-icon:hover {
+  color: #0056b3;
+}
+
+</style>
 <div class="space-remove"></div>
 <div class="title-subheading">
    @if (Session::has('success'))
    <div class="notification-green">
-      <p>{{ Session::get('success') }}</p>
+      <p>{{ Session::get('success') }}</p> 
    </div>
    @endif 
    @if (Session::has('unsuccess'))
@@ -12,9 +39,15 @@
       <p>{{ Session::get('unsuccess') }}</p>
    </div>
    @endif
-   <div class ="search-header">
-      <h2 class="attendance-header">All Employees Monthly Attendance List:-  {{ date('F Y') }}</h2>
-   </div>
+   <div class="search-header">
+  <h2 class="attendance-header">
+    All Employees Monthly Attendance List:- {{ date('F Y') }}
+  </h2>
+  <a href="{{ url('admin/attendance/download-pdf') }}" target="_blank" class="download-icon">
+    <i class="fas fa-download"></i>
+  </a>
+</div>
+
    <!--start employee attendance boxes-->
    <div class="boxes-wrapper student-attendance-header">
       <div class="box">

@@ -106,20 +106,20 @@
                   <th>Name</th>
                   <th>Shift</th>
                   <th>Shift Type</th>
+                  <!--start month header-->
                   @foreach ($days as $day)
-
-                  @php
-                  $date = \Carbon\Carbon::create($year, $month, $day);
-                  $dayOfWeek = $date->format('D'); 
-                  $dayNumber = $date->format('d'); 
-                  $isSunday = $dayOfWeek === 'Sun';
-                  $isLastSaturday = $dayOfWeek === 'Sat' && $day == $lastSaturday;
-                  @endphp
-
-                  <th class="{{ $isSunday ? 'text-danger' : ($isLastSaturday ? 'text-primary' : '') }}">
-                     {{ $dayNumber }} {{ $dayOfWeek }}
-                  </th>
+                     @php
+                        $date = \Carbon\Carbon::create($year, $month, $day);
+                        $dayOfWeek = $date->format('D'); 
+                        $dayNumber = $date->format('d'); 
+                        $isSunday = $dayOfWeek === 'Sun';
+                        $isAlternativeSaturday = in_array($day, $alternativeSaturdays);;
+                     @endphp
+                     <th class="{{ $isSunday || $isAlternativeSaturday ? 'text-danger' : '' }}">
+                        {{ $dayNumber }} {{ $dayOfWeek }}
+                     </th>
                   @endforeach
+                  <!--end month header-->
                </tr>
             </thead>
             @if($get_employee_detail->first()->employees_attendance_detail->count() > 0)
@@ -147,7 +147,7 @@
                      @php
                      $date = \Carbon\Carbon::create($year, $month, $day)->format('Y-m-d');
                      $attendance = $employee->employees_attendance_detail->first(function ($att) use ($date) {
-                     return \Carbon\Carbon::parse($att->submission_date)->format('Y-m-d') === $date;
+                        return \Carbon\Carbon::parse($att->submission_date)->format('Y-m-d') === $date;
                      });
 
                      //Get punch in and out
@@ -167,13 +167,13 @@
                         }
                      }
                      $isSunday = in_array($day, $sundays);
-                     $isLastSaturday = $day == $lastSaturday;
+                     $isAlternativeSaturday = in_array($day, $alternativeSaturdays);
                      @endphp
                      <td>
                         <!--show holiday icon-->
                         @if ($isSunday)
                            <img src="{{ url('public/admin/images/sunday.svg') }}" alt="Holiday">
-                           @elseif ($isLastSaturday)
+                           @elseif ($isAlternativeSaturday)
                            <img src="{{ url('public/admin/images/saturday.svg') }}" alt="Holiday">
                            @else
                            @if ($attendance)

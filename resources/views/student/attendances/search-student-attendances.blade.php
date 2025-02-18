@@ -16,7 +16,7 @@
       <h2 class="attendance-header">Search Attendances List</h2>
    </div>
    <!--start student attendance boxes-->
-    <div class="boxes-wrapper student-attendance-header">
+   <div class="boxes-wrapper student-attendance-header">
          <div class="box">
             <img src="{{ url('public/admin/images/working_hours.svg') }}" alt="Working Hours">
             <h3>Working Hours</h3>
@@ -106,25 +106,26 @@
                   <th>Name</th>
                   <th>Batch</th>
                   <th>Batch Timing</th>
+                  <!--start month header-->
                   @foreach ($days as $day)
-                  @php
-                  $date = \Carbon\Carbon::create($year, $month, $day);
-                  $dayOfWeek = $date->format('D'); 
-                  $dayNumber = $date->format('d'); 
-                  $isSunday = $dayOfWeek === 'Sun';
-                  $isLastSaturday = $dayOfWeek === 'Sat' && $day == $lastSaturday;
-                  @endphp
-                  <th class="{{ $isSunday ? 'text-danger' : ($isLastSaturday ? 'text-primary' : '') }}">
-                     {{ $dayNumber }} {{ $dayOfWeek }}
-                  </th>
+                     @php
+                        $date = \Carbon\Carbon::create($year, $month, $day);
+                        $dayOfWeek = $date->format('D'); 
+                        $dayNumber = $date->format('d'); 
+                        $isSunday = $dayOfWeek === 'Sun';
+                        $isAlternativeSaturday = in_array($day, $alternativeSaturdays);
+                     @endphp
+                     <th class="{{ $isSunday || $isAlternativeSaturday ? 'text-danger' : '' }}">
+                        {{ $dayNumber }} {{ $dayOfWeek }}
+                     </th>
                   @endforeach
+                  <!--end month header-->
                </tr>
             </thead>
             @if ($get_student_detail->first()->student_attendance_detail->count() > 0)
                <tbody>
-                  @php
-                  $count = 1;
-                  @endphp
+                  @php $count = 1; @endphp
+                  <!--Get student attendance-->
                   @forelse ($get_student_detail as $student)
                   <tr>
                      <td>{{ $count++ }}.</td>
@@ -163,13 +164,13 @@
                      }
 
                      $isSunday = in_array($day, $sundays);
-                     $isLastSaturday = $day == $lastSaturday;
+                     $isAlternativeSaturday = in_array($day, $alternativeSaturdays);
                      @endphp
                      <td>
                         <!--show holiday icon-->
                         @if ($isSunday)
                               <img src="{{ url('public/admin/images/sunday.svg') }}" alt="Holiday">
-                           @elseif ($isLastSaturday)
+                           @elseif ($isAlternativeSaturday)
                               <img src="{{ url('public/admin/images/saturday.svg') }}" alt="Holiday">
                            @else
                            @if ($attendance)

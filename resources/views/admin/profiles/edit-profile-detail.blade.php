@@ -21,7 +21,7 @@
          <div class="small-12 medium-2 large-2 columns">
             <div class="avatar-upload">
                <div class="avatar-edit">
-                  <input type="file" name="imagea" id="imageUpload" accept=".png, .jpg, .jpeg" />
+                  <input type="file" name="images" id="imageUpload" accept=".png, .jpg, .jpeg" />
                   <label for="imageUpload"><i class="fas fa-pencil-alt"></i></label>
                </div>
                <div class="add-new-student-pic">

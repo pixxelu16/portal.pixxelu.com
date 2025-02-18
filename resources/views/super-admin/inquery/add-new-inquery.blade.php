@@ -36,7 +36,7 @@
             <div class="form-design mail">
                <label for="course_type">Course</label>
                <select class="form-control" name="course_type" id="Course Type" required>
-                  <option value ="" disabled selected>Select Course Type</option>
+                  <option value ="" disabled selected>Select Course</option>
                   <option value="Web Designing">Web Designing</option>
                   <option value="Web Development">Web Development</option>
                   <option value="PHP Development">PHP Development</option>
@@ -48,23 +48,39 @@
             <div class="form-design mail">
                <label for="priority">Priority</label>
                <select class="form-control" name="priority" id="Priority Type" required>
-                  <option value ="" disabled selected>Select Priority Type</option>
+                  <option value ="" disabled selected>Select Priority</option>
                   <option value="hot">Hot</option>
                   <option value="coldt">Cold</option>
                   <option value="warm">Warm</option>
                </select>
             </div>
+            <div class="form-design fees">
+               <label for="visit">Visit</label>
+               <select class="form-control" name="visit" id="visit">
+                  <option value="" disabled selected>Select Visit</option>
+                  <option value="Google">Google</option>
+                  <option value="Instagram">Instagram</option>
+                  <option value="Facebook">Facebook</option>
+                  <option value="Office-Visit">Office-Visit</option>
+                  <option value="Website">Website</option>
+                  <option value="YouTube">YouTube</option>
+                  <option value="Email">Email</option>
+                  <option value="WhatsApp">WhatsApp</option>
+                  <option value="SMS">SMS</option>
+                  <option value="Other">Other</option>
+               </select>
+            </div>
+         </div>
+         <div class="form-group display-column">
+            <div class="form-design fees">
+               <label for="status">Status</label>
+               <input type="text" class="form-control" value="Active" readonly>
+               <input type="hidden" name="status" value="Active">
+            </div>
             <div class="form-design dob">
                <label for="total_fees">Total Fees</label>
                <input type="text" id="total_fees" name="total_fees" value="{{ old('total_fees') }}"  placeholder="Enter Total Fees">
             </div>
-            <!-- <div class="form-design fees">
-               <label for="status">Status</label>
-               <select class="form-control" name="status" id="User Status">
-                  <option value ="" disabled selected>Select Status Type</option>
-                  <option value="Active">Active</option>
-               </select>
-               </div> -->
          </div>
          <div class="form-button">
             <div class="back-button">

@@ -121,6 +121,7 @@
                <tr class="sticky">
                   <th>S. No</th>
                   <th>Registration ID</th>
+                  <th>Fee Receipt</th>
                   <th>Image</th>
                   <th>Name</th>
                   <th>Phone No</th>
@@ -137,7 +138,8 @@
                @foreach($get_student_list as $student)    
                <tr>
                   <td>{{ $count++ }}</td>
-                  <td>{{ $student->id }} </td>
+                  <td>{{ $student->id }}</td>
+                  <td><a href="{{ url('admin/download-receipt/' . $student->id) }}" target="_blank"><i class="fas fa-download"></i></a></td>
                   <td data-th="Image">
                      <div class="user-image">
                         @if($student->user_pic)
