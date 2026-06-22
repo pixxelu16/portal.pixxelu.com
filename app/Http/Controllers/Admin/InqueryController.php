@@ -55,19 +55,22 @@ class InqueryController extends Controller
         if ($is_mobile_exist) {
             return back()->with('unsuccess', 'This mobile no is already used, please try new no.');
         }
-
         //Create inquery
         $is_create_inquery = Inquery::create([
-            'name' => $request->name, 
+            'name' => $request->f_name . ' ' . $request->l_name,
+            'f_name' => $request->f_name, 
+            'l_name' => $request->l_name, 
+            'email' => $request->email, 
             'mobile' => $request->mobile,
             'address' => $request->address,
+            'state' => $request->state, 
+            'city' => $request->city, 
             'course_type' => $request->course_type,
             'priority' => $request->priority,
             'visit' => $request->visit,
             'total_fees' => $request->total_fees,
             'status' => 'Active',
         ]);
-
         //Check if inquery is created or not
         if ($is_create_inquery) {
             return back()->with('success', 'Inquery created successfully.');
@@ -94,9 +97,14 @@ class InqueryController extends Controller
         
         //Update inquery
         $is_update_inquery = $inquiry->update([
-            'name' => $request->name,
+            'name' => $request->f_name . ' ' . $request->l_name,
+            'f_name' => $request->f_name, 
+            'l_name' => $request->l_name, 
+            'email' => $request->email, 
             'mobile' => $request->mobile,
             'address' => $request->address,
+            'state' => $request->state, 
+            'city' => $request->city, 
             'course_type' => $request->course_type,
             'priority' => $request->priority,
             'visit' => $request->visit,

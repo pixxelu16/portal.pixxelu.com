@@ -2,19 +2,9 @@
 @section('content')
 <div class="space-remove"></div>
 <div class="title-subheading">
-   <h2>Edit Student Record</h2>
+   <h2>{{ !empty($is_intern) ? 'Edit Intern Record' : 'Edit Student Record' }}</h2>
 </div>
 <div class="main-table">
-   @if (Session::has('success')) 
-   <div class="notification-green">
-      <p>{{ Session::get('success') }}</p>
-   </div>
-   @endif 
-   @if (Session::has('unsuccess')) 
-   <div class="notification-red">
-      <p>{{ Session::get('unsuccess') }}</p>
-   </div>
-   @endif 
    <div class="login-form">
       <form action="{{ route('super.admin.update.student', $student->id) }}" Method="POST" enctype="multipart/form-data">
       @csrf
@@ -34,8 +24,7 @@
                 </div>
                 </div>
             </div>
-         </div>
-         <div class="student-accessories">
+            <div class="student-accessories">
             <div class="box-pay">
                      <button type="button" class="pay-fes-buton student_assign_accessories" data-student_id="{{ $student->id }}" data-toggle="modal" data-target="#myModal">Assign Accessories</button>
                   </div>
@@ -43,7 +32,7 @@
                      <button type="button" class="pay-fes-buton student_damage_accessories" data-student_id="{{ $student->id }}" data-toggle="modal" data-target="#myModals">Damage Accessories</button>
                </div>
             </div>
-         
+         </div>
          <div class="form-group display-column">
             <div class="form-design first-name">
                <label for="first-name">First Name</label>
@@ -257,8 +246,9 @@
                   <option value ="" disabled selected>Select Course Type</option>
                   <option value="Web Designing" @if($student->course_type == 'Web Designing') selected @endif>Web Designing</option>
                   <option value="Web Development" @if($student->course_type == 'Web Development') selected @endif>Web Development</option>
-                  <option value="Php" @if($student->course_type == 'Php') selected @endif>PHP</option>
+                  <option value="PHP Development" @if($student->course_type == 'PHP Development') selected @endif>PHP Development</option>
                   <option value="Graphic" @if($student->course_type == 'Graphic') selected @endif>Graphic</option>
+                  <option value="Digital Marketing" @if($student->course_type == 'Digital Marketing') selected @endif>Digital Marketing</option>
                   <option value="Full Stack Development" @if($student->course_type == 'Full Stack Development') selected @endif>Full Stack Development</option>
                </select>
             </div>
@@ -299,12 +289,30 @@
                   <option value ="" disabled selected>Select Status Type</option>
                   <option value="Active" @if($student->user_status == 'Active') selected @endif>Active</option>
                   <option value="Pending" @if($student->user_status == 'Pending') selected @endif>Pending</option>
-                  <option value="Suspend" @if($student->user_status == 'Suspend') selected @endif>Suspend</option>
                   <option value="Leave" @if($student->user_status == 'Leave') selected @endif>Leave</option>
+                  <option value="Suspend" @if($student->user_status == 'Suspend') selected @endif>Suspend</option>
                   <option value="Completed" @if($student->user_status == 'Completed') selected @endif>Completed</option>
                </select>
             </div>
          </div>
+         @php $isInternRecord = !empty($is_intern) || $student->is_internship; @endphp
+         <div class="portal-internship-toggle">
+            <h4>Internship</h4>
+            @if($isInternRecord)
+            <label class="portal-internship-option">
+               <input type="checkbox" name="remove_from_internship" value="1">
+               <span>Remove from Internship</span>
+            </label>
+            <p class="portal-internship-hint">Check this and click Update to move this record back to <strong>All Students</strong> list.</p>
+            @else
+            <label class="portal-internship-option">
+               <input type="checkbox" name="move_to_internship" value="1">
+               <span>Move to Internship</span>
+            </label>
+            <p class="portal-internship-hint">Check this and click Update to move this student to the <strong>Internship</strong> list (hidden from All Students).</p>
+            @endif
+         </div>         @include('admin.partials.form-footer-alerts')
+
          <div class="form-button">
             <div class="back-button">
                <input type="submit" class="btn btn-success" name="submit" value="Update">
@@ -313,9 +321,9 @@
       </form>
    </div>
 </div>
-<div class="modal fade pay-modal" id="myModal" role="dialog">
+   <!--start student assign accessories model--> 
+   <div class="modal fade pay-modal" id="myModal" role="dialog">
       <div class="modal-dialog">
-         <!-- Modal content-->
          <div class="modal-content">
             <div class="modal-header">
                <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -336,13 +344,13 @@
          </div>
       </div>
    </div>
-   <!-- Damage accessories model-->
+   <!--start student assign accessories model--> 
+   <!--start student damage accessories model--> 
    <div class="modal pay-modals" id="myModals" role="dialog">
       <div class="modal-dialog">
-         <!-- Modal content-->
          <div class="modal-content">
             <div class="modal-header-damage">
-            <h4 class="modal-title">Damage Accessories</h4>
+               <h4 class="modal-title">Damage Accessories</h4>
                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body-damage">
@@ -361,6 +369,7 @@
          </div>
       </div>
    </div>
-</div>
-</div>
+   <!--end student assign damage model--> 
+   </div>
+   </div>
 @endsection

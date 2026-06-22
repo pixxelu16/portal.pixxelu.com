@@ -20,19 +20,99 @@ class StudentController extends Controller
 {
     //Function for Get all students list
     public function all_students() {
-        //Get students details
-        $get_students_detail = User::where('user_type', 'Student')->where('user_status', 'Active')->orderBy('id', 'DESC')->with('student_fees_detail')->get();
-       
-        //Get total students list acc to course  
-        $is_total_students = User::where('user_status', 'Active')->where('user_type', 'Student')->count();
-        $is_web_designing_students = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Web Designing')->count();
-        $is_web_development_students = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Web Development')->count();
-        $is_full_stack_development = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Full Stack Development')->count();
-        $is_php = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Php Development')->count();
-        $is_graphic = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Graphic')->count();
-        $digital_marketing = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Digital Marketing')->count();
+        $get_students_detail = User::regularStudents()->orderBy('id', 'DESC')->with('student_fees_detail')->get();
+
+        $is_total_students = User::regularStudents()->count();
+        $is_web_designing_students = User::regularStudents()->where('course_type', 'Web Designing')->count();
+        $is_web_development_students = User::regularStudents()->where('course_type', 'Web Development')->count();
+        $is_full_stack_development = User::regularStudents()->where('course_type', 'Full Stack Development')->count();
+        $is_php = User::regularStudents()->where('course_type', 'Php Development')->count();
+        $is_graphic = User::regularStudents()->where('course_type', 'Graphic')->count();
+        $digital_marketing = User::regularStudents()->where('course_type', 'Digital Marketing')->count();
 
         return view('admin.students.all-students-list', compact('get_students_detail', 'is_total_students', 'is_web_designing_students','is_web_development_students','is_full_stack_development','is_php','is_graphic','digital_marketing'));
+    }
+
+    //Function for Get all internships list
+    public function all_internships() {
+        $get_interns_detail = User::internships()->orderBy('id', 'DESC')->with('student_fees_detail')->get();
+        $is_total_interns = $get_interns_detail->count();
+
+        return view('admin.internships.all-internships-list', compact('get_interns_detail', 'is_total_interns'));
+    }
+
+    public function add_intern() {
+        return view('admin.internships.add-new-intern');
+    }
+
+    public function submit_intern(Request $request) {
+        $is_email_exists = User::where('email', $request->email)->exists();
+        if ($is_email_exists) {
+            return back()->with('unsuccess', 'Email is already taken, Please try with a new email.');
+        }
+
+        $filename = 'default_user.png';
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->move(public_path('uploads/users'), $filename);
+        }
+
+        $qualification = '';
+        if ($request->has('qualification')) {
+            $qualification = implode(',', $request->input('qualification'));
+        }
+
+        $course_joining_date = Carbon::parse($request->course_joining_date);
+        $course_completion_date = $course_joining_date->copy()->add($request->course_duration);
+        $course_completion_date_formatted = $course_completion_date->format('Y-m-d');
+
+        $create_intern = User::create([
+            'name' => $request->first_name . " " . $request->last_name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'dob' => $request->dob,
+            'gender' => $request->gender,
+            'father_name' => $request->father_name,
+            'father_phone_no' => $request->father_phone_no,
+            'aadhaar_no' => $request->aadhaar_no,
+            'email' => $request->email,
+            'password' => Hash::make($request['password']),
+            'student_phone_no' => $request->student_phone_no,
+            'marital_status' => $request->marital_status,
+            'category' => $request->category,
+            'address' => $request->address,
+            'district' => $request->district,
+            'state' => $request->state,
+            'pin_code' => $request->pin_code,
+            'qualification' => $qualification,
+            'course_type' => $request->course_type,
+            'course_duration' => $request->course_duration,
+            'course_joining_date' => $request->course_joining_date,
+            'course_complession_date' => $course_completion_date_formatted,
+            'batch_timing' => $request->batch_timing,
+            'total_fees' => $request->total_fees,
+            'user_status' => 'Active',
+            'user_type' => 'Student',
+            'is_internship' => true,
+            'user_pic' => $filename,
+        ]);
+
+        if ($create_intern) {
+            return redirect('admin/all-internships-list')->with('success', 'Intern record created successfully.');
+        }
+
+        return back()->with('unsuccess', 'Oops, something went wrong.');
+    }
+
+    public function edit_intern($id) {
+        $student = User::where('id', $id)->where('is_internship', true)->firstOrFail();
+        if ($student->user_status === 'Active') {
+            Trash::where('user_id', $id)->delete();
+        }
+        $is_intern = true;
+        return view('admin.students.edit-student', compact('student', 'is_intern'));
     }
 
     //Function for add new student
@@ -122,120 +202,74 @@ class StudentController extends Controller
 
     //Function for update student 
     public function update_student(Request $request, $id) {
-        //Check if user image is exit or not
-        $filename = 'default_user.png';
+        User::findOrFail($id);
+
+        $qualification = '';
+        if ($request->has('qualification')) {
+            $qualification = implode(',', $request->input('qualification'));
+        }
+
+        $data = [
+            'name' => $request->first_name . ' ' . $request->last_name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'dob' => $request->dob,
+            'gender' => $request->gender,
+            'father_name' => $request->father_name,
+            'father_phone_no' => $request->father_phone_no,
+            'aadhaar_no' => $request->aadhaar_no,
+            'student_phone_no' => $request->student_phone_no,
+            'marital_status' => $request->marital_status,
+            'category' => $request->category,
+            'address' => $request->address,
+            'district' => $request->district,
+            'state' => $request->state,
+            'pin_code' => $request->pin_code,
+            'qualification' => $qualification,
+            'course_type' => $request->course_type,
+            'course_duration' => $request->course_duration,
+            'course_joining_date' => $request->course_joining_date,
+            'batch_timing' => $request->batch_timing,
+            'total_fees' => $request->total_fees,
+            'user_status' => $request->user_status,
+            'user_type' => 'Student',
+        ];
+
         if ($request->hasFile('image')) {
             $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
+            $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/users'), $filename);
-            //Check if qualification exist or not
-            $qualification = '';
-            if ($request->has('qualification')) {
-                //Convert array to string
-                $qualification = implode(',', $request->input('qualification'));
-            }
-            //Check if the course joining date and course duration exists or not 
-            if ($request->has('course_joining_date') && $request->has('course_duration')) {
-                //Calculation course joining date
-                $course_joining_date = Carbon::parse($request->course_joining_date);
-                $course_completion_date = $course_joining_date->add($request->course_duration);
-                //Format the completion date
-                $course_completion_date_formatted = $course_completion_date->format('Y-m-d');
-                //Update student record with image
-                $update_student = User::where('id', $id)->update([
-                    'course_complession_date' => $course_completion_date_formatted,
-                ]);
-            }
-            //Update student record with image
-            $update_student = User::where('id', $id)->update([
-                'name' => $request->first_name . " " . $request->last_name,
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-                'dob' => $request->dob,
-                'gender' => $request->gender,
-                'father_name' => $request->father_name,
-                'father_phone_no' => $request->father_phone_no,
-                'aadhaar_no' => $request->aadhaar_no,
-                'student_phone_no' => $request->student_phone_no,
-                'marital_status' => $request->marital_status,
-                'category' => $request->category,
-                'address' => $request->address,
-                'district' => $request->district,
-                'state' => $request->state,
-                'pin_code' => $request->pin_code,
-                'qualification' => $qualification,
-                'course_type' => $request->course_type,
-                'course_duration' => $request->course_duration,
-                'course_joining_date' => $request->course_joining_date,
-                'batch_timing' => $request->batch_timing,
-                'total_fees' => $request->total_fees,
-                'user_status' => $request->user_status,
-                'user_type' => 'Student',
-                'user_pic' => $filename,
-            ]);
-
-            //Check if student record created or not
-            if ($update_student) {
-                return back()->with('success', 'Student record updated successfully.');
-            } else {
-                return back()->with('unsuccess', 'Opps something went wrong.');
-            }
-        } else {
-            //Check if qualification exist or not
-            $qualification = '';
-            if ($request->has('qualification')) {
-                //Convert array to string
-                $qualification = implode(',', $request->input('qualification'));
-            }
-            //Check if the course joining date and course duration exists or not 
-            if ($request->has('course_joining_date') && $request->has('course_duration')) {
-                //Calculation course joining date
-                $course_joining_date = Carbon::parse($request->course_joining_date);
-                $course_completion_date = $course_joining_date->add($request->course_duration);
-                //Format the completion date
-                $course_completion_date_formatted = $course_completion_date->format('Y-m-d');
-                //Update student record without image
-                $update_student = User::where('id', $id)->update([
-                    'course_complession_date' => $course_completion_date_formatted,
-                ]);
-            }
-            //Update student record without image
-            $update_student = User::where('id', $id)->update([
-                'name' => $request->first_name . " " . $request->last_name,
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-                'dob' => $request->dob,
-                'gender' => $request->gender,
-                'father_name' => $request->father_name,
-                'father_phone_no' => $request->father_phone_no,
-                'aadhaar_no' => $request->aadhaar_no,
-                'student_phone_no' => $request->student_phone_no,
-                'marital_status' => $request->marital_status,
-                'category' => $request->category,
-                'address' => $request->address,
-                'district' => $request->district,
-                'state' => $request->state,
-                'pin_code' => $request->pin_code,
-                'qualification' => $qualification,
-                'course_type' => $request->course_type,
-                'course_duration' => $request->course_duration,
-                'course_joining_date' => $request->course_joining_date,
-                'batch_timing' => $request->batch_timing,
-                'total_fees' => $request->total_fees,
-                'user_status' => $request->user_status,
-                'user_type' => 'Student',
-            ]);
-
-            //Check if student record created or not
-            if ($update_student) {
-                return back()->with('success', 'Student record updated successfully.');
-            } else {
-                return back()->with('unsuccess', 'Opps something went wrong.');
-            }
+            $data['user_pic'] = $filename;
         }
+
+        if ($request->filled('course_joining_date') && $request->filled('course_duration')) {
+            $course_joining_date = Carbon::parse($request->course_joining_date);
+            $data['course_complession_date'] = $course_joining_date->copy()
+                ->add($request->course_duration)
+                ->format('Y-m-d');
+        }
+
+        User::where('id', $id)->update($data);
+
+        if ($redirect = $this->redirectAfterInternshipToggle($request, $id)) {
+            return $redirect;
+        }
+
+        return back()->with('success', 'Student record updated successfully.');
+    }
+
+    private function redirectAfterInternshipToggle(Request $request, $id)
+    {
+        if ($request->has('move_to_internship')) {
+            User::where('id', $id)->update(['is_internship' => true]);
+            return redirect('admin/all-internships-list')->with('success', 'Student moved to Internship successfully.');
+        }
+        if ($request->has('remove_from_internship')) {
+            User::where('id', $id)->update(['is_internship' => false]);
+            return redirect('admin/all-students-list')->with('success', 'Removed from Internship. Student is now in All Students list.');
+        }
+        return null;
     }
 
     //Function for student submit fees
@@ -248,7 +282,7 @@ class StudentController extends Controller
         $is_create_student_fees = StudentFees::create([
             'user_id' => $request->student_id,
             'user_fees' => $request->fees_amount,
-            'is_down_payment' => $request->first_payment_type,
+            'is_down_payment' => $request->filled('first_payment_type') ? $request->first_payment_type : '',
             'payment_type' => $request->payment_type,
             'submission_date' => $now,
             'end_date' => $newDate,
@@ -418,7 +452,14 @@ class StudentController extends Controller
                                                                         <img src="<?php echo url('public/admin/images/edite-icon.svg'); ?>"
                                                                             alt="Edit Icon">
                                                                     </button>
+                                                                    <!-- Delete Button -->
+                                                                    <button class="btn btn-danger btn-sm delete-btn delete-student-fee"
+                                                                        data-id="<?php echo $fee['id']; ?>" 
+                                                                        data-student-name="<?php echo $get_student_detail['name']; ?>">                           
+                                                                        <img src="<?php echo url('public/admin/images/Delete 10px.png'); ?>" alt="Delete Icon">
+                                                                    </button>
                                                                 </span><br>
+
                                                                 <?php
                                                             endif;
                                                         endforeach;
@@ -632,6 +673,44 @@ class StudentController extends Controller
                 }
             });
         });
+
+        //Delete student fees record
+        $('body').on('click', '.delete-student-fee', function(event) {
+            event.preventDefault();
+            var id = $(this).data('id');       
+            //through sweet alert
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once processed, this fee cannot be reverted!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    //Call ajax
+                    $.ajax({
+                        type: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: base_url + '/admin/delete-student-fee',
+                        data: { id: id },
+                        //Show success message
+                        success: function(response) {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Student fee deleted successfully.",
+                                icon: "success"
+                            }).then(() => {
+                                location.reload();
+                            });
+                        },
+                    });
+                }
+            });
+        });
         </script>
             <script>
             $(document).ready(function () {
@@ -663,6 +742,20 @@ class StudentController extends Controller
         }
     }
 
+    //Function for delete student fee
+    public function delete_student_fee(Request $request) {
+        //Get student fee id through ajax request
+        $id = $request->id;
+        //Delete record
+        $delete_student_fee = StudentFees::where('id', $id)->delete();
+        //Check if student fee deleted or not
+        if ($delete_student_fee) {
+            return back()->with('success', 'Student fees deleted successfully.');
+        } else {
+            return back()->with('unsuccess', 'Opps something went wrong.');
+        }
+    }
+
     //Function for edit single student fees
     public function edit_student_fees($id) {
         $student_fees_detail = StudentFees::find($id);
@@ -681,17 +774,6 @@ class StudentController extends Controller
     //         return back()->with('success', 'Student fees updated successfully.');
     //     } else {
     //         return back()->with('unsuccess', 'Opps something went wrong.');
-    //     }
-    // }
-
-    // //Function for delete student fees
-    // public function delete_student_fees($id){
-    //     $delete_student_fees = StudentFees::find($id)->delete();
-    //     //Check if student fees deleted or not
-    //     if($delete_student_fees){
-    //         return back()->with('success', 'Student fees deleted successfully.');
-    //     } else {
-    //         return back()->with('success', 'Opps something went wrong.');
     //     }
     // }
 
@@ -776,7 +858,7 @@ class StudentController extends Controller
         $courseType = $request->segment(count($request->segments()));
 
         //Get search student detail
-        $get_students_detail = User::where('user_type', 'Student')->where('user_status', 'Active')->where('course_type', $courseType)->orderBy('id', 'DESC')->with('student_fees_detail')->get();
+        $get_students_detail = User::regularStudents()->where('course_type', $courseType)->orderBy('id', 'DESC')->with('student_fees_detail')->get();
         return view('admin.students.search-students-list', compact('get_students_detail', 'all_students_total_fees', 'all_students_paid_fees'));
     }
 

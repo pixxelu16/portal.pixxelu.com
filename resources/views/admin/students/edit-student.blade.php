@@ -2,19 +2,9 @@
 @section('content')
 <div class="space-remove"></div>
 <div class="title-subheading">
-   <h2>Edit Student Record</h2>
+   <h2>{{ !empty($is_intern) ? 'Edit Intern Record' : 'Edit Student Record' }}</h2>
 </div>
 <div class="main-table">
-   @if (Session::has('success')) 
-   <div class="notification-green">
-      <p>{{ Session::get('success') }}</p>
-   </div>
-   @endif 
-   @if (Session::has('unsuccess')) 
-   <div class="notification-red">
-      <p>{{ Session::get('unsuccess') }}</p>
-   </div>
-   @endif 
    <div class="login-form">
       <form action="{{ route('admin.update.student', $student->id) }}" Method="POST" enctype="multipart/form-data">
       @csrf
@@ -305,6 +295,24 @@
                </select>
             </div>
          </div>
+         @php $isInternRecord = !empty($is_intern) || $student->is_internship; @endphp
+         <div class="portal-internship-toggle">
+            <h4>Internship</h4>
+            @if($isInternRecord)
+            <label class="portal-internship-option">
+               <input type="checkbox" name="remove_from_internship" value="1">
+               <span>Remove from Internship</span>
+            </label>
+            <p class="portal-internship-hint">Check this and click Update to move this record back to <strong>All Students</strong> list.</p>
+            @else
+            <label class="portal-internship-option">
+               <input type="checkbox" name="move_to_internship" value="1">
+               <span>Move to Internship</span>
+            </label>
+            <p class="portal-internship-hint">Check this and click Update to move this student to the <strong>Internship</strong> list (hidden from All Students).</p>
+            @endif
+         </div>         @include('admin.partials.form-footer-alerts')
+
          <div class="form-button">
             <div class="back-button">
                <input type="submit" class="btn btn-success" name="submit" value="Update">

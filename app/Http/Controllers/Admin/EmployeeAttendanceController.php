@@ -125,37 +125,31 @@ class EmployeeAttendanceController extends Controller
         $daysInMonth = Carbon::create($year, $month, 1)->daysInMonth;
         $days = range(1, $daysInMonth);
 
-        //Calculate Sundays and the last Saturday of the month
+        //Get all Sundays and alternative Saturdays
         $sundays = [];
-        $secondSaturday = null;
-        $lastSaturday = null;
+        $alternativeSaturdays = [];
 
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $date = Carbon::create($year, $month, $day);
 
+            //Check for Sundays
             if ($date->isSunday()) {
-                $sundays[] = $day; 
+                $sundays[] = $day;
             }
 
+            //Check for Saturdays
             if ($date->isSaturday()) {
-                $weekNumber = $date->weekOfMonth;
-
-                // Identify the second Saturday
-                if ($weekNumber === 2) {
-                    $secondSaturday = $day;
-                }
-
-                // Identify the last Saturday
-                if ($day >= ($daysInMonth - 6)) {
-                    $lastSaturday = $day;
+                $weekOfMonth = ceil($day / 7);
+                if (in_array($weekOfMonth, [2, 4, 6])) {
+                    $alternativeSaturdays[] = $day;
                 }
             }
         }
 
-        //Calculate total holidays (Sundays + Second Saturday + Last Saturday)
-        $total_holidays = count($sundays) + ($secondSaturday ? 1 : 0) + ($lastSaturday ? 1 : 0);
+        //Calculate total holidays
+        $total_holidays = count($sundays) + count($alternativeSaturdays);
 
-        return view('admin.employee-attendances.all-employees-attendance-list', compact('get_employee_detail', 'months', 'days', 'month', 'year', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays', 'daysInMonth'));
+        return view('admin.employee-attendances.all-employees-attendance-list', compact('get_employee_detail', 'months', 'days', 'month', 'year', 'sundays', 'alternativeSaturdays', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays', 'daysInMonth'));
     }
 
     //Function for employee panch in attendance
@@ -226,7 +220,6 @@ class EmployeeAttendanceController extends Controller
         $month = $request->month;
         $year = $request->year;
 
-
         //Get employee details 
         $get_employee_detail = User::where('user_type', 'Employee')
             ->where('user_status', 'Active')->where('name', $employee_name)
@@ -236,8 +229,6 @@ class EmployeeAttendanceController extends Controller
                         ->whereMonth('submission_date', $month);
                 }
             ])->get();
-
-            //echo "<pre>"; print_r($get_employee_detail->toArray());exit;
             
         //Get employee name
         $get_employee_name = User::select('name')->where('user_type', 'Employee')->where('user_status', 'Active')->get();
@@ -304,53 +295,46 @@ class EmployeeAttendanceController extends Controller
         $daysInMonth = Carbon::create($year, $month, 1)->daysInMonth;
         $days = range(1, $daysInMonth);
 
-        //Calculate Sundays and the last Saturday of the month
+        //Get all Sundays and alternative Saturdays
         $sundays = [];
-        $secondSaturday = null;
-        $lastSaturday = null;
+        $alternativeSaturdays = [];
 
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $date = Carbon::create($year, $month, $day);
 
+            //Check for Sundays
             if ($date->isSunday()) {
-                $sundays[] = $day; 
+                $sundays[] = $day;
             }
 
+            //Check for Saturdays
             if ($date->isSaturday()) {
-                $weekNumber = $date->weekOfMonth;
-
-                // Identify the second Saturday
-                if ($weekNumber === 2) {
-                    $secondSaturday = $day;
-                }
-
-                // Identify the last Saturday
-                if ($day >= ($daysInMonth - 6)) {
-                    $lastSaturday = $day;
+                $weekOfMonth = ceil($day / 7);
+                if (in_array($weekOfMonth, [2, 4, 6])) {
+                    $alternativeSaturdays[] = $day;
                 }
             }
         }
 
-        //Calculate total holidays (Sundays + Second Saturday + Last Saturday)
-        $total_holidays = count($sundays) + ($secondSaturday ? 1 : 0) + ($lastSaturday ? 1 : 0);
-
-        return view('admin.employee-attendances.search-employee-attendances', compact('get_employee_detail', 'get_employee_name', 'months', 'days', 'month', 'year', 'daysInMonth', 'sundays', 'lastSaturday', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays'));
+        //Calculate total holidays
+        $total_holidays = count($sundays) + count($alternativeSaturdays);
+        
+        return view('admin.employee-attendances.search-employee-attendances', compact('get_employee_detail', 'get_employee_name', 'months', 'days', 'month', 'year', 'daysInMonth', 'sundays', 'alternativeSaturdays', 'total_present_hours', 'total_present_days', 'total_absent_days', 'total_leave_days', 'total_half_day', 'total_holidays'));
     }
 
-
-
-    public function downloadAttendancePDF()
-    {
+    //Function for dounload attendance pdf file
+    public function downloadAttendancePDF() {
+        //Get current month and year
         $currentMonth = Carbon::now()->month;
         $currentYear = Carbon::now()->year;
     
-        // Fetch employees with attendance details for the current month
+        //Get employees with attendance details for the current month
         $employees = User::where('user_type', 'Employee')->where('user_status', 'Active')->with(['employees_attendance_detail' => function ($query) use ($currentMonth, $currentYear) {
             $query->whereMonth('submission_date', $currentMonth)
                   ->whereYear('submission_date', $currentYear);
         }])->get();
     
-        // Calculate total holidays (Sundays + alternate Saturdays)
+        //Calculate total holidays (Sundays + alternate Saturdays)
         $daysInMonth = Carbon::now()->daysInMonth;
         $totalHolidays = 0;
         for ($day = 1; $day <= $daysInMonth; $day++) {
@@ -359,6 +343,7 @@ class EmployeeAttendanceController extends Controller
                 $totalHolidays++;
             }
         }
+        //Get attendances detail
         foreach ($employees as $employee) {
             $totalHours = 0;
             foreach ($employee->employees_attendance_detail as $attendance) {
@@ -370,9 +355,7 @@ class EmployeeAttendanceController extends Controller
             }
             $employee->total_hours = $totalHours;
         }
-        
-      
-    
+        //Get data
         $data = [
             'employees' => $employees,
             'month' => Carbon::now()->format('F'),
@@ -381,18 +364,27 @@ class EmployeeAttendanceController extends Controller
             'daysInMonth' => $daysInMonth
         ];
     
-        $pdf = Pdf::loadView('admin.employee-attendances.attendance-pdf', $data);
-        return $pdf->download('employee_attendance_' . Carbon::now()->format('F_Y') . '.pdf');
+        //Create pdf
+        $pdf = PDF::loadView('admin.employee-attendances.employees-attendance-pdf', $data)
+        ->setPaper('A4', 'portrait'); 
+
+        //Generate file name
+        $fileName = 'employees_attendance_list_' . Carbon::now()->format('d M Y') . '.pdf';
+
+        //Save PDF to the folder
+        $pdf->save(public_path("uploads/employees-monthly-attendances-pdf/{$fileName}"));
+
+        //Download the PDF
+        return $pdf->download($fileName);   
     }
     
-
-    
-    public function SearchdownloadAttendancePDF($unique_employee_id)
-    {
+    //Function for single employee generate pdf file
+    public function SearchdownloadAttendancePDF($unique_employee_id) {
+        //Get current month and year
         $currentMonth = Carbon::now()->month;
         $currentYear = Carbon::now()->year;
     
-        // Fetch the single employee with attendance details for the current month
+        //Get single employee with attendance details for the current month
         $employee = User::where('unique_employee_id', $unique_employee_id)->where('user_type', 'Employee')
             ->where('user_status', 'Active')
             ->with(['employees_attendance_detail' => function ($query) use ($currentMonth, $currentYear) {
@@ -400,10 +392,8 @@ class EmployeeAttendanceController extends Controller
                       ->whereYear('submission_date', $currentYear);
             }])
             ->first();
-
-            //echo "<pre>"; print_r($employee->toArray());exit;
     
-        // Calculate total holidays (Sundays + alternate Saturdays)
+        //Calculate total holidays (Sundays + alternate Saturdays)
         $daysInMonth = Carbon::now()->daysInMonth;
         $totalHolidays = 0;
         for ($day = 1; $day <= $daysInMonth; $day++) {
@@ -413,7 +403,7 @@ class EmployeeAttendanceController extends Controller
             }
         }
     
-        // Calculate total worked hours for the single employee
+        //Calculate total worked hours for the single employee
         $totalHours = 0;
         foreach ($employee->employees_attendance_detail as $attendance) {
             if ($attendance->attendance_status === 'present' && $attendance->punch_in_time && $attendance->punch_out_time) {
@@ -424,7 +414,7 @@ class EmployeeAttendanceController extends Controller
         }
         $employee->total_hours = $totalHours;
     
-        // Prepare data for the PDF
+        //Prepare data for the PDF
         $data = [
             'employee' => $employee,
             'month' => Carbon::now()->format('F'),
@@ -433,14 +423,10 @@ class EmployeeAttendanceController extends Controller
             'daysInMonth' => $daysInMonth
         ];
     
-        // Generate and download the PDF
+        //Generate and download the PDF
         $pdf = Pdf::loadView('admin.employee-attendances.search-employee-attendance-pdf', $data);
         return $pdf->download('employee_attendance_' . Carbon::now()->format('F_Y') . '.pdf');
     }
-    
-    
-    
-    
 }
 
 

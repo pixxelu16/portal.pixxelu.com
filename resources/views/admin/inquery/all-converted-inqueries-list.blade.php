@@ -2,25 +2,17 @@
 @section('content')
 <div class="space-remove"></div>
 <div class="title-subheading">
-   @if (Session::has('success'))
-   <div class="notification-green">
-      <p>{{ Session::get('success') }}</p>
-   </div>
-   @endif 
-   @if (Session::has('unsuccess'))
-   <div class="notification-red">
-      <p>{{ Session::get('unsuccess') }}</p>
-   </div>
-   @endif
+   @include('notification')
    <h2>All Converted Inqueries Listing</h2>
 </div>
 <div class="main-table">
    <div class="data-table-listing">
       <div class="btn-pixxelu">
          <a href="{{ url('admin/all-inqueries-list') }}">
-         <span class="login-arrow">
-         <i class="fa fa-arrow-left" style="margin-right: 5px;" aria-hidden="true"></i>Back
-         </span>
+            <span class="login-arrow">
+               <i class="fa fa-arrow-left" style="margin-right: 5px;" aria-hidden="true"></i>
+               Back
+            </span>
          </a>
       </div>
    </div>
@@ -37,7 +29,7 @@
                   <th>Visit</th>
                   <th>Inqury Date</th>
                   <th>Status</th>
-                  <!-- <th>Action</th> -->
+                  <!--<th>Action</th>-->
                </tr>
             </thead>
             <tbody>
@@ -45,25 +37,27 @@
                @endphp
                @foreach($all_inqueries_list as $list)   
                <tr>
-                  <td>{{ $count++ }}</td>
+                  <td>{{ $count++ }}.</td>
                   <td>{{ $list->name }} </td>
                   <td><a href="https://wa.me/{{ str_replace(['+', '-', ' '], '', $list->mobile) }}" target="_blank">{{ substr($list->mobile, 0, 5) . '-' . substr($list->mobile, 5) }}</a></td>
                   <td>{{ $list->address ??'-' }}</td>
+                  <!--check if course types exists or not-->
                   @if($list->course_type == 'Full Stack Development') 
-                  <td class="lights-blue-color"><span>Full Stack Development</span></td>
+                     <td class="lights-blue-color"><span>Full Stack Development</span></td>
                   @elseif($list->course_type == 'PHP Development')
-                  <td class="lights-green-color"><span>PHP Development</span></td>
+                     <td class="lights-green-color"><span>PHP Development</span></td>
                   @elseif($list->course_type == 'Web Development')
-                  <td class="light-yellow-color"><span>Web Development</span></td>
+                     <td class="light-yellow-color"><span>Web Development</span></td>
                   @elseif($list->course_type == 'Digital Marketing')
-                  <td class="light-organge-color"><span>Digital Marketing</span></td>
+                     <td class="light-organge-color"><span>Digital Marketing</span></td>
                   @elseif($list->course_type == 'Web Designing')
-                  <td class="light-pink-color"><span>Web Designing</span></td>
+                     <td class="light-pink-color"><span>Web Designing</span></td>
                   @elseif($list->course_type == 'Graphic Designing')
-                  <td class="light-cyan-color"><span>Graphic Designing</span></td>
+                     <td class="light-cyan-color"><span>Graphic Designing</span></td>
                   @else
-                  <td></td>
+                     <td>-</td>
                   @endif
+                  <!--check if visit exists or not-->
                   @if($list->visit == 'Google') 
                      <td class="lights-blue-color"><span>Google</span></td>
                   @elseif($list->visit == 'Instagram') 
@@ -87,19 +81,20 @@
                   @elseif($list->visit == 'Other') 
                      <td class="light-cyan-color"><span>Other</span></td>
                   @else
-                     <td></td>
+                     <td>-</td>
                   @endif
-                  <td>{{ \Carbon\Carbon::parse($list->created_at)->format('d M Y') }}</td>
+                  <td>{{ \Carbon\Carbon::parse($list->created_at)->format('d M, Y') }}</td>
+                  <!--check if status exists or not-->
                   @if($list->status == 'Active') 
-                  <td class="green-color"><span>Active</span></td>
+                     <td class="green-color"><span>Active</span></td>
                   @elseif($list->status == 'Office_Visited')
-                  <td class="pink-color"><span>Office Visited</span></td>
+                     <td class="pink-color"><span>Office Visited</span></td>
                   @elseif($list->status == 'Closed')
-                  <td class="red-color"><span>Closed</span></td>
+                     <td class="red-color"><span>Closed</span></td>
                   @elseif($list->status == 'Converted')
-                  <td class="purple-color"><span>Converted</span></td>
+                     <td class="purple-color"><span>Converted</span></td>
                   @else
-                  <td></td>
+                     <td>-</td>
                   @endif
                   <!-- <td>
                      <a class="btn btn-info btn-sm" href="{{ url('admin/edit-inquery', $list->id) }}">

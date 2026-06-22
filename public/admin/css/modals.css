@@ -1,0 +1,350 @@
+/* ===== Portal Modals — global styles for all Bootstrap & custom modals ===== */
+
+/* Fix broken backdrop (style.css previously set position: relative) */
+.modal-backdrop,
+.modal-backdrop.fade,
+.modal-backdrop.in,
+.modal-backdrop.show {
+	position: fixed !important;
+	top: 0 !important;
+	left: 0 !important;
+	right: 0 !important;
+	bottom: 0 !important;
+	width: 100vw !important;
+	height: 100vh !important;
+	background-color: rgba(0, 0, 0, 0.72) !important;
+	opacity: 1 !important;
+	z-index: 1040 !important;
+}
+
+.modal-backdrop.fade:not(.in):not(.show) {
+	opacity: 0 !important;
+}
+
+/* Center modal vertically */
+.modal {
+	z-index: 1050 !important;
+}
+
+.modal.in,
+.modal.show {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	padding: 20px 16px !important;
+	overflow-y: auto !important;
+}
+
+.modal-dialog {
+	margin: 0 auto !important;
+	max-width: 460px;
+	width: 100%;
+	position: relative;
+}
+
+.modal-dialog.modal-lg {
+	max-width: 640px;
+}
+
+.modal-content {
+	border: none !important;
+	border-radius: 16px !important;
+	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28) !important;
+	overflow: hidden;
+	margin: 0 !important;
+	background: #fff !important;
+}
+
+/* All header variants */
+.modal-header,
+.modal-header-damage,
+.modal-header-trash,
+.modals-header,
+.modal-header-edit-pays {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: space-between !important;
+	gap: 12px;
+	padding: 18px 22px !important;
+	border-bottom: 1px solid #f0f0f0 !important;
+	background: #fff !important;
+	position: relative !important;
+	text-align: left !important;
+	width: 100% !important;
+}
+
+.modal-title,
+.modal-header h4,
+.modal-header h5,
+.modal-header-damage h4,
+.modal-header-damage .modal-title,
+.modal-header-trash h4,
+.modals-header h4,
+.modal-header-edit-pays h4,
+#editFeeModal .modal-header .modal-title {
+	color: #191919 !important;
+	font-weight: 700 !important;
+	font-size: 17px !important;
+	margin: 0 !important;
+	line-height: 1.35 !important;
+	flex: 1;
+	order: 1;
+}
+
+/* Close buttons */
+.modal .close,
+.modal-header .close,
+.modal-header-damage .close,
+.modal-header-damage button.close,
+.modal-header-trash button,
+.modal-header-trash .close,
+.modals-header button,
+.modal-header-edit-pays button {
+	position: static !important;
+	top: auto !important;
+	right: auto !important;
+	background: #f3f3f3 !important;
+	border: none !important;
+	color: #555 !important;
+	border-radius: 8px !important;
+	width: 34px !important;
+	height: 34px !important;
+	min-width: 34px;
+	line-height: 34px !important;
+	font-size: 22px !important;
+	padding: 0 !important;
+	opacity: 1 !important;
+	text-shadow: none !important;
+	transition: background 0.2s, color 0.2s;
+	flex-shrink: 0;
+	order: 2;
+}
+
+.modal .close:hover,
+.modal-header .close:hover,
+.modal-header-damage button.close:hover,
+.modal-header-trash button:hover,
+.modals-header button:hover,
+.modal-header-edit-pays button:hover {
+	background: #DC4A26 !important;
+	color: #fff !important;
+	opacity: 1 !important;
+}
+
+/* Body */
+.modal-body,
+.modal-body-damage {
+	padding: 22px !important;
+	text-align: left !important;
+}
+
+.modal-body p {
+	font-size: 14px;
+	color: #666;
+	margin-bottom: 12px;
+}
+
+/* Form layout — stack fields vertically */
+.modal-body form,
+.modal-body-damage form,
+.pay-modal .modal-body form,
+.modal-content .modal-body-damage form {
+	display: flex !important;
+	flex-direction: column !important;
+	gap: 14px !important;
+	width: 100% !important;
+	padding: 0 !important;
+}
+
+.modal-body .form-group {
+	margin-bottom: 0;
+}
+
+.modal-body .form-group label,
+.modal-body-damage label {
+	display: block;
+	font-size: 13px;
+	font-weight: 600;
+	color: #555;
+	margin-bottom: 6px;
+}
+
+.modal-body .form-control,
+.modal-body input[type="text"],
+.modal-body input[type="number"],
+.modal-body input[type="time"],
+.modal-body input[type="date"],
+.modal-body textarea,
+.modal-body select,
+.modal-body-damage input,
+.modal-body-damage select,
+.pay-modal .modal-body form input,
+.pay-modal .modal-body form select,
+.modal-body select.form-control {
+	width: 100% !important;
+	border: 1px solid #e0e0e0 !important;
+	border-radius: 8px !important;
+	padding: 10px 14px !important;
+	font-size: 14px !important;
+	color: #333 !important;
+	height: auto !important;
+	background: #fafafa !important;
+	box-shadow: none !important;
+}
+
+.modal-body .form-control:focus,
+.modal-body input:focus,
+.modal-body select:focus,
+.modal-body textarea:focus,
+.pay-modal .modal-body form input:focus,
+.pay-modal .modal-body form select:focus {
+	border-color: #DC4A26 !important;
+	box-shadow: 0 0 0 3px rgba(220, 74, 38, 0.12) !important;
+	outline: none !important;
+	background: #fff !important;
+}
+
+/* Footer */
+.modal-footer {
+	padding: 14px 22px 18px !important;
+	border-top: 1px solid #f0f0f0 !important;
+	background: #fafafa !important;
+	display: flex !important;
+	justify-content: flex-end !important;
+	gap: 10px !important;
+}
+
+.modal-footer .btn,
+.modal-footer .btn-primary,
+.modal-body .portal-btn-primary,
+.modal-body .button-save button,
+.modal-body .button-saves button,
+.pay-modal .modal-body form button,
+.pay-modal .modal-body .button-save button,
+.modal-footer .is_create_employee_punch_in_attendance,
+.modal-footer .is_create_student_attendance,
+.modal-footer .is_create_employee_attendance,
+.button-save.is_create_student_damage_accessorie button {
+	background: #DC4A26 !important;
+	border: 1px solid #DC4A26 !important;
+	color: #fff !important;
+	padding: 10px 22px !important;
+	border-radius: 8px !important;
+	font-size: 14px !important;
+	font-weight: 600 !important;
+	width: 100%;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.modal-footer .btn:hover,
+.modal-body .portal-btn-primary:hover,
+.pay-modal .modal-body form button:hover {
+	background: #c43d1f !important;
+	border-color: #c43d1f !important;
+	color: #fff !important;
+}
+
+.button-save,
+.button-saves {
+	width: 100%;
+	margin: 0 !important;
+}
+
+/* Pay fees modal */
+.pay-modal .modal-dialog {
+	margin: 0 auto !important;
+}
+
+.pay-modal .modal-header {
+	padding: 18px 22px !important;
+}
+
+.pay-modal .modal-body {
+	padding: 22px !important;
+}
+
+/* Trash / radio options */
+.portal-radio-group {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin-top: 4px;
+}
+
+.portal-radio-group label {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 14px;
+	color: #444;
+	cursor: pointer;
+	padding: 10px 12px;
+	border: 1px solid #eee;
+	border-radius: 8px;
+	transition: border-color 0.2s, background 0.2s;
+}
+
+.portal-radio-group label:hover {
+	border-color: rgba(220, 74, 38, 0.35);
+	background: rgba(220, 74, 38, 0.04);
+}
+
+.portal-radio-group input[type="radio"] {
+	accent-color: #DC4A26;
+	width: 16px;
+	height: 16px;
+}
+
+/* Custom full-screen overlay modals */
+div#myModals,
+.scrolling-data-table .modal {
+	background-color: rgba(0, 0, 0, 0.72) !important;
+}
+
+.scrolling-data-table .modal-content {
+	margin: auto !important;
+	padding: 0 !important;
+	border-radius: 16px !important;
+	border: none !important;
+	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28) !important;
+	max-width: 480px;
+}
+
+/* SweetAlert2 backdrop */
+.swal2-container {
+	background: rgba(0, 0, 0, 0.72) !important;
+}
+
+.swal2-popup {
+	border-radius: 16px !important;
+	padding: 24px !important;
+}
+
+/* Loader inside modals */
+.modal-body .com_ajax_loader,
+.modal-body .loader {
+	text-align: center;
+	padding: 12px 0;
+}
+
+.modal-body .com_ajax_loader img,
+.modal-body .loader img {
+	max-width: 48px;
+}
+
+@media (max-width: 576px) {
+	.modal.in,
+	.modal.show {
+		padding: 12px !important;
+		align-items: flex-end !important;
+	}
+
+	.modal-dialog {
+		max-width: 100%;
+	}
+
+	.modal-content {
+		border-radius: 16px 16px 0 0 !important;
+	}
+}

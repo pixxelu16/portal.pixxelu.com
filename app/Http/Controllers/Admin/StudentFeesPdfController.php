@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -53,12 +52,51 @@ class StudentFeesPdfController extends Controller
             ->setPaper('A4', 'portrait'); 
 
         //Generate file name
-        $fileName = 'receipt_' . $student->name . '_' . Carbon::now()->format('Y-m-d') . '.pdf';
+        $fileName = 'receipt_' . $student->name . '_' . Carbon::now()->format('d M Y') . '.pdf';
 
         //Save PDF to the folder
-        $pdf->save(public_path("uploads/fees-pdfs/{$fileName}"));
+        $pdf->save(public_path("uploads/student-monthly-fees-pdf/{$fileName}"));
 
         //Download the PDF
         return $pdf->download($fileName);   
+    }
+
+    //Fucntion for show attendance monthly sheet 
+    public function downloadAttendancePDF(Request $request) {
+        //Get input field type
+        $type = $request->type;
+        //Get data and month
+        $date = Carbon::now()->startOfMonth();
+        $daysInMonth = $date->daysInMonth;
+        //Curse duration filter
+        if ($type === 'regular') {
+            $courseDurations = ['1 Year', '2 Year', '3 Year', '4 Year'];
+            $attendanceTitle = 'Regular Students Attendance Sheet';
+        } else {
+            $courseDurations = ['1 Month', '3 Month', '6 Month'];
+            $attendanceTitle = 'Internship Students Attendance Sheet';
+        }
+        //Get students
+        $students = User::where('user_type', 'Student')
+            ->where('user_status', 'Active')
+            ->whereIn('course_duration', $courseDurations)
+            ->orderBy('id', 'asc')
+            ->get();
+        //Pdf
+        $pdf = Pdf::setOptions([
+            'enable_html5_parser' => true,
+            'enable_php' => true,
+            'isRemoteEnabled' => true
+        ])->loadView('admin.students.student-attendance-pdf', [
+            'date'     => $date,
+            'days'     => $daysInMonth,
+            'students' => $students,
+            'attendanceTitle' => $attendanceTitle
+        ]);
+        //Pdf size
+        $pdf->setPaper('A4', 'landscape');
+        return $pdf->download(
+            strtolower($request->type) . '_attendance_' . $date->format('F_Y') . '.pdf'
+        );
     }
 }

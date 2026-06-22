@@ -1,0 +1,834 @@
+/* ===== Portal Forms — all add/edit/profile pages (portal + legacy main-table) ===== */
+
+.portal-form-scope,
+.portal-form-page,
+.main-table:has(.login-form),
+.main-table:has(.student-change-password),
+.main-table:has(form > .form-design) {
+	--form-max: 1000px;
+}
+
+.portal-form-page {
+	max-width: var(--form-max, 1000px);
+	margin: 0 auto 36px;
+	padding: 0 4px;
+}
+
+.portal-form-header {
+	margin-bottom: 20px;
+}
+
+.portal-form-header h2 {
+	margin: 0;
+	font-size: 22px;
+	font-weight: 700;
+	color: #191919;
+}
+
+.portal-form-sub {
+	margin: 6px 0 0;
+	font-size: 13px;
+	color: #888;
+}
+
+.portal-form-card,
+.main-table:has(.login-form),
+.main-table:has(.student-change-password) {
+	background: #fff;
+	border: 1px solid #ebebeb;
+	border-radius: 16px;
+	padding: 32px !important;
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+	max-width: var(--form-max, 1000px);
+	margin: 0 auto 36px;
+}
+
+/* Login form container */
+.portal-form-page .login-form,
+.main-table .login-form {
+	width: 100% !important;
+	max-width: 100% !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	background: transparent !important;
+	box-shadow: none !important;
+	border: none !important;
+}
+
+/* Grid fields */
+.portal-form-page .form-group,
+.main-table .form-group.display-column,
+.main-table > form > .form-group.display-column {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 18px 20px;
+	margin-bottom: 22px;
+	max-width: 100%;
+	flex-wrap: unset !important;
+}
+
+.portal-form-page .form-group.display-column,
+.main-table .form-group.display-column {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* Radio / gender section — full width stacked groups */
+.portal-form-page .radio-btn-design,
+.main-table .radio-btn-design {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+	gap: 18px 20px !important;
+	width: 100% !important;
+	margin-bottom: 22px !important;
+	justify-content: unset !important;
+}
+
+.portal-form-page .radio-btn-design .form-group,
+.main-table .radio-btn-design .form-group {
+	width: 100% !important;
+	display: block !important;
+	margin-bottom: 0 !important;
+}
+
+.portal-form-page .form-design,
+.main-table .form-design {
+	width: 100% !important;
+	min-width: 0;
+	max-width: 100%;
+	flex: none !important;
+	margin: 0;
+}
+
+.portal-form-page .form-design.category,
+.portal-form-page .form-design.qualification,
+.main-table .form-design.category,
+.main-table .form-design.qualification {
+	grid-column: 1 / -1;
+	width: 100% !important;
+	margin-bottom: 8px;
+}
+
+.portal-form-page .form-group.display-column.radio-btn-design > .form-design.aadhaar-no,
+.portal-form-page .form-group.display-column.radio-btn-design > .form-design.password,
+.portal-form-page .form-group.display-column.radio-btn-design > .form-design.student-phone-no,
+.main-table .form-group.display-column.radio-btn-design > .form-design.aadhaar-no,
+.main-table .form-group.display-column.radio-btn-design > .form-design.password,
+.main-table .form-group.display-column.radio-btn-design > .form-design.student-phone-no {
+	grid-column: span 1;
+}
+
+/* Labels */
+.portal-form-page .form-design label,
+.portal-form-page .form-group > label,
+.main-table .form-design label,
+.main-table .form-group > label {
+	display: block;
+	font-size: 13px;
+	font-weight: 600;
+	color: #555;
+	margin-bottom: 7px;
+}
+
+/* Inputs */
+.portal-form-page .form-design input,
+.portal-form-page .form-design select,
+.portal-form-page .form-design textarea,
+.portal-form-page .form-design .form-control,
+.portal-form-page .form-group input,
+.portal-form-page .form-group select,
+.main-table .form-design input,
+.main-table .form-design select,
+.main-table .form-design textarea,
+.main-table .form-design .form-control,
+.main-table .form-group input,
+.main-table .form-group select {
+	width: 100% !important;
+	max-width: 100% !important;
+	box-sizing: border-box !important;
+	border: 1px solid #e0e0e0 !important;
+	border-radius: 8px !important;
+	padding: 12px 14px !important;
+	font-size: 14px !important;
+	color: #333 !important;
+	background: #fafafa !important;
+	height: auto !important;
+	min-height: 42px;
+	box-shadow: none !important;
+	transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.portal-form-page .form-design input:focus,
+.portal-form-page .form-design select:focus,
+.main-table .form-design input:focus,
+.main-table .form-design select:focus {
+	border-color: #DC4A26 !important;
+	box-shadow: 0 0 0 3px rgba(220, 74, 38, 0.1) !important;
+	outline: none !important;
+	background: #fff !important;
+}
+
+.portal-form-page .email-disabled,
+.main-table .email-disabled {
+	background: #f0f0f0 !important;
+	color: #888 !important;
+	cursor: not-allowed;
+}
+
+/* Gender / marital / category pills */
+.portal-form-page .gender-options,
+.main-table .gender-options,
+.portal-form-page .form-design.gender-options,
+.main-table .form-design.gender-options,
+.portal-form-page .form-design.marital-status,
+.main-table .form-design.marital-status {
+	display: flex !important;
+	flex-wrap: wrap !important;
+	gap: 10px !important;
+	width: 100% !important;
+	border: none !important;
+	background: none !important;
+	padding: 0 !important;
+	margin-top: 4px;
+}
+
+.portal-form-page .gender.male,
+.main-table .gender.male {
+	display: inline-flex !important;
+	align-items: center !important;
+	gap: 8px !important;
+	width: auto !important;
+	padding: 8px 14px !important;
+	border: 1px solid #e8e8e8 !important;
+	border-radius: 8px !important;
+	background: #fafafa !important;
+	cursor: pointer;
+	transition: border-color 0.2s, background 0.2s;
+}
+
+.portal-form-page .gender.male:hover,
+.main-table .gender.male:hover {
+	border-color: rgba(220, 74, 38, 0.4) !important;
+	background: rgba(220, 74, 38, 0.05) !important;
+}
+
+.portal-form-page .gender input,
+.main-table .gender input {
+	width: 16px !important;
+	min-height: auto !important;
+	height: 16px !important;
+	padding: 0 !important;
+	border: none !important;
+	background: transparent !important;
+	accent-color: #DC4A26;
+	flex-shrink: 0;
+}
+
+.portal-form-page .gender span,
+.main-table .gender span,
+.portal-form-page .gender label,
+.main-table .gender label {
+	font-size: 13px !important;
+	margin: 0 !important;
+	font-weight: 500;
+	color: #444;
+}
+
+.portal-form-page .gender label.radio-option,
+.main-table .gender label.radio-option {
+	display: inline-flex !important;
+	align-items: center;
+	gap: 8px;
+	padding: 0;
+	border: none;
+	background: none;
+}
+
+/* Qualification checkboxes */
+.portal-form-page .qualification-ftp,
+.main-table .qualification-ftp {
+	display: flex !important;
+	flex-wrap: wrap !important;
+	gap: 10px !important;
+	justify-content: flex-start !important;
+	margin-top: 8px;
+}
+
+.portal-form-page .checkbox-option,
+.main-table .checkbox-option {
+	display: inline-flex !important;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 14px;
+	border: 1px solid #e8e8e8;
+	border-radius: 8px;
+	background: #fafafa;
+	cursor: pointer;
+	font-size: 13px;
+}
+
+.portal-form-page .checkbox-option input,
+.main-table .checkbox-option input {
+	width: 16px !important;
+	min-height: auto !important;
+	height: 16px !important;
+	padding: 0 !important;
+	accent-color: #DC4A26;
+}
+
+/* Avatar */
+.portal-form-page .small-12.medium-2.large-2.columns,
+.main-table .small-12.medium-2.large-2.columns {
+	width: 100%;
+	margin: 0 0 24px;
+	text-align: center;
+}
+
+.portal-form-page .avatar-upload,
+.main-table .avatar-upload {
+	position: relative;
+	max-width: 140px;
+	margin: 0 auto 8px;
+}
+
+.portal-form-page .avatar-upload .avatar-edit,
+.main-table .avatar-upload .avatar-edit {
+	position: absolute;
+	right: 4px;
+	bottom: 4px;
+	top: auto;
+	z-index: 2;
+}
+
+.portal-form-page .avatar-upload .avatar-edit input + label,
+.main-table .avatar-upload .avatar-edit input + label,
+.portal-form-page .avatar-edit label,
+.main-table .avatar-edit label {
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	width: 36px !important;
+	height: 36px !important;
+	margin: 0 !important;
+	border-radius: 50% !important;
+	background: #DC4A26 !important;
+	border: 2px solid #fff !important;
+	box-shadow: 0 2px 8px rgba(220, 74, 38, 0.35) !important;
+	color: #fff !important;
+	line-height: 1 !important;
+	padding: 0 !important;
+}
+
+.portal-form-page .add-new-student-pic,
+.portal-form-page .avatar-preview,
+.main-table .add-new-student-pic,
+.main-table .add-new-student-pic .avatar-preview,
+.main-table .avatar-upload .avatar-preview {
+	width: 120px !important;
+	height: 120px !important;
+	margin: 0 auto;
+	border-radius: 50% !important;
+	overflow: hidden;
+	border: 3px solid #f0f0f0 !important;
+	background: #f5f5f5;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+	padding: 0 !important;
+}
+
+.portal-form-page .avatar-preview img,
+.portal-form-page #imagePreview,
+.main-table .add-new-student-pic img,
+.main-table .avatar-preview img,
+.main-table #imagePreview {
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover;
+	object-position: center;
+	border-radius: 50% !important;
+	display: block;
+}
+
+/* Change password — single card (no nested box) */
+.main-table:has(.student-change-password) {
+	padding: 32px !important;
+}
+
+.main-table .student-change-password,
+.portal-form-page .student-change-password {
+	width: 100% !important;
+	max-width: 520px;
+	margin: 0 auto !important;
+	box-shadow: none !important;
+	border: none !important;
+	padding: 0 !important;
+	background: transparent !important;
+}
+
+.portal-form-page .form-designs,
+.main-table .form-designs,
+.main-table .student-change-password .form-designs {
+	width: 100% !important;
+	max-width: 100% !important;
+	margin-bottom: 18px;
+}
+
+.portal-form-page .form-designs label,
+.main-table .form-designs label {
+	display: block;
+	font-size: 13px;
+	font-weight: 600;
+	color: #555;
+	margin-bottom: 7px;
+}
+
+.portal-form-page .form-designs input,
+.main-table .form-designs input {
+	width: 100% !important;
+	box-sizing: border-box;
+	border: 1px solid #e0e0e0 !important;
+	border-radius: 8px !important;
+	padding: 12px 14px !important;
+	font-size: 14px !important;
+	background: #fafafa !important;
+	min-height: 42px;
+}
+
+.portal-form-page .input-icon,
+.main-table .input-icon {
+	position: relative;
+}
+
+.portal-form-page .input-icon i,
+.main-table .input-icon i {
+	position: absolute;
+	right: 12px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: #aaa;
+	cursor: pointer;
+}
+
+/* Form actions */
+.portal-form-page .form-button,
+.main-table .form-button {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin-top: 8px;
+	padding-top: 22px;
+	border-top: 1px solid #f0f0f0;
+}
+
+.portal-form-page .btn-submit-custom,
+.portal-form-page input[type="submit"].btn-success,
+.portal-form-page input[type="submit"].btn.btn-success,
+.main-table .btn-submit-custom,
+.main-table input[type="submit"].btn-success,
+.main-table .back-button input[type="submit"],
+.main-table .form-button input[type="submit"] {
+	background: #DC4A26 !important;
+	border: none !important;
+	color: #fff !important;
+	padding: 11px 28px !important;
+	border-radius: 8px !important;
+	font-size: 14px !important;
+	font-weight: 600 !important;
+	cursor: pointer;
+	min-width: 140px !important;
+	white-space: nowrap !important;
+	width: auto !important;
+}
+
+.main-table .back-button,
+.main-table .form-button .back-button {
+	width: auto !important;
+	overflow: visible !important;
+}
+
+.portal-form-page .btn-back-custom,
+.main-table .btn-back-custom {
+	display: inline-flex;
+	align-items: center;
+	padding: 10px 20px;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: 600;
+	color: #555;
+	background: #f5f5f5;
+	border: 1px solid #e0e0e0;
+	text-decoration: none;
+}
+
+.portal-form-page .btn-back-custom:hover,
+.main-table .btn-back-custom:hover {
+	border-color: #DC4A26;
+	color: #DC4A26;
+	background: rgba(220, 74, 38, 0.06);
+}
+
+.portal-form-page .notification-green,
+.portal-form-page .notification-red,
+.main-table .notification-green,
+.main-table .notification-red {
+	margin-bottom: 16px;
+	border-radius: 8px;
+	font-size: 14px !important;
+}
+
+/* Form footer alerts — near Save/Update button */
+.main-table:has(.login-form) > .notification-green,
+.main-table:has(.login-form) > .notification-red,
+.main-table:has(.student-change-password) > .notification-green,
+.main-table:has(.student-change-password) > .notification-red {
+	display: none !important;
+}
+
+.portal-form-alert {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	padding: 12px 14px;
+	border-radius: 8px;
+	margin-bottom: 14px;
+	font-size: 14px;
+	line-height: 1.45;
+}
+
+.portal-form-alert i {
+	font-size: 18px;
+	flex-shrink: 0;
+	margin-top: 1px;
+}
+
+.portal-form-alert p {
+	margin: 0;
+}
+
+.portal-form-alert-success {
+	background: #E8F5E9;
+	border: 1px solid #C8E6C9;
+	color: #2E7D32;
+}
+
+.portal-form-alert-success i {
+	color: #43A047;
+}
+
+.portal-form-alert-error {
+	background: #FFEBEE;
+	border: 1px solid #FFCDD2;
+	color: #C62828;
+}
+
+.portal-form-alert-error i {
+	color: #E53935;
+}
+
+.main-table .form-button,
+.portal-form-page .form-button {
+	border-top: none;
+	padding-top: 0;
+}
+
+.main-table .portal-form-alert + .form-button,
+.portal-form-page .portal-form-alert + .form-button {
+	margin-top: 0;
+	padding-top: 8px;
+	border-top: 1px solid #f0f0f0;
+}
+
+@media (max-width: 768px) {
+	.portal-form-card,
+	.main-table:has(.login-form),
+	.main-table:has(.student-change-password) {
+		padding: 20px !important;
+	}
+
+	.portal-form-page .form-group,
+	.main-table .form-group.display-column,
+	.portal-form-page .radio-btn-design,
+	.main-table .radio-btn-design {
+		grid-template-columns: 1fr !important;
+	}
+}
+
+/* Bootstrap 5 + legacy overrides (must load after bootstrap) */
+body .portal-form-page .login-form,
+body .main-table .login-form {
+	width: 100% !important;
+	max-width: 100% !important;
+}
+
+body .portal-form-page .form-design,
+body .main-table .login-form .form-design,
+body .portal-form-page .radio-btn-design .form-group .form-design,
+body .main-table .login-form .radio-btn-design .form-group .form-design {
+	width: 100% !important;
+	max-width: 100% !important;
+	flex: none !important;
+}
+
+body .portal-form-page .radio-btn-design,
+body .main-table .login-form .radio-btn-design {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+	gap: 18px 20px !important;
+	width: 100% !important;
+}
+
+body .portal-form-page .radio-btn-design > .form-group,
+body .main-table .login-form .radio-btn-design > .form-group {
+	width: 100% !important;
+	max-width: 100% !important;
+}
+
+body .portal-form-page .gender-options,
+body .main-table .login-form .gender-options,
+body .portal-form-page .form-design.gender-options,
+body .main-table .login-form .form-design.gender-options {
+	display: flex !important;
+	flex-direction: row !important;
+	flex-wrap: wrap !important;
+	align-items: center !important;
+	gap: 10px !important;
+}
+
+body .portal-form-page .gender.male,
+body .main-table .login-form .gender.male {
+	display: inline-flex !important;
+	width: auto !important;
+	max-width: none !important;
+	flex: 0 0 auto !important;
+}
+
+body .avatar-upload .avatar-edit input + label {
+	background: #DC4A26 !important;
+	border-color: #fff !important;
+	width: 36px !important;
+	height: 36px !important;
+	line-height: 1 !important;
+}
+
+body .avatar-upload .avatar-preview,
+body .add-new-student-pic .avatar-preview,
+body .portal-form-page .add-new-student-pic .avatar-preview {
+	width: 120px !important;
+	height: 120px !important;
+	min-height: 120px !important;
+	border-radius: 50% !important;
+	border: 3px solid #f0f0f0 !important;
+	padding: 0 !important;
+	overflow: hidden;
+}
+
+body .add-new-student-pic .avatar-preview img,
+body .avatar-upload .avatar-preview img,
+body #imagePreview {
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover !important;
+	border-radius: 50% !important;
+}
+
+body .portal-form-page .form-group.display-column,
+body .main-table .login-form .form-group.display-column {
+	display: grid !important;
+	grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+/* ===== Form polish — layout, spacing, chips ===== */
+.main-table .login-form form,
+.portal-form-page .login-form form {
+	display: flex;
+	flex-direction: column;
+}
+
+/* Full width fields */
+.main-table .login-form .form-group.display-column .form-design.mail:has(input[type="email"]),
+.main-table .login-form .form-group.display-column .form-design.aadhaar-no,
+.main-table .login-form .form-group.display-column .form-design.address,
+.portal-form-page .login-form .form-group.display-column .form-design.mail:has(input[type="email"]),
+.portal-form-page .login-form .form-group.display-column .form-design.aadhaar-no,
+.portal-form-page .login-form .form-group.display-column .form-design.address {
+	grid-column: 1 / -1;
+}
+
+/* Avatar separator */
+.main-table .login-form .small-12.medium-2.large-2.columns,
+.portal-form-page .login-form .small-12.medium-2.large-2.columns {
+	padding-bottom: 22px;
+	margin-bottom: 6px;
+	border-bottom: 1px solid #f0f0f0;
+}
+
+/* Standalone qualification block */
+.main-table .login-form > form > .form-design.qualification,
+.portal-form-page .login-form > form > .form-design.qualification {
+	width: 100% !important;
+	margin: 6px 0 22px !important;
+	padding: 18px 0 4px;
+	border-top: 1px solid #f0f0f0;
+}
+
+/* Labels — more breathing room */
+.main-table .login-form .form-design > label,
+.main-table .login-form .form-group > label,
+.portal-form-page .login-form .form-design > label,
+.portal-form-page .login-form .form-group > label {
+	margin-bottom: 9px !important;
+	line-height: 1.3;
+}
+
+.main-table .login-form .radio-btn-design > .form-group > label,
+.portal-form-page .login-form .radio-btn-design > .form-group > label {
+	font-size: 12px;
+	font-weight: 600;
+	color: #777;
+	margin-bottom: 10px !important;
+}
+
+/* Inputs — cleaner look */
+.main-table .login-form .form-design input:not([type="radio"]):not([type="checkbox"]),
+.main-table .login-form .form-design select,
+.main-table .login-form .form-design textarea,
+.portal-form-page .login-form .form-design input:not([type="radio"]):not([type="checkbox"]),
+.portal-form-page .login-form .form-design select,
+.portal-form-page .login-form .form-design textarea {
+	background: #fff !important;
+	border-color: #d5d5d5 !important;
+}
+
+.main-table .login-form .email-disabled,
+.portal-form-page .login-form .email-disabled {
+	background: #f3f4f6 !important;
+	border-color: #e5e7eb !important;
+	color: #6b7280 !important;
+}
+
+/* Choice chips — compact pills */
+.main-table .login-form .gender.male,
+.main-table .login-form .checkbox-option,
+.portal-form-page .login-form .gender.male,
+.portal-form-page .login-form .checkbox-option {
+	padding: 6px 14px !important;
+	border-radius: 20px !important;
+	border-color: #e0e0e0 !important;
+	background: #fff !important;
+	font-size: 12px;
+	min-height: 34px;
+}
+
+.main-table .login-form .gender.male:has(input:checked),
+.main-table .login-form .checkbox-option:has(input:checked),
+.portal-form-page .login-form .gender.male:has(input:checked),
+.portal-form-page .login-form .checkbox-option:has(input:checked) {
+	border-color: #DC4A26 !important;
+	background: rgba(220, 74, 38, 0.09) !important;
+	box-shadow: 0 0 0 1px rgba(220, 74, 38, 0.15);
+}
+
+.main-table .login-form .gender.male:has(input:checked) span,
+.main-table .login-form .checkbox-option:has(input:checked) span,
+.portal-form-page .login-form .gender.male:has(input:checked) span,
+.portal-form-page .login-form .checkbox-option:has(input:checked) span {
+	color: #c43d1f;
+	font-weight: 600;
+}
+
+/* Wrapper divs — not inputs */
+.main-table .login-form .form-design.gender-options,
+.main-table .login-form .form-design.marital-status,
+.portal-form-page .login-form .form-design.gender-options,
+.portal-form-page .login-form .form-design.marital-status {
+	background: none !important;
+	border: none !important;
+	padding: 0 !important;
+	min-height: 0 !important;
+	box-shadow: none !important;
+}
+
+/* Radio row spacing */
+.main-table .login-form .form-group.display-column.radio-btn-design,
+.portal-form-page .login-form .form-group.display-column.radio-btn-design {
+	padding-top: 4px;
+	margin-top: 2px;
+	border-top: 1px solid #f0f0f0;
+	padding-top: 18px;
+}
+
+.main-table .login-form .form-design.category,
+.portal-form-page .login-form .form-design.category {
+	margin-top: 4px;
+	padding-top: 14px;
+	border-top: 1px dashed #eee;
+}
+
+.main-table .login-form .form-design.category > label,
+.portal-form-page .login-form .form-design.category > label {
+	margin-bottom: 10px !important;
+}
+
+/* Form sections gap */
+.main-table .login-form .form-group.display-column,
+.portal-form-page .login-form .form-group.display-column {
+	gap: 20px 24px !important;
+	margin-bottom: 24px !important;
+}
+
+.main-table .login-form .form-design,
+.portal-form-page .login-form .form-design {
+	margin-bottom: 0;
+}
+
+/* Submit row */
+.main-table .login-form .form-button,
+.portal-form-page .login-form .form-button {
+	margin-top: 12px;
+}
+
+/* Internship toggle on edit student */
+.main-table .portal-internship-toggle,
+.portal-form-page .portal-internship-toggle {
+	margin: 8px 0 20px;
+	padding: 16px 18px;
+	border: 1px solid #ebebeb;
+	border-radius: 10px;
+	background: #fafafa;
+}
+
+.main-table .portal-internship-toggle h4,
+.portal-form-page .portal-internship-toggle h4 {
+	margin: 0 0 12px;
+	font-size: 14px;
+	font-weight: 700;
+	color: #191919;
+}
+
+.main-table .portal-internship-option,
+.portal-form-page .portal-internship-option {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: 600;
+	color: #333;
+}
+
+.main-table .portal-internship-option input,
+.portal-form-page .portal-internship-option input {
+	width: 18px !important;
+	height: 18px !important;
+	min-height: 18px !important;
+	accent-color: #DC4A26;
+}
+
+.main-table .portal-internship-hint,
+.portal-form-page .portal-internship-hint {
+	margin: 10px 0 0;
+	font-size: 12px;
+	color: #888;
+	line-height: 1.5;
+}
+

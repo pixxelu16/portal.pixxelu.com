@@ -19,13 +19,13 @@
       <div class="btn-pixxelu">
          <!--start filter employees acc employee role-->
          <select name="employee_role" id="employee_role" class="search-student-list">
-            <option value ="" disabled selected>Select Employee Role</option>
-            <option value="Project Bidder">Project Bidder</option>
-            <option value="Php Development">Php Development</option>
-            <option value="Web Development">Web Development</option>
-            <option value="Web Designing">Web Designing</option>
-            <option value="Graphic Designing">Graphic Designing</option>
-            <option value="SEO">SEO</option>
+            <option value="" disabled {{ request()->segment(count(request()->segments())) ? '' : 'selected' }}>Select Employee Role</option>
+            <option value="Project Bidder" {{ request()->segment(count(request()->segments())) == 'Project Bidder' ? 'selected' : '' }}>Project Bidder</option>
+            <option value="Php Development" {{ request()->segment(count(request()->segments())) == 'Php Development' ? 'selected' : '' }}>Php Development</option>
+            <option value="Web Development" {{ request()->segment(count(request()->segments())) == 'Web Development' ? 'selected' : '' }}>Web Development</option>
+            <option value="Web Designing" {{ request()->segment(count(request()->segments())) == 'Web Designing' ? 'selected' : '' }}>Web Designing</option>
+            <option value="Graphic Designing" {{ request()->segment(count(request()->segments())) == 'Graphic Designing' ? 'selected' : '' }}>Graphic Designing</option>
+            <option value="SEO" {{ request()->segment(count(request()->segments())) == 'SEO' ? 'selected' : '' }}>SEO</option>
          </select>
          <!--end filter employees acc employee role-->
       </div>

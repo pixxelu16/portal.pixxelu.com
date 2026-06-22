@@ -1,373 +1,376 @@
-@extends('super-admin.layouts.master') 
+@extends('super-admin.layouts.master')
 @section('content')
 <div class="space-remove"></div>
 <div class="title-subheading">
-   @if (Session::has('success'))
-   <div class="notification-green">
-      <p>{{ Session::get('success') }}</p>
+   @include('admin.partials.page-alerts')
+
+   <div class="portal-stats portal-stats-compact">
+      <div class="portal-stat-card portal-stat-featured">
+         <div class="portal-stat-top">
+            <div class="portal-stat-icon stat-icon-orange"><i class="bi bi-people-fill"></i></div>
+            <span class="portal-stat-tag">All Courses</span>
+         </div>
+         <div class="portal-stat-body">
+            <p class="portal-stat-value">{{ $is_total_students }}</p>
+            <h3>Total Students</h3>
+         </div>
+      </div>
+      <div class="portal-stat-card">
+         <div class="portal-stat-top">
+            <div class="portal-stat-icon stat-icon-pink"><i class="bi bi-palette"></i></div>
+         </div>
+         <div class="portal-stat-body">
+            <p class="portal-stat-value">{{ $is_web_designing_students }}</p>
+            <h3>Web Designing</h3>
+         </div>
+      </div>
+      <div class="portal-stat-card">
+         <div class="portal-stat-top">
+            <div class="portal-stat-icon stat-icon-yellow"><i class="bi bi-code-slash"></i></div>
+         </div>
+         <div class="portal-stat-body">
+            <p class="portal-stat-value">{{ $is_web_development_students }}</p>
+            <h3>Web Development</h3>
+         </div>
+      </div>
+      <div class="portal-stat-card">
+         <div class="portal-stat-top">
+            <div class="portal-stat-icon stat-icon-blue"><i class="bi bi-layers"></i></div>
+         </div>
+         <div class="portal-stat-body">
+            <p class="portal-stat-value">{{ $is_full_stack_development }}</p>
+            <h3>Full Stack</h3>
+         </div>
+      </div>
+      <div class="portal-stat-card {{ $is_php == 0 ? 'portal-stat-zero' : '' }}">
+         <div class="portal-stat-top">
+            <div class="portal-stat-icon stat-icon-green"><i class="bi bi-braces"></i></div>
+         </div>
+         <div class="portal-stat-body">
+            <p class="portal-stat-value">{{ $is_php }}</p>
+            <h3>PHP Dev</h3>
+         </div>
+      </div>
+      <div class="portal-stat-card {{ $digital_marketing == 0 ? 'portal-stat-zero' : '' }}">
+         <div class="portal-stat-top">
+            <div class="portal-stat-icon stat-icon-teal"><i class="bi bi-megaphone"></i></div>
+         </div>
+         <div class="portal-stat-body">
+            <p class="portal-stat-value">{{ $digital_marketing }}</p>
+            <h3>Digital Mkt</h3>
+         </div>
+      </div>
+      <div class="portal-stat-card {{ $is_graphic == 0 ? 'portal-stat-zero' : '' }}">
+         <div class="portal-stat-top">
+            <div class="portal-stat-icon stat-icon-purple"><i class="bi bi-brush"></i></div>
+         </div>
+         <div class="portal-stat-body">
+            <p class="portal-stat-value">{{ $is_graphic }}</p>
+            <h3>Graphic</h3>
+         </div>
+      </div>
    </div>
-   @endif 
-   @if (Session::has('unsuccess'))
-   <div class="notification-red">
-      <p>{{ Session::get('unsuccess') }}</p>
+
+   <div class="portal-page-header">
+      <div>
+         <h2>All Students</h2>
+         <p class="portal-page-sub">Manage enrollments, fees & student records</p>
+      </div>
+      <span class="portal-record-count">{{ $get_students_detail->count() }} active</span>
    </div>
-   @endif
-   <!--start six boxes students information-->
-   <div class="boxes-wrapperers">
-      <div class="box">
-         <h3>Total Students</h3>
-         <p>{{ $is_total_students }}</p>
-      </div>
-      <div class="box">
-         <h3>Web Designing</h3>
-         <p>{{ $is_web_designing_students }}</p>
-      </div>
-      <div class="box">
-         <h3>Web Development</h3>
-         <p>{{ $is_web_development_students }}</p>
-      </div>
-      <div class="box">
-         <h3>Php Development</h3>
-         <p>{{ $is_php }}</p>
-      </div>
-      <div class="box">
-         <h3>Full Stack Development</h3>
-         <p>{{ $is_full_stack_development }}</p>
-      </div>
-      <div class="box">
-         <h3>Digital Marketing</h3>
-         <p>{{ $digital_marketing }}</p>
-      </div>
-      <div class="box">
-         <h3>Graphic</h3>
-         <p>{{ $is_graphic }}</p>
-      </div>
-   </div>
-   <!--end six boxes students information-->
-   <h2>All Students Listing</h2>
 </div>
-<div class="main-table">
-   <div class="data-table-listing">
-      <div class="btn-pixxelu">
-         <!--start filter student status acc fees-->
-         <select name="fees_status" id="search_student_fees_status" class="search-student-list">
-            <option value ="" disabled selected>Monthly Fees Status</option>
+
+<div class="portal-listing">
+   <div class="portal-listing-toolbar">
+      <div class="portal-listing-toolbar-left">
+         <select name="fees_status" id="search_student_fees_status" class="portal-select portal-select-sm">
+            <option value="" disabled selected>Fees Status</option>
             <option value="Paid">Paid</option>
             <option value="Pending">Pending</option>
             <option value="Overdue">Overdue</option>
          </select>
-         <!--end filter student status acc fees-->
-         <!--start filter student status acc course-->
-         <select name="course_type" id="search_student_list" class="search-student-list">
-            <option value ="" disabled selected>Select Course Type</option>
+         <select name="course_type" id="search_student_list" class="portal-select portal-select-sm">
+            <option value="" disabled selected>Course</option>
             <option value="Web Designing">Web Designing</option>
             <option value="Web Development">Web Development</option>
             <option value="PHP Development">PHP Development</option>
             <option value="Digital Marketing">Digital Marketing</option>
-            <option value="Graphic">Graphic</option>
             <option value="Full Stack Development">Full Stack Development</option>
+            <option value="Graphic">Graphic</option>
          </select>
-         <!--<a href="{{ url('super-admin/export-student') }}" class="export"><img src="{{ url('public/admin/images/csv-file.svg') }}"></a>-->
-         <a href="{{ url('super-admin/all-students-trash-list') }}" class="export"><img src="{{ url('public/admin/images/trash.svg') }}"></a>
-         <a href="{{ url('super-admin/add-new-student') }}"><img src="{{ url('public/admin/images/pluse.svg') }}">Add New Student</a>
-         <!--<a href="{{ url('super-admin/add-student-previous-fees') }}" class="add-pervious"><img src="{{ url('public/admin/images/pluse.svg') }}">Add Previous Fees</a>-->
+         <form action="{{ url('super-admin/export-student') }}" method="GET" class="portal-inline-form">
+            <select name="course_type" id="course_type" class="portal-select portal-select-sm">
+               <option value="" disabled selected>Export CSV</option>
+               <option value="all">All Students</option>
+               <option value="Web Designing">Web Designing</option>
+               <option value="Web Development">Web Development</option>
+               <option value="PHP Development">PHP Development</option>
+               <option value="Digital Marketing">Digital Marketing</option>
+               <option value="Full Stack Development">Full Stack Development</option>
+               <option value="Graphic">Graphic</option>
+            </select>
+            <button class="portal-btn-outline portal-btn-sm-export" type="submit"><i class="bi bi-download"></i> Export</button>
+         </form>
+      </div>
+      <div class="portal-listing-toolbar-right">
+         <a href="{{ url('super-admin/all-students-trash-list') }}" class="portal-btn-outline"><i class="bi bi-trash3"></i> Trash</a>
+         <a href="{{ url('super-admin/add-new-student') }}" class="portal-btn-primary"><i class="bi bi-plus-lg"></i> Add Student</a>
       </div>
    </div>
-   <!--start export order filter-->
-   <form action="{{ url('super-admin/export-students') }}" method="GET">
-      <div class="filter-admin-csv">
-         <select name="course_type" id="course_type" class="types">
-            <option value="" disabled selected>Students CSV Course Type</option>
-            <option value="all">All Students</option>
-            <option value="Web Designing">Web Designing</option>
-            <option value="Web Development">Web Development</option>
-            <option value="PHP Development">PHP Development</option>
-            <option value="Digital Marketing">Digital Marketing</option>
-            <option value="Full Stack Development">Full Stack Development</option>
-            <option value="Graphic">Graphic</option>
-         </select>
-         <div class="form-group">
-            <button class="btn btn-success" type="submit">Export</button>
-         </div>
-      </div>
-   </form>
-   <!--end export order filter-->
-   <div class="scrolling-data-table">
-      <div class="">
-      <table id="example1" class="rwd-table cloud-path">
-            <thead>
-               <tr class="">
-                  <th>S.No</th>
-                  <th>Registration ID</th>
-                  <th>Image</th>
-                  <th>Name</th>
-                  <th>Phone No</th>
-                  <th>Joining Date</th>
-                  <th>Course</th>
-                  <th>Course Duration</th>
-                  <th>Total Fees</th>
-                  <th>Last Paid Fees</th>
-                  <th>Pending Fees</th>
-                  <th>Status</th>
-                  <th>Action</th>
-               </tr>
-            </thead>
-            <tbody>
-               @php 
-                  $count = 1;
-                  use Carbon\Carbon;
-                  $currentMonth = Carbon::now()->month;
-                  $currentYear = Carbon::now()->year;
-               @endphp
-               @foreach($get_students_detail as $student)
-                  @php 
-                     $total_fees = $student->total_fees;
-                     $pay_fees = 0;
-                     @endphp
-                     @if(isset($student->student_fees_detail))
-                  @foreach($student->student_fees_detail as $fees)
-                     @php 
-                        $total_fees = $student->total_fees;
-                        $pay_fees += $fees['user_fees'];
-                        $submissionMonths[] = Carbon::parse($fees['submission_date'])->month;
-                     @endphp
-                  @endforeach 
-               @endif                 
-               <tr>
-                  <td>{{ $count++ }}</td>
-                  <td>{{ $student->id }} </td>
-                  <td data-th="Image">
-                     @if($student->user_pic)
-                     <div class="user-image"> <img src="{{ url('public/uploads/users/' . $student->user_pic)}}" alt="">
-                     @else
-                     <img src="{{ url('public/uploads/users/default_user.png') }}" alt="">
-                     </div>
-                     @endif                           
-                  </td>
-                  <td>
-                     <span onclick="openNav()"><a href="#" class="student-link"
-                        data-student_id="{{ $student->id }}">{{ $student->name }}</a></span>
-                  </td>
-                  <td>
-                     @if($student->student_phone_no)
-                     <a href="https://wa.me/{{ str_replace(['+', '-', ' '], '', $student->student_phone_no) }}"
-                        target="_blank">
-                     {{ substr($student->student_phone_no, 0, 5) }}-{{ substr($student->student_phone_no, 5) }}
-                     </a>
-                     @else
-                     -
-                     @endif
-                  </td>
-                  <td>{{ \Carbon\Carbon::parse($student->course_joining_date)->format('d M Y') }}</td>
-                  @if($student->course_type == 'Full Stack Development')
-                  <td class="lights-blue-color"><span>Full Stack Development</span></td>
-                  @elseif($student->course_type == 'PHP Development')
-                  <td class="lights-green-color"><span>PHP Development</span></td>
-                  @elseif($student->course_type == 'Web Development')
-                  <td class="light-yellow-color"><span>Web Development</span></td>
-                  @elseif($student->course_type == 'Web Designing')
-                  <td class="light-pink-color"><span>Web Designing</span></td>
-                  @elseif($student->course_type == 'Digital Marketing')
-                  <td class="light-organge-color"><span>Digital Marketing</span></td>
-                  @elseif($student->course_type == 'Graphic Designing')
-                  <td class="light-cyan-color"><span>Graphic Designing</span></td>
-                  @else
-                  <td></td>
-                  @endif
-                  <td>{{ $student->course_duration }}</td>
-                  @if($student->total_fees)
-                  <td>
-                     Rs {{ number_format($student->total_fees) }} 
-                     <div class="box-pay">
-                        <button type="button" class="pay-fes-buton student_pay_fees"
-                           data-student_id="{{ $student->id }}" data-student_name="{{ $student->name }}" data-toggle="modal" data-target="#myModal">Pay
-                        Fee</button>
-                     </div>
-                  </td>
-                  @else
-                  <td>N/A</td>
-                  @endif
-                  <td>
-                     @if(isset($student->student_fees_detail))
-                     @php      $last_record = $student->student_fees_detail->last(); @endphp
-                     @if($last_record)
-                     Rs {{ number_format($last_record->user_fees) }}<br>
-                     <span class="date-tbl">{{ Carbon::parse($last_record->submission_date)->format('d M Y') }}</span>
-                     @else
-                     -<br>
-                     @endif
-                     @endif
-                  </td>
-                  <td>
-                  @if($pay_fees == 0)
-                     -
-                  @else
-                     Rs {{ number_format($total_fees - $pay_fees) }}
-                  @endif
-               </td>
 
-                  @php
-                     $isPaid = false;
-                     $isPending = false;
-                     $isOverdue = false;
-                     $lastPaymentDate = null;
-                     $noPayment = true;
-                     $payment_completed = false;
+   <div class="portal-listing-body portal-table-scroll">
+      <table id="portalListingTable" class="portal-table portal-table-students">
+         <thead>
+            <tr>
+               <th>#</th>
+               <th>Student</th>
+               <th>Contact</th>
+               <th>Course</th>
+               <th>Fees Summary</th>
+               <th>This Month</th>
+               <th>Status</th>
+               <th>Actions</th>
+            </tr>
+         </thead>
+         <tbody>
+            @php
+               $count = 1;
+               use Carbon\Carbon;
+               $currentMonth = Carbon::now()->month;
+               $currentYear = Carbon::now()->year;
+            @endphp
+            @foreach($get_students_detail as $student)
+            @php
+               $pay_fees = 0;
+               if (isset($student->student_fees_detail)) {
+                  foreach ($student->student_fees_detail as $fees) {
+                     $pay_fees += $fees['user_fees'];
+                  }
+               }
+               $total_fees = $student->total_fees ?? 0;
+               $pending_fees = $total_fees - $pay_fees;
 
-                     if (isset($student->student_fees_detail)) {
-                     foreach ($student->student_fees_detail as $fees) {
+               $coursePill = match($student->course_type) {
+                  'Full Stack Development' => 'portal-pill-blue',
+                  'PHP Development'        => 'portal-pill-green',
+                  'Web Development'        => 'portal-pill-yellow',
+                  'Web Designing'          => 'portal-pill-pink',
+                  'Digital Marketing'      => 'portal-pill-orange',
+                  'Graphic Designing'      => 'portal-pill-cyan',
+                  'Graphic'                => 'portal-pill-cyan',
+                  default                  => 'portal-pill-gray',
+               };
+
+               $monthPaid = 0;
+               $monthPaidDate = null;
+               if (isset($student->student_fees_detail) && $student->student_fees_detail->isNotEmpty()) {
+                  $currentMonthPayments = $student->student_fees_detail->filter(function ($record) use ($currentMonth, $currentYear) {
+                     $d = Carbon::parse($record->submission_date);
+                     return $d->month == $currentMonth && $d->year == $currentYear
+                        && in_array($record->payment_type, ['cash', 'online']);
+                  });
+                  foreach ($currentMonthPayments as $payment) {
+                     $monthPaid += $payment->user_fees;
+                     $monthPaidDate = $payment->submission_date;
+                  }
+               }
+
+               $isPaid = false;
+               $isPending = false;
+               $isOverdue = false;
+               $lastPaymentDate = null;
+               $noPayment = empty($total_fees) || $total_fees == 0;
+               $payment_completed = false;
+
+               if (isset($student->student_fees_detail)) {
+                  foreach ($student->student_fees_detail as $fees) {
                      $submissionMonth = Carbon::parse($fees['submission_date'])->format('m');
                      $submissionYear = Carbon::parse($fees['submission_date'])->format('Y');
                      $lastPaymentDate = Carbon::parse($fees['submission_date']);
-
-                     //Check if the fees for the current month and year are paid
                      if ($submissionMonth == $currentMonth && $submissionYear == $currentYear && !is_null($fees['user_fees'])) {
                         $isPaid = true;
                         break;
                      }
-                     }
-
-                     //Check if the last payment date is more than 45 days ago
-                     if ($lastPaymentDate && $lastPaymentDate->diffInDays(Carbon::now()) > 45) {
-                         $isOverdue = true;
-                        } else {
-                         $isPending = !$isPaid;
-                        }
-                     } 
-
-                     //check user total fees
-                     if (!empty($student->total_fees) && $student->total_fees !== 0)  {
-                        $noPayment = false;
-                     }
-
-                  //check user fees completed or not
-                  if (isset($student->total_fees) && $student->total_fees == $pay_fees) {
-                     $payment_completed = true;
                   }
-                  @endphp
-                  @if($noPayment == true)
-                  <td>-</td>
-                  @elseif($isOverdue)
-                  <td class="yellow-color"><span>Overdue</span></td>
-                  @elseif($isPending)
-                  <td class="red-color"><span>Pending</span></td>
-                  @elseif($payment_completed)
-                  <td class="ligth-green-color"><span>Fees Complete</span></td>
-                  @else
-                  <td class="green-colors"><span>Paid</span></td>
-                  @endif
-                  <td>
-                     <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle action-fee-design" type="button"
-                           data-bs-toggle="dropdown" aria-expanded="false"> <img
-                           src="{{ url('public/admin/images/ellips.svg') }}" alt="ellips" /> </button>
-                        <ul class="dropdown-menu pay-fees-submit">
-                           <form class="drop-don-list">
-                              <li>
-                                 <!-- <a href="{{ url('admin/single-student-detail', $student->id) }}"><img src="{{ url('public/admin/images/ico-1.png') }}">View Student Detail</a> -->
-                              </li>
-                              <li><a href="{{ url('super-admin/edit-student', $student->id) }}"><img
-                                 src="{{ url('public/admin/images/ico-4.png') }}">Edit</a></li>
-                              <!-- <li><button type="submit" class="is_trash_student_record" data-id="{{ $student->id }}"><img src="{{ url('public/admin/images/ico-5.png') }}">Trash</button></li> -->
-                              <li class="student_trash_record" data-student_id="{{ $student->id }}">
-                                 <img src="{{ url('public/admin/images/ico-5.png') }}" alt="Trash Icon"> Trash
-                              </li>
-                           </form>
-                        </ul>
+                  if ($total_fees == $pay_fees) {
+                     $payment_completed = true;
+                  } elseif ($lastPaymentDate && $lastPaymentDate->diffInDays(Carbon::now()) > 45 && $total_fees !== $pay_fees) {
+                     $isOverdue = true;
+                  } else {
+                     $isPending = !$isPaid;
+                  }
+               }
+
+               if ($noPayment) {
+                  $statusBadge = 'portal-badge-muted'; $statusLabel = 'N/A';
+               } elseif ($isOverdue) {
+                  $statusBadge = 'portal-badge-warning'; $statusLabel = 'Overdue';
+               } elseif ($isPending) {
+                  $statusBadge = 'portal-badge-danger'; $statusLabel = 'Pending';
+               } elseif ($payment_completed) {
+                  $statusBadge = 'portal-badge-success'; $statusLabel = 'Complete';
+               } else {
+                  $statusBadge = 'portal-badge-success'; $statusLabel = 'Paid';
+               }
+            @endphp
+            <tr>
+               <td class="col-num">{{ $count++ }}</td>
+               <td>
+                  <div class="portal-person">
+                     <div class="portal-avatar">
+                        @if($student->user_pic)
+                           <img src="{{ url('public/uploads/users/' . $student->user_pic) }}" alt="">
+                        @else
+                           <img src="{{ url('public/uploads/users/default_user.png') }}" alt="">
+                        @endif
                      </div>
-                  </td>
-               </tr>
-               @endforeach 
-            </tbody>
-         </table>
-      </div>
-      <!--start student pay fees model-->
-      <div class="modal fade pay-modal" id="myModal" role="dialog">
-         <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-               <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title"><span class="student_name_pay_fees"></span>Wants to pay fees</h4>
-               </div>
-               <div class="modal-body">
-                  <form action="#" id="is_create_student_fee" Method="POST">
-                     <input id="model_student_id" type="hidden" value="" name="student_id">
-                     <input type="text" id="fees_amount" name="fees_amount" placeholder="Amount"/>                     
-                     <select name="payment_type" id="payment_type">
-                        <option value="">Payment Type</option>
-                        <option value="online">Online</option>
-                        <option value="cash">Cash</option>
-                     </select>
-                     <select name="first_payment_type" id="first_payment_type">
-                        <option value="">First Payment Type</option>
-                        <option value="down_payment">Down Payment</option>
-                        <option value="monthly">Monthly</option>
-                     </select>
-                     <div class="button-save"><button type="submit" class="disable-submit">Save</button></div>
-                  </form>
-                  <div class="loader com_ajax_loader" style="display:none;">
-                     <img src="{{ url('public/admin/images/200w.gif') }}" /> 
+                     <div class="portal-person-info">
+                        <a href="#" class="portal-person-name student-link" data-student_id="{{ $student->id }}" onclick="openNav(); return false;">{{ $student->name }}</a>
+                        <span class="portal-person-meta">Reg #{{ $student->id }} · Joined {{ Carbon::parse($student->course_joining_date)->format('d M Y') }}</span>
+                     </div>
                   </div>
-               </div>
-               <div class="student_fee_responce"></div>
-            </div>
-         </div>
-      </div>
-      <!--end student pay fees model-->
-      <!--start student trash model-->
-        <div class="modal" id="modeal_student_id" role="dialog">
-         <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-               <div class="modal-header-trash">
-                  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                  </button>
-                  <h4 class="modal-title">Trash student record</h4>
-               </div>
-               <div class="modal-body">
-                  <form action="#" id="trash_student_form" Method="POST">
-                     <input id="trash_student_id" type="hidden" value="" name="student_id">                   
-                     <p>Please select your student status</p>
-                     <input type="radio" id="Leave" name="user_status" value="Leave">
-                     <label for="leave">Due to some reason student leave.</label><br>
-                     <input type="radio" id="Completed" name="user_status" value="Completed">
-                     <label for="completed">Student course are completed.</label><br>
-                     <div class="button-saves"><button type="submit" class="disable-submit is_delete_trash_record">Save</button></div>
-                  </form>
-                  <div class="loader com_ajax_loader" style="display:none;">
-                     <img src="{{ url('public/admin/images/200w.gif') }}" /> 
+               </td>
+               <td>
+                  @if($student->student_phone_no)
+                     <a href="https://wa.me/{{ str_replace(['+', '-', ' '], '', $student->student_phone_no) }}" target="_blank" class="portal-phone">
+                        <i class="bi bi-whatsapp"></i>
+                        {{ substr($student->student_phone_no, 0, 5) }}-{{ substr($student->student_phone_no, 5) }}
+                     </a>
+                  @else
+                     <span class="portal-muted">—</span>
+                  @endif
+               </td>
+               <td>
+                  <span class="portal-pill {{ $coursePill }}">{{ $student->course_type ?: '—' }}</span>
+                  @if($student->course_duration)
+                     <span class="portal-duration">{{ $student->course_duration }}</span>
+                  @endif
+               </td>
+               <td>
+                  <div class="portal-fees-stack">
+                     @if($total_fees)
+                        <div class="portal-fees-row">
+                           <span class="portal-fees-label">Total</span>
+                           <span class="portal-fee-amount">₹ {{ number_format($total_fees) }}</span>
+                        </div>
+                        <div class="portal-fees-row">
+                           <span class="portal-fees-label">Pending</span>
+                           <span class="portal-fees-pending">₹ {{ number_format(max(0, $pending_fees)) }}</span>
+                        </div>
+                        <button type="button" class="portal-btn-sm portal-btn-sm-pay student_pay_fees pay-fes-buton"
+                           data-student_id="{{ $student->id }}" data-student_name="{{ $student->name }}"
+                           data-toggle="modal" data-target="#myModal">
+                           <i class="bi bi-cash-coin"></i> Pay Fee
+                        </button>
+                     @else
+                        <span class="portal-muted">N/A</span>
+                     @endif
                   </div>
-               </div>
-               <div class="trash_responce"></div>
-            </div>
-         </div>
-      </div>
-      <!--end student trash model-->
+               </td>
+               <td>
+                  @if($monthPaid > 0)
+                     <span class="portal-fee-amount">₹ {{ number_format($monthPaid) }}</span>
+                     <span class="portal-fee-date">{{ Carbon::parse($monthPaidDate)->format('d M Y') }}</span>
+                  @else
+                     <span class="portal-muted">—</span>
+                  @endif
+               </td>
+               <td><span class="portal-badge {{ $statusBadge }}">{{ $statusLabel }}</span></td>
+               <td>
+                  <div class="portal-row-actions">
+                     <a href="{{ url('super-admin/download-receipt/' . $student->id) }}" target="_blank" class="portal-icon-btn portal-icon-download" title="Download Receipt">
+                        <i class="bi bi-download"></i>
+                     </a>
+                     <a href="{{ url('super-admin/edit-student', $student->id) }}" class="portal-icon-btn portal-icon-edit" title="Edit">
+                        <i class="bi bi-pencil"></i>
+                     </a>
+                     <button type="button" class="portal-icon-btn portal-icon-danger student_trash_record" data-student_id="{{ $student->id }}" title="Move to Trash">
+                        <i class="bi bi-trash3"></i>
+                     </button>
+                  </div>
+               </td>
+            </tr>
+            @endforeach
+         </tbody>
+      </table>
    </div>
 </div>
+
+{{-- Pay Fees Modal --}}
+<div class="modal fade pay-modal" id="myModal" role="dialog">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title"><span class="student_name_pay_fees"></span> — Pay Fees</h4>
+         </div>
+         <div class="modal-body">
+            <form action="{{ url('super-admin/submit-student-fees') }}" id="is_create_student_fee" method="POST" novalidate>
+               @csrf
+               <input id="model_student_id" type="hidden" value="" name="student_id">
+               <input type="text" id="fees_amount" name="fees_amount" placeholder="Amount" class="form-control mb-2" />
+               <select name="payment_type" id="payment_type" class="form-control mb-2">
+                  <option value="">Payment Type</option>
+                  <option value="online">Online</option>
+                  <option value="cash">Cash</option>
+               </select>
+               <select name="first_payment_type" id="first_payment_type" class="form-control mb-2">
+                  <option value="">First Payment Type (Optional)</option>
+                  <option value="down_payment">Down Payment</option>
+                  <option value="monthly">Monthly</option>
+               </select>
+               <div class="button-save"><button type="button" class="disable-submit portal-btn-primary is_submit_student_fee">Save Payment</button></div>
+            </form>
+            <div class="loader com_ajax_loader" style="display:none;"><img src="{{ url('public/admin/images/200w.gif') }}" /></div>
+         </div>
+         <div class="student_fee_responce"></div>
+      </div>
+   </div>
 </div>
+
+{{-- Trash Modal --}}
+<div class="modal" id="modeal_student_id" role="dialog">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header-trash">
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Move to Trash</h4>
+         </div>
+         <div class="modal-body">
+            <form action="#" id="trash_student_form" Method="POST">
+               <input id="trash_student_id" type="hidden" value="" name="student_id">
+               <p>Select reason:</p>
+               <div class="portal-radio-group">
+                  <label><input type="radio" name="user_status" value="Leave"> Student left the course</label>
+                  <label><input type="radio" name="user_status" value="Completed"> Course completed</label>
+               </div>
+               <div class="button-saves mt-3"><button type="submit" class="disable-submit is_delete_trash_record portal-btn-primary">Confirm</button></div>
+            </form>
+            <div class="loader com_ajax_loader" style="display:none;"><img src="{{ url('public/admin/images/200w.gif') }}" /></div>
+         </div>
+         <div class="trash_responce"></div>
+      </div>
+   </div>
 </div>
+
 <div id="myNav" class="overlay hide">
    <div class="overlay-content">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <div class="loader com_ajax_loaders" style="display: none;">
-         <img src="{{ url('public/admin/images/index.svg') }}" />
-      </div>
+      <div class="loader com_ajax_loaders" style="display: none;"><img src="{{ url('public/admin/images/index.svg') }}" /></div>
       <div class="student_detail_response"></div>
    </div>
 </div>
+
 <script>
-   function openNav() {
+function openNav() {
    document.getElementById("myNav").style.width = "68%";
    document.querySelector('.overlay').classList.remove('hide');
-   document.querySelector('.loader').style.display = "block"; 
-   }
-   function closeNav() {
+   document.querySelector('.loader').style.display = "block";
+}
+function closeNav() {
    document.getElementById("myNav").style.width = "0%";
    document.querySelector('.overlay').classList.add('hide');
-   document.querySelector('.loader').style.display = "none"; 
-   }
+   document.querySelector('.loader').style.display = "none";
+}
 </script>
 @endsection

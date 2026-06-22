@@ -5,22 +5,12 @@
    <h2>Changed Password</h2>
 </div>
 <div class="main-table">
-   @if (Session::has('success')) 
-   <div class="notification-green">
-      <p>{{ Session::get('success') }}</p>
-   </div>
-   @endif 
-   @if (Session::has('unsuccess')) 
-   <div class="notification-red">
-      <p>{{ Session::get('unsuccess') }}</p>
-   </div>
-   @endif 
    <div class="student-change-password">
       <form action="{{ route('super.admin.changed.password', $user_profile->id) }}" method="POST" enctype="multipart/form-data">
          @csrf
          <div class="form-designs first-name">
             <label for="email">Email Address</label>
-            <input type="email" id="email" class="email-disabled" name="email" value="{{ $user_profile->email }}">
+            <input type="email" id="email" class="email-disabled" name="email" value="{{ $user_profile->email }}" readonly>
          </div>
          <div class="form-designs first-name">
             <label for="current_password">Current Password</label>
@@ -42,7 +32,8 @@
                <input type="password" id="confirm_password" name="confirm_password" placeholder="Enter Confirm Password" required>
                <i class="fas fa-eye" id="toggleConfirmPassword"></i>
             </div>
-         </div>
+         </div>         @include('admin.partials.form-footer-alerts')
+
          <div class="form-button">
             <div class="back-button">
                <input type="submit" class="btn btn-success" name="submit" value="Update">

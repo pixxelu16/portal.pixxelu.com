@@ -43,7 +43,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = ['unique_employee_id','name','email','password','first_name','last_name','dob','gender','father_name','father_phone_no','aadhaar_no','student_phone_no','marital_status','category','address','district','pin_code','state','qualification','course_type','course_duration','course_joining_date','batch_timing','course_complession_date','total_fees','employee_phone_no','joining_date','resign_date','experince','net_salary','employee_role','user_pic','user_status','user_type'];
+    protected $fillable = ['unique_employee_id','name','email','password','first_name','last_name','dob','gender','father_name','father_phone_no','aadhaar_no','student_phone_no','marital_status','category','address','district','pin_code','state','qualification','course_type','course_duration','course_joining_date','batch_timing','course_complession_date','total_fees','employee_phone_no','joining_date','resign_date','national_id','blood','religion','experince','net_salary','employee_role','user_pic','user_status','user_type','is_internship'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -97,6 +97,23 @@ class User extends Authenticatable
     //Function for get student attendance details
     public function student_attendance_detail() {
         return $this->HasMany(StudentAttendance::class, 'user_id');
+    }
+
+    public function scopeActiveStudents($query)
+    {
+        return $query->where('user_type', 'Student')->where('user_status', 'Active');
+    }
+
+    public function scopeRegularStudents($query)
+    {
+        return $query->activeStudents()->where(function ($q) {
+            $q->where('is_internship', false)->orWhereNull('is_internship');
+        });
+    }
+
+    public function scopeInternships($query)
+    {
+        return $query->activeStudents()->where('is_internship', true);
     }
 }
  

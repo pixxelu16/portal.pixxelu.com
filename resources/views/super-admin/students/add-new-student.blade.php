@@ -1,20 +1,10 @@
-@extends('super-admin.layouts.master')
+@extends('super-admin.layouts.master') 
 @section('content')
 <div class="space-remove"></div>
 <div class="title-subheading">
    <h2>Add New Student Record</h2>
 </div>
 <div class="main-table">
-   @if (Session::has('success')) 
-   <div class="notification-green">
-      <p>{{ Session::get('success') }}</p>
-   </div>
-   @endif 
-   @if (Session::has('unsuccess')) 
-   <div class="notification-red">
-      <p>{{ Session::get('unsuccess') }}</p>
-   </div>
-   @endif 
    <div class="login-form">
       <form action="{{ route('super.admin.submit.student') }}" Method="POST" enctype="multipart/form-data">
          @csrf 
@@ -236,7 +226,7 @@
                   <option value ="" disabled selected>Select Course Type</option>
                   <option value="Web Designing">Web Designing</option>
                   <option value="Web Development">Web Development</option>
-                  <option value="Php">PHP</option>
+                  <option value="PHP Development">PHP Development</option>
                   <option value="Graphic">Graphic</option>
                   <option value="Full Stack Development">Full Stack Development</option>
                </select>
@@ -254,7 +244,7 @@
             </div>
          </div>
          <div class="form-group display-column">
-         <div class="form-design batch-timing">
+            <div class="form-design batch-timing">
                <label for="batch_timing">Batch Timing</label>
                <select id="batch_timing" name="batch_timing" class="form-control">
                   <option value ="" disabled selected>Select Batch Timing</option>
@@ -286,7 +276,8 @@
                   <option value="Completed">Completed</option>
                </select>
             </div>
-         </div>
+         </div>         @include('admin.partials.form-footer-alerts')
+
          <div class="form-button">
             <div class="back-button">
                <input type="submit" class="btn btn-success" name="submit" value="Submit">

@@ -2,199 +2,135 @@
 @section('content')
 <div class="space-remove"></div>
 <div class="title-subheading">
-   @if (Session::has('success'))
-   <div class="notification-green">
-      <p>{{ Session::get('success') }}</p>
-   </div>
-   @endif 
-   @if (Session::has('unsuccess'))
-   <div class="notification-red">
-      <p>{{ Session::get('unsuccess') }}</p>
-   </div>
-   @endif
-   <div class ="search-header">
-      <h2 class="attendance-header">Monthly Attendance List:-  {{ date('F Y') }}</h2>
-   </div>
-   <!--start student attendance boxes-->
-   <div class="boxes-wrapper student-attendance-header">
-         <div class="box">
-            <img src="{{ url('public/admin/images/working_hours.svg') }}" alt="Working Hours">
-            <h3>Working Hours</h3>
-            <p>{{ number_format($total_present_hours, 2) }} Hrs</p>
+   @include('admin.partials.page-alerts')
+   <div class="portal-attendance-header">
+      <div>
+         <h2>My Attendance</h2>
+         <span class="portal-attendance-period">{{ date('F Y') }}</span>
       </div>
-         <div class="box">
-            <img src="{{ url('public/admin/images/present_icon.svg') }}" alt="Present">
-            <h3>Presents</h3>
-            <p>{{ $total_present_days }}</p>
-         </div>
-         <div class="box">
-            <img src="{{ url('public/admin/images/absent_icon.svg') }}" alt="Absent">
-            <h3>Absent</h3>
-            <p>{{ $total_absent_days }}</p>
-         </div>
-         <div class="box">
-            <img src="{{ url('public/admin/images/leave_icon.svg') }}" alt="Leave">
-            <h3>Leave</h3>
-            <p>{{ $total_leave_days }}</p>
-         </div>
-         <div class="box">
-            <img src="{{ url('public/admin/images/half_day_leave.svg') }}" alt="Half Day">
-            <h3>Half Day</h3>
-            <p>{{ $total_half_day }}</p>
-         </div>
-         <div class="box">
-            <img src="{{ url('public/admin/images/holiday.svg') }}" alt="Holidays">
-            <h3>Holidays</h3>
-            <p>{{ $total_holidays }}</p>
-         </div>
-         <div class="box">
-            <img src="{{ url('public/admin/images/total_days_in_month.svg') }}" alt="daysInMonth">
-            <h3>Days in month</h3>
-            <p>{{ $daysInMonth }}</p>
-         </div>
    </div>
-   <!--end student attendance boxes-->
+   @include('admin.partials.attendance-stats')
 </div>
-<!--start search filter-->
-<form action="{{ url('student/search-attendance') }}" method="GET">
-   <div class="row search-student-attendance">
-      <div class="col-sm-6 col-md-3">
-         <div class="input-block mb-3 form-focus select-focus">
-            <select class="select floating" name="month">
-               <option value="">Select Month</option>
-               @foreach ($months as $key => $name)
-               <option value="{{ $key }}" {{ \Carbon\Carbon::now()->month === $key ? 'selected' : '' }}>
-               {{ $name }}
-               </option>
-               @endforeach
-            </select>
-         </div>
-      </div>
-      <div class="col-sm-6 col-md-3">
-         <div class="input-block mb-3 form-focus select-focus">
-            <select class="select floating" name="year">
-               <option value="">Select Year</option>
-               @for ($i = date('Y'); $i >= 2023; $i--)
-               <option value="{{ $i }}" {{ $i == date('Y') ? 'selected' : '' }}>
-               {{ $i }}
-               </option>
-               @endfor
-            </select>
-         </div>
-      </div>
-      <div class="col-sm-6 col-md-3">
-         <div class="d-grid">
-            <input type="submit" class="btn btn-success" value="Search" />     
-         </div>
-      </div>
-   </div>
-</form>
-<!--end search filter-->
-<div class="row">
-   <div class="col-lg-12">
-      <div class="table-responsive">
-         <table class="table table-striped custom-table table-nowrap mb-0">
-            <thead>
-               <tr>
-                  <th>Sr No.</th>
-                  <th>Registration ID</th>
-                  <th>Image</th>
-                  <th>Name</th>
-                  <th>Batch</th>
-                  <th>Batch Timing</th>
-                  <!--start month header-->
-                  @foreach ($days as $day)
-                     @php
-                        $date = \Carbon\Carbon::create($year, $month, $day);
-                        $dayOfWeek = $date->format('D'); 
-                        $dayNumber = $date->format('d'); 
-                        $isSunday = $dayOfWeek === 'Sun';
-                        $isAlternativeSaturday = in_array($day, $alternativeSaturdays);
-                     @endphp
-                        <th class="{{ $isSunday || $isAlternativeSaturday ? 'text-danger' : '' }}">
-                           {{ $dayNumber }} {{ $dayOfWeek }}
-                        </th>
-                  @endforeach
-                  <!--end month header-->
-               </tr>
-            </thead>
-            <tbody>
-               @php $count = 1; @endphp
-               <!--Get student attendances-->
-               @forelse ($get_student_detail as $student)
-                  <tr>
-                     <td>{{ $count++ }}.</td>
-                     <td>{{ $student->id }}</td>
-                     <td data-th="Image">
-                        @if($student->user_pic)
-                        <div class="user-image">
-                           <img src="{{ url('public/uploads/users/'. $student->user_pic) }}" alt="">
-                        </div>
-                        @else
-                        <img src="{{ url('public/uploads/users/default_user.png') }}" alt="">
-                        @endif
-                     </td>
-                     <td>{{ $student->name }}</td>
-                     <td>{{ $student['student_attendance_detail']['0']['batch'] ?? '-'}}</td>
-                     <td class="batch-time">{{ $student['student_attendance_detail'][0]['batch_time'] ?? '-'}}</td>
-                     @foreach ($days as $day)
-                     @php
-                     $date = \Carbon\Carbon::create($year, $month, $day)->format('Y-m-d');
-                     $attendance = $student->student_attendance_detail->first(function ($att) use ($date) {
-                        return \Carbon\Carbon::parse($att->submission_date)->format('Y-m-d') === $date;
-                     });
-                     //Check punch in and out
-                     $punchIn = null;
-                     $punchOut = null;
-                     $formattedDuration = null;
-                     if ($attendance) {
-                        $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
-                        $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
-                        if ($punchOut) {
-                           $duration = $punchIn->diff($punchOut);
-                           $hours = $duration->h;
-                           $minutes = $duration->i;
-                           $formattedDuration = sprintf('%d:%02d Hrs', $hours, $minutes);
-                        }
-                     }
 
-                     $isSunday = in_array($day, $sundays);
-                     $isAlternativeSaturday = in_array($day, $alternativeSaturdays);
-                     @endphp
-                     <td>
-                        <!--show holiday icon-->
-                        @if ($isSunday)
-                              <img src="{{ url('public/admin/images/sunday.svg') }}" alt="Holiday">
-                           @elseif ($isAlternativeSaturday)
-                              <img src="{{ url('public/admin/images/saturday.svg') }}" alt="Holiday">
-                           @else
-                           @if ($attendance)
-                              @if ($attendance->attendance_status == 'present')
-                                    <img src="{{ url('public/admin/images/present_icon.svg') }}" alt="Present">
-                                    <p class="student-attendance-duration">{{ $formattedDuration ?? 'N/A' }}</p>
-                                 @elseif ($attendance->attendance_status == 'absent')
-                                    <img src="{{ url('public/admin/images/absent_icon.svg') }}" alt="Absent">
-                                 @elseif ($attendance->attendance_status == 'leave')
-                                    <img src="{{ url('public/admin/images/leave_icon.svg') }}" alt="Leave">
-                                 @elseif ($attendance->attendance_status == 'half_day')
-                                    <img src="{{ url('public/admin/images/half_day_leave.svg') }}" alt="Half Day">
-                                 @elseif ($attendance->attendance_status == 'holiday')
-                                    <img src="{{ url('public/admin/images/Holiday.svg') }}" alt="Holiday Day">
-                              @endif
-                              @else 
-                           @endif
+<div class="portal-listing portal-attendance-listing">
+   <form action="{{ url('student/search-attendance') }}" method="GET" class="portal-attendance-filters">
+      <select class="portal-select" name="month">
+         <option value="">Month</option>
+         @foreach ($months as $key => $name)
+            <option value="{{ $key }}" {{ \Carbon\Carbon::now()->month === $key ? 'selected' : '' }}>{{ $name }}</option>
+         @endforeach
+      </select>
+      <select class="portal-select" name="year">
+         <option value="">Year</option>
+         @for ($i = date('Y'); $i >= 2023; $i--)
+            <option value="{{ $i }}" {{ $i == date('Y') ? 'selected' : '' }}>{{ $i }}</option>
+         @endfor
+      </select>
+      <button type="submit" class="portal-btn-primary"><i class="bi bi-search"></i> Search</button>
+   </form>
+
+   <div class="portal-attendance-legend">
+      <span><img src="{{ url('public/admin/images/present_icon.svg') }}" alt=""> Present</span>
+      <span><img src="{{ url('public/admin/images/absent_icon.svg') }}" alt=""> Absent</span>
+      <span><img src="{{ url('public/admin/images/leave_icon.svg') }}" alt=""> Leave</span>
+      <span><img src="{{ url('public/admin/images/half_day_leave.svg') }}" alt=""> Half Day</span>
+      <span><img src="{{ url('public/admin/images/sunday.svg') }}" alt=""> Sunday</span>
+      <span><img src="{{ url('public/admin/images/saturday.svg') }}" alt=""> Alt. Saturday</span>
+   </div>
+
+   <div class="portal-attendance-scroll">
+      <table class="portal-table portal-attendance-table">
+         <thead>
+            <tr>
+               <th class="att-sticky-col att-col-1">#</th>
+               <th class="att-sticky-col att-col-2">Student</th>
+               <th class="att-sticky-col att-col-3">Batch</th>
+               <th class="att-sticky-col att-col-4">Timing</th>
+               @foreach ($days as $day)
+               @php
+                  $date = \Carbon\Carbon::create($year, $month, $day);
+                  $dayOfWeek = $date->format('D');
+                  $dayNumber = $date->format('d');
+                  $isSunday = $dayOfWeek === 'Sun';
+                  $isAlternativeSaturday = in_array($day, $alternativeSaturdays);
+                  $headClass = $isSunday ? 'sun' : ($isAlternativeSaturday ? 'sat' : '');
+               @endphp
+               <th class="att-day-col att-day-head {{ $headClass }}">{{ $dayNumber }}<br>{{ $dayOfWeek }}</th>
+               @endforeach
+            </tr>
+         </thead>
+         <tbody>
+            @php $count = 1; @endphp
+            @forelse ($get_student_detail as $student)
+            <tr>
+               <td class="att-sticky-col att-col-1 col-num">{{ $count++ }}</td>
+               <td class="att-sticky-col att-col-2">
+                  <div class="portal-person">
+                     <div class="portal-avatar">
+                        @if($student->user_pic)
+                           <img src="{{ url('public/uploads/users/' . $student->user_pic) }}" alt="">
+                        @else
+                           <img src="{{ url('public/uploads/users/default_user.png') }}" alt="">
                         @endif
-                     </td>
-                     @endforeach
-                  </tr>
-                  @empty
-                  <tr>
-                     <td colspan="{{ count($days) + 6 }}" class="text-center">No Attendances found</td>
-                  </tr>
-               @endforelse
-            </tbody>
-         </table>
-      </div>
+                     </div>
+                     <div class="portal-person-info">
+                        <span class="portal-person-name" style="cursor:default;">{{ $student->name }}</span>
+                        <span class="portal-person-meta">Reg #{{ $student->id }}</span>
+                     </div>
+                  </div>
+               </td>
+               <td class="att-sticky-col att-col-3">{{ $student['student_attendance_detail']['0']['batch'] ?? '—' }}</td>
+               <td class="att-sticky-col att-col-4">{{ $student['student_attendance_detail']['0']['batch_time'] ?? '—' }}</td>
+               @foreach ($days as $day)
+               @php
+                  $date = \Carbon\Carbon::create($year, $month, $day)->format('Y-m-d');
+                  $attendance = $student->student_attendance_detail->first(function ($att) use ($date) {
+                     return \Carbon\Carbon::parse($att->submission_date)->format('Y-m-d') === $date;
+                  });
+                  $formattedDuration = null;
+                  if ($attendance) {
+                     $punchIn = \Carbon\Carbon::parse($attendance->punch_in_time);
+                     $punchOut = $attendance->punch_out_time ? \Carbon\Carbon::parse($attendance->punch_out_time) : null;
+                     if ($punchOut) {
+                        $duration = $punchIn->diff($punchOut);
+                        $formattedDuration = sprintf('%d:%02d', $duration->h, $duration->i);
+                     }
+                  }
+                  $isSunday = in_array($day, $sundays);
+                  $isAlternativeSaturday = in_array($day, $alternativeSaturdays);
+                  $isHoliday = $isSunday || $isAlternativeSaturday;
+               @endphp
+               <td class="att-day-col">
+                  <div class="att-cell">
+                     @if ($isHoliday)
+                        @if ($isSunday)
+                           <img class="att-icon" src="{{ url('public/admin/images/sunday.svg') }}" alt="Sun">
+                        @else
+                           <img class="att-icon" src="{{ url('public/admin/images/saturday.svg') }}" alt="Sat">
+                        @endif
+                     @elseif ($attendance)
+                        @if ($attendance->attendance_status == 'present')
+                           <img class="att-icon" src="{{ url('public/admin/images/present_icon.svg') }}" alt="P">
+                           @if($formattedDuration)<p class="att-duration">{{ $formattedDuration }}</p>@endif
+                        @elseif ($attendance->attendance_status == 'absent')
+                           <img class="att-icon" src="{{ url('public/admin/images/absent_icon.svg') }}" alt="A">
+                        @elseif ($attendance->attendance_status == 'leave')
+                           <img class="att-icon" src="{{ url('public/admin/images/leave_icon.svg') }}" alt="L">
+                        @elseif ($attendance->attendance_status == 'half_day')
+                           <img class="att-icon" src="{{ url('public/admin/images/half_day_leave.svg') }}" alt="H">
+                        @elseif ($attendance->attendance_status == 'holiday')
+                           <img class="att-icon" src="{{ url('public/admin/images/holiday.svg') }}" alt="Holiday">
+                        @endif
+                     @endif
+                  </div>
+               </td>
+               @endforeach
+            </tr>
+            @empty
+            <tr><td colspan="{{ count($days) + 4 }}" class="portal-no-data">No attendance records found.</td></tr>
+            @endforelse
+         </tbody>
+      </table>
    </div>
 </div>
 @endsection

@@ -1,39 +1,59 @@
-//Student fees submit 
-$(document).ready(function() {
-    //Validate form
-    $('#is_create_student_fee').validate({
-        rules: {
-            fees_amount: {
-                required: true,
-            },
-            payment_type: {
-                required: true,
-            },        
+//Student fees submit
+function postStudentFees(form, submitUrl) {
+    var formData = $(form).serialize();
+    $.ajax({
+        type: 'POST',
+        url: submitUrl,
+        data: formData,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-        messages: { },
-        submitHandler: function (form, e) {
-            e.preventDefault();
-            var formData = $(form).serialize();
-            //Ajax student submit fees form
-            $.ajax({
-                type: 'POST',
-                url: base_url + '/admin/submit-student-fees',
-                data: formData,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                beforeSend: function () {
-                    $(".com_ajax_loader").show();
-                    $('.disable-submit').prop('disabled', true);
-                },
-                success: function (response) {
-                    $('.student_fee_responce').html(response);
-                    $(".disable-submit").prop('disabled', false);
-                    $(".com_ajax_loader").hide();
-                }
-            });
+        beforeSend: function () {
+            $(".com_ajax_loader").show();
+            $('.disable-submit').prop('disabled', true);
+            $('.student_fee_responce').empty();
+        },
+        success: function (response) {
+            $('.student_fee_responce').html(response);
+            $(".disable-submit").prop('disabled', false);
+            $(".com_ajax_loader").hide();
+        },
+        error: function () {
+            $('.student_fee_responce').html('<p style="color:red;">Payment could not be saved. Please try again.</p>');
+            $(".disable-submit").prop('disabled', false);
+            $(".com_ajax_loader").hide();
         }
-    }); 
+    });
+}
+
+$('body').on('click', '.is_submit_student_fee', function (e) {
+    e.preventDefault();
+    var $form = $(this).closest('#is_create_student_fee');
+    if (!$form.length) {
+        return;
+    }
+
+    var amount = $.trim($form.find('[name="fees_amount"]').val());
+    var paymentType = $form.find('[name="payment_type"]').val();
+    var studentId = $form.find('[name="student_id"]').val();
+
+    $form.find('.error').removeClass('error');
+    $('.student_fee_responce').empty();
+
+    if (!studentId) {
+        $('.student_fee_responce').html('<p style="color:red;">Please close and reopen the payment form.</p>');
+        return;
+    }
+    if (!amount) {
+        $form.find('[name="fees_amount"]').addClass('error');
+        return;
+    }
+    if (!paymentType) {
+        $form.find('[name="payment_type"]').addClass('error');
+        return;
+    }
+
+    postStudentFees($form[0], base_url + '/admin/submit-student-fees');
 });
 //For get student pay fees model
 $('body').on('click', '.student_pay_fees', function() {
@@ -42,6 +62,10 @@ $('body').on('click', '.student_pay_fees', function() {
   
     //Append value
     $("#model_student_id").val(student_id);
+    $("#fees_amount").val('');
+    $("#payment_type").val('');
+    $("#first_payment_type").val('');
+    $(".student_fee_responce").empty();
     //student pay fees header
     $(".student_name_pay_fees").text(student_name);      
 });

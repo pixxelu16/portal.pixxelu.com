@@ -18,6 +18,10 @@ Route::get('/', function () {
 }); 
 //web.php
 Route::get('/send-reminders', [App\Http\Controllers\PaymentController::class, 'sendWhatsAppReminderToStudents']);
+//Douload fees list
+Route::get('/students-fees-paid', [App\Http\Controllers\CommonFeeController::class, 'monthly_paid_fees']); 
+Route::get('/students-pending-fees', [App\Http\Controllers\CommonFeeController::class, 'monthly_pending_fees']);
+Route::get('/students-overdue-fees', [App\Http\Controllers\CommonFeeController::class, 'overdue_fees']);
 
 Route::group(['middleware' => 'auth'], function() { 
     //Stcks
@@ -32,19 +36,33 @@ Route::group(['middleware' => 'auth'], function() {
        Route::get('super-admin/change-password', [App\Http\Controllers\SuperAdmin\ProfileController::class, 'changed_password']);
        Route::post('super-admin/submit-change-password/{id}', [App\Http\Controllers\SuperAdmin\ProfileController::class, 'submit_changed_password'])->name('super.admin.changed.password');
        Route::get('super-admin/setting', [App\Http\Controllers\SuperAdmin\ProfileController::class, 'edit_profile']);
-       //employees  
-       Route::get('super-admin/get-employee-detail', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'single_employee_detail']);
-       Route::post('super-admin/update-employee-salary', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'update_employee_salary'])->name('super.admin.update.employee.salary');
-       Route::get('super-admin/all-employees-list', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'all_employees_list']);
-       Route::get('super-admin/add-new-employee', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'add_employee']);
-       Route::post('super-admin/submit-employee-increment-salary', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'submit_employee_salary_increment'])->name('super.admin.employee.salary.increment');
-       Route::post('super-admin/submit-employee', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'submit_employee'])->name('super.admin.submit.employee');
-       Route::get('super-admin/edit-employee/{id}', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'edit_employee']);
-       Route::post('super-admin/update-employee{id}', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'update_employee'])->name('super.admin.update.employee');
-       Route::get('super-admin/search-employees-list/{any}', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'search_employee_list'])->name('super.admin.search.employee.list');
-       Route::get('super-admin/trash-employee', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'trash_employee'])->name('super.admin.employee.trash');
-       Route::get('super-admin/all-employees-trash-list', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'all_trash_employees_list']);
-       Route::get('super-admin/delete-employee', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'delete_employee'])->name('super.admin.employee.delete');
+       //employee
+       Route::get('super-admin/add-new-employee', [App\Http\Controllers\SuperAdmin\CustomerController::class, 'add_employee']);
+       Route::post('super-admin/submit-employee', [App\Http\Controllers\SuperAdmin\CustomerController::class, 'submit_employee'])->name('submit.employee');
+       Route::get('super-admin/all-employees', [App\Http\Controllers\SuperAdmin\CustomerController::class, 'all_employees']);
+       Route::get('super-admin/edit-employee/{id}', [App\Http\Controllers\SuperAdmin\CustomerController::class, 'edit_employee']);
+       Route::post('super-admin/update-employee/{id}', [App\Http\Controllers\SuperAdmin\CustomerController::class, 'update_employee'])->name('update.employee');
+       Route::get('super-admin/delete-employee', [App\Http\Controllers\SuperAdmin\CustomerController::class, 'delete_employee']);
+       Route::get('super-admin/trash-employee', [App\Http\Controllers\SuperAdmin\CustomerController::class, 'trash_employees']);
+       Route::get('super-admin/search-employees', [App\Http\Controllers\SuperAdmin\CustomerController::class, 'search_employee']);
+       Route::get('super-admin/employee-report/{id}', [App\Http\Controllers\SuperAdmin\CustomerController::class, 'employee_report']);
+       Route::get('super-admin/search-employee-name', [App\Http\Controllers\SuperAdmin\CustomerController::class, 'search_employee_name']);
+       Route::get('super-admin/job-letter/{id}', [App\Http\Controllers\SuperAdmin\CustomerController::class, 'job_letter'])->name('job.letter');
+       Route::get('super-admin/search-job', [App\Http\Controllers\SuperAdmin\CustomerController::class, 'search_job_letter']);
+       Route::get('super-admin/job-letter-print/{id}', [App\Http\Controllers\SuperAdmin\CustomerController::class, 'print_job_letter']);
+       //Hide this
+       //Route::get('super-admin/get-employee-detail', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'single_employee_detail']);
+       //Route::post('super-admin/update-employee-salary', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'update_employee_salary'])->name('super.admin.update.employee.salary');
+       //Route::get('super-admin/all-employees-list', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'all_employees_list']);
+       //Route::get('super-admin/add-new-employee', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'add_employee']);
+       //Route::post('super-admin/submit-employee-increment-salary', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'submit_employee_salary_increment'])->name('super.admin.employee.salary.increment');
+       //Route::post('super-admin/submit-employee', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'submit_employee'])->name('super.admin.submit.employee');
+       //Route::get('super-admin/edit-employee/{id}', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'edit_employee']);
+       //Route::post('super-admin/update-employee{id}', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'update_employee'])->name('super.admin.update.employee');
+       //Route::get('super-admin/search-employees-list/{any}', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'search_employee_list'])->name('super.admin.search.employee.list');
+       //Route::get('super-admin/trash-employee', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'trash_employee'])->name('super.admin.employee.trash');
+       //Route::get('super-admin/all-employees-trash-list', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'all_trash_employees_list']);
+       //Route::get('super-admin/delete-employee', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'delete_employee'])->name('super.admin.employee.delete');
        //Route::get('super-admin/employee-detail/{id}', [App\Http\Controllers\SuperAdmin\EmployeeController::class, 'single_employee_details']);
        //employee attendance 
        Route::post('super-admin/submit-employee-attendance', [App\Http\Controllers\SuperAdmin\EmployeeAttendanceController::class, 'employee_attendance'])->name('super.admin.submit.employee.attendance');
@@ -64,6 +82,10 @@ Route::group(['middleware' => 'auth'], function() {
        Route::post('super-admin/update-client/{id}', [App\Http\Controllers\SuperAdmin\ClientController::class, 'update_client'])->name('super.admin.update.client');
        //students detail
        Route::get('super-admin/all-students-list', [App\Http\Controllers\SuperAdmin\StudentController::class, 'all_students']);
+       Route::get('super-admin/all-internships-list', [App\Http\Controllers\SuperAdmin\StudentController::class, 'all_internships']);
+       Route::get('super-admin/add-new-intern', [App\Http\Controllers\SuperAdmin\StudentController::class, 'add_intern']);
+       Route::post('super-admin/submit-intern', [App\Http\Controllers\SuperAdmin\StudentController::class, 'submit_intern'])->name('super.admin.submit.intern');
+       Route::get('super-admin/edit-intern/{id}', [App\Http\Controllers\SuperAdmin\StudentController::class, 'edit_intern']);
        Route::get('super-admin/add-new-student', [App\Http\Controllers\SuperAdmin\StudentController::class, 'add_student']);
        Route::post('super-admin/submit-student', [App\Http\Controllers\SuperAdmin\StudentController::class, 'submit_student'])->name('super.admin.submit.student');
        Route::get('super-admin/edit-student/{id}', [App\Http\Controllers\SuperAdmin\StudentController::class, 'edit_student']); 
@@ -124,6 +146,7 @@ Route::group(['middleware' => 'auth'], function() {
         //Admin generate student fees receipt
         Route::get('admin/download-receipt/{student_id}', [App\Http\Controllers\Admin\StudentFeesPdfController::class, 'downloadReceipt'])->name('download.receipt');
         Route::get('admin/attendance/download-pdf', [App\Http\Controllers\Admin\EmployeeAttendanceController::class, 'downloadAttendancePDF'])->name('attendance.download');
+        Route::get('admin/students/attendance/download-pdf', [App\Http\Controllers\Admin\StudentAttendanceController::class, 'students_attendance_pdf'])->name('student.attendance.download');
         Route::get('admin/search/attendance/download-pdf/{unique_employee_id}', [App\Http\Controllers\Admin\EmployeeAttendanceController::class, 'SearchdownloadAttendancePDF'])->name('search.attendance.download');
         //Admin dashboard
         Route::get('admin/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'dashboard']);
@@ -148,6 +171,10 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('admin/submit-employee-damage-accessories', [App\Http\Controllers\Admin\EmployeeController::class, 'submit_employee_damage_accessories'])->name('admin.submit.damage.accessories.employee');
         //students 
         Route::get('admin/all-students-list', [App\Http\Controllers\Admin\StudentController::class, 'all_students']);
+        Route::get('admin/all-internships-list', [App\Http\Controllers\Admin\StudentController::class, 'all_internships']);
+        Route::get('admin/add-new-intern', [App\Http\Controllers\Admin\StudentController::class, 'add_intern']);
+        Route::post('admin/submit-intern', [App\Http\Controllers\Admin\StudentController::class, 'submit_intern'])->name('admin.submit.intern');
+        Route::get('admin/edit-intern/{id}', [App\Http\Controllers\Admin\StudentController::class, 'edit_intern']);
         Route::get('admin/add-new-student', [App\Http\Controllers\Admin\StudentController::class, 'add_student']);
         Route::post('admin/submit-student', [App\Http\Controllers\Admin\StudentController::class, 'submit_student'])->name('admin.submit.student');
         Route::get('admin/edit-student/{id}', [App\Http\Controllers\Admin\StudentController::class, 'edit_student']); 
@@ -165,7 +192,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('admin/get-student-detail', [App\Http\Controllers\Admin\StudentController::class, 'single_student_detail']);
         Route::get('admin/edit-student-fees/{id}', [App\Http\Controllers\Admin\StudentController::class, 'edit_student_fees']);
         Route::post('admin/update-student-fees/{id}', [App\Http\Controllers\Admin\StudentController::class, 'update_ssstudent_feess'])->name('admin.updddate.student.fees');
-        Route::get('admin/delete-student-fees/{id}', [App\Http\Controllers\Admin\StudentController::class, 'delete_student_fees']);
+        Route::get('admin/delete-student-fee', [App\Http\Controllers\Admin\StudentController::class, 'delete_student_fee']);
         //student assign accessories 
         Route::post('admin/submit-student-assign-accessories', [App\Http\Controllers\Admin\StudentController::class, 'submit_student_assign_accessories'])->name('admin.submit.assign.accessories.student');
         Route::post('admin/submit-student-damage-accessories', [App\Http\Controllers\Admin\StudentController::class, 'submit_student_damage_accessories'])->name('admin.submit.damage.accessories.student');
@@ -202,9 +229,12 @@ Route::group(['middleware' => 'auth'], function() {
         //export students monthly fees record
         Route::get('admin/export-students-paid-fees', [App\Http\Controllers\Admin\ExportStudentController::class, 'export_students_paid_fees'])->name('admin.export.paid.fees');
         Route::get('admin/export-students-pending-fees', [App\Http\Controllers\Admin\ExportStudentController::class, 'export_students_pending_fees'])->name('admin.export.pending.fees');
-        //Contact
-        Route::get('admin/all-contacts', [App\Http\Controllers\Admin\ContactUsController::class, 'all_contacts']); 
-        Route::get('admin/delete-contact', [App\Http\Controllers\Admin\ContactUsController::class, 'all_contacts']); 
+        Route::get('admin/export-students-overdue-fees', [App\Http\Controllers\Admin\ExportStudentController::class, 'export_students_overdue_fees'])->name('admin.export.overdue.fees');
+        //export trash students record
+        Route::get('admin/export-trash-students', [App\Http\Controllers\Admin\ExportStudentController::class, 'export_trash_students']);
+        //export students attendances
+        Route::get('admin/attendance/pdf', [App\Http\Controllers\Admin\StudentFeesPdfController::class, 'downloadAttendancePDF']);
+
     });
 
     //Student Only 

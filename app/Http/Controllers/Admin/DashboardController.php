@@ -1,114 +1,277 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\User; 
+use App\Models\User;
 use App\Models\StudentFees;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    //Function for show admin dashboard
-    public function dashboard() {
-       //Get the start and end dates for the current month
-        $startOfMonth = Carbon::now()->startOfMonth();
-        $endOfMonth = Carbon::now()->endOfMonth();
+    public function dashboard(Request $request)
+    {
+        $filterType = $request->get('filter_type', 'month');
+        if (!in_array($filterType, ['year', 'month', 'week'])) {
+            $filterType = 'month';
+        }
 
-        //Get all students total fees and all paid fees
+        $selectedYear  = (int) $request->get('year', date('Y'));
+        $selectedMonth = (int) $request->get('month', date('n'));
+        $selectedWeek  = (int) $request->get('week', Carbon::now()->weekOfYear);
+
+        $selectedMonth = max(1, min(12, $selectedMonth));
+        $selectedWeek  = max(1, min(53, $selectedWeek));
+
+        [$periodStart, $periodEnd, $periodLabel] = $this->resolvePeriod(
+            $filterType,
+            $selectedYear,
+            $selectedMonth,
+            $selectedWeek
+        );
+
         $all_students_total_fees = User::where('user_status', 'Active')->sum('total_fees');
-        $all_students_paid_fees = StudentFees::where('user_status', 'Active')->sum('user_fees');
+        $all_students_paid_fees  = StudentFees::where('user_status', 'Active')->sum('user_fees');
 
-        //Get students total monthly fees acc current year
-        $jan_month_fees_detail = StudentFees::where('user_status', 'Active')->whereMonth('submission_date', '1')->whereYear('submission_date', Carbon::now()->year)->sum('user_fees');
-        $feb_month_fees_detail = StudentFees::where('user_status', 'Active')->whereMonth('submission_date', '2')->whereYear('submission_date', Carbon::now()->year)->sum('user_fees');
-        $march_month_fees_detail = StudentFees::where('user_status', 'Active')->whereMonth('submission_date', '3')->whereYear('submission_date', Carbon::now()->year)->sum('user_fees');
-        $april_month_fees_detail = StudentFees::where('user_status', 'Active')->whereMonth('submission_date', '4')->whereYear('submission_date', Carbon::now()->year)->sum('user_fees');
-        $may_month_fees_detail = StudentFees::where('user_status', 'Active')->whereMonth('submission_date', '5')->whereYear('submission_date', Carbon::now()->year)->sum('user_fees');
-        $june_month_fees_detail = StudentFees::where('user_status', 'Active')->whereMonth('submission_date', '6')->whereYear('submission_date', Carbon::now()->year)->sum('user_fees');
-        $july_month_fees_detail = StudentFees::where('user_status', 'Active')->whereMonth('submission_date', '7')->whereYear('submission_date', Carbon::now()->year)->sum('user_fees');
-        $august_month_fees_detail = StudentFees::where('user_status', 'Active')->whereMonth('submission_date', '8')->whereYear('submission_date', Carbon::now()->year)->sum('user_fees');
-        $sept_month_fees_detail = StudentFees::where('user_status', 'Active')->whereMonth('submission_date', '9')->whereYear('submission_date', Carbon::now()->year)->sum('user_fees');
-        $oct_month_fees_detail = StudentFees::where('user_status', 'Active')->whereMonth('submission_date', '10')->whereYear('submission_date', Carbon::now()->year)->sum('user_fees');
-        $nov_month_fees_detail = StudentFees::where('user_status', 'Active')->whereMonth('submission_date', '11')->whereYear('submission_date', Carbon::now()->year)->sum('user_fees');
-        $dec_month_fees_detail = StudentFees::where('user_status', 'Active')->whereMonth('submission_date', '12')->whereYear('submission_date', Carbon::now()->year)->sum('user_fees');
+        $periodPaidFees = StudentFees::where('user_status', 'Active')
+            ->whereBetween('submission_date', [$periodStart, $periodEnd])
+            ->sum('user_fees');
 
-        //Get students monthly enrollement details year 2023
-        $jan_month_student_detail_2023 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '1')->whereYear('course_joining_date', '2023')->count();
-        $feb_month_student_detail_2023 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '2')->whereYear('course_joining_date', '2023')->count();
-        $march_month_student_detail_2023 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '3')->whereYear('course_joining_date', '2023')->count();
-        $april_month_student_detail_2023 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '4')->whereYear('course_joining_date', '2023')->count();
-        $may_month_student_detail_2023 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '5')->whereYear('course_joining_date', '2023')->count();
-        $june_month_student_detail_2023 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '6')->whereYear('course_joining_date', '2023')->count();
-        $july_month_student_detail_2023 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '7')->whereYear('course_joining_date', '2023')->count();
-        $august_month_student_detail_2023 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '8')->whereYear('course_joining_date', '2023')->count();
-        $sep_month_student_detail_2023 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '9')->whereYear('course_joining_date', '2023')->count();
-        $oct_month_student_detail_2023 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '10')->whereYear('course_joining_date', '2023')->count();
-        $nov_month_student_detail_2023 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '11')->whereYear('course_joining_date', '2023')->count();
-        $dec_month_student_detail_2023 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '12')->whereYear('course_joining_date', '2023')->count();
-        //Get all students list 2023
-        $all_students_list_2023 = User::where('user_status', 'Active')->where('user_type', 'Student')->whereYear('course_joining_date', '2023')->get();
-    
-        //Get students monthly enrollement details year 2024
-        $jan_month_student_detail_2024 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '1')->whereYear('course_joining_date', '2024')->count();
-        $feb_month_student_detail_2024 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '2')->whereYear('course_joining_date', '2024')->count();
-        $march_month_student_detail_2024 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '3')->whereYear('course_joining_date', '2024')->count();
-        $april_month_student_detail_2024 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '4')->whereYear('course_joining_date', '2024')->count();
-        $may_month_student_detail_2024 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '5')->whereYear('course_joining_date', '2024')->count();
-        $june_month_student_detail_2024 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '6')->whereYear('course_joining_date', '2024')->count();
-        $july_month_student_detail_2024 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '7')->whereYear('course_joining_date', '2024')->count();
-        $august_month_student_detail_2024 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '8')->whereYear('course_joining_date', '2024')->count();
-        $sep_month_student_detail_2024 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '9')->whereYear('course_joining_date', '2024')->count();
-        $oct_month_student_detail_2024 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '10')->whereYear('course_joining_date', '2024')->count();
-        $nov_month_student_detail_2024 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '11')->whereYear('course_joining_date', '2024')->count();
-        $dec_month_student_detail_2024 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '12')->whereYear('course_joining_date', '2024')->count();
+        $payment_type_online = StudentFees::where('user_status', 'Active')
+            ->where('payment_type', 'online')
+            ->whereBetween('submission_date', [$periodStart, $periodEnd])
+            ->sum('user_fees');
 
-        //Get students monthly enrollement details year 2025
-        $jan_month_student_detail_2025 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '1')->whereYear('course_joining_date', Carbon::now()->year)->count();
-        $feb_month_student_detail_2025 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '2')->whereYear('course_joining_date', Carbon::now()->year)->count();
-        $march_month_student_detail_2025 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '3')->whereYear('course_joining_date', Carbon::now()->year)->count();
-        $april_month_student_detail_2025 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '4')->whereYear('course_joining_date', Carbon::now()->year)->count();
-        $may_month_student_detail_2025 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '5')->whereYear('course_joining_date', Carbon::now()->year)->count();
-        $june_month_student_detail_2025 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '6')->whereYear('course_joining_date', Carbon::now()->year)->count();
-        $july_month_student_detail_2025 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '7')->whereYear('course_joining_date', Carbon::now()->year)->count();
-        $august_month_student_detail_2025 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '8')->whereYear('course_joining_date', Carbon::now()->year)->count();
-        $sep_month_student_detail_2025 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '9')->whereYear('course_joining_date', Carbon::now()->year)->count();
-        $oct_month_student_detail_2025 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '10')->whereYear('course_joining_date', Carbon::now()->year)->count();
-        $nov_month_student_detail_2025 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '11')->whereYear('course_joining_date', Carbon::now()->year)->count();
-        $dec_month_student_detail_2025 = User::where('user_status', 'Active')->Where('user_type', 'Student')->whereMonth('course_joining_date', '12')->whereYear('course_joining_date', Carbon::now()->year)->count();
+        $payment_type_cash = StudentFees::where('user_status', 'Active')
+            ->where('payment_type', 'cash')
+            ->whereBetween('submission_date', [$periodStart, $periodEnd])
+            ->sum('user_fees');
 
-
-        //Get payment types online or cash
-        $payment_type_online = StudentFees::where('user_status', 'Active')->where('payment_type','online')->whereBetween('submission_date', [$startOfMonth, $endOfMonth])->sum('user_fees');
-        $payment_type_cash = StudentFees::where('user_status', 'Active')->where('payment_type','cash')->whereBetween('submission_date', [$startOfMonth, $endOfMonth])->sum('user_fees');
-      
-        //Get total current month paid fees
-        $current_month_paid_fees = StudentFees::where('user_status', 'Active')->whereBetween('submission_date', [$startOfMonth, $endOfMonth])->sum('user_fees');
-
-        //Get student fees detail list
         $get_student_list = User::where('user_status', 'Active')
-        ->whereHas('student_fees_detail', function ($query) use ($startOfMonth, $endOfMonth) {
-            $query->whereBetween('submission_date', [$startOfMonth, $endOfMonth]);
-        })
-        ->with(['student_fees_detail' => function ($query) use ($startOfMonth, $endOfMonth) {
-            $query->whereBetween('submission_date', [$startOfMonth, $endOfMonth])
-                  ->orderBy('submission_date', 'desc'); 
-        }])
-        ->get()
-        ->sortByDesc(function ($user) {
-            return $user->student_fees_detail->first()->submission_date ?? null;
-        });
-             
-        //Get total students list acc to course  
-        $is_total_students = User::where('user_status', 'Active')->where('user_type', 'Student')->count();
-        $is_web_designing_students = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Web Designing')->count();
-        $is_web_development_students = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Web Development')->count();
-        $is_full_stack_development = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Full Stack Development')->count();
-        $is_php = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Php Development')->count();
-        $digital_marketing = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Digital Marketing')->count();
-        $is_graphic = User::where('user_status', 'Active')->where('user_type', 'Student')->where('course_type', 'Graphic')->count();
+            ->whereHas('student_fees_detail', function ($query) use ($periodStart, $periodEnd) {
+                $query->whereBetween('submission_date', [$periodStart, $periodEnd]);
+            })
+            ->with(['student_fees_detail' => function ($query) use ($periodStart, $periodEnd) {
+                $query->whereBetween('submission_date', [$periodStart, $periodEnd])
+                    ->orderBy('submission_date', 'desc');
+            }])
+            ->get()
+            ->sortByDesc(function ($user) {
+                return $user->student_fees_detail->first()->submission_date ?? null;
+            });
 
-        return view('admin.dashboard', compact('get_student_list','all_students_total_fees','all_students_paid_fees','current_month_paid_fees','payment_type_online','payment_type_cash','jan_month_fees_detail','feb_month_fees_detail','march_month_fees_detail','april_month_fees_detail','may_month_fees_detail','june_month_fees_detail','july_month_fees_detail','august_month_fees_detail','sept_month_fees_detail','oct_month_fees_detail','nov_month_fees_detail','dec_month_fees_detail','jan_month_student_detail_2023','feb_month_student_detail_2023','march_month_student_detail_2023','april_month_student_detail_2023','may_month_student_detail_2023','june_month_student_detail_2023','july_month_student_detail_2023','august_month_student_detail_2023','sep_month_student_detail_2023','oct_month_student_detail_2023','nov_month_student_detail_2023','dec_month_student_detail_2023','jan_month_student_detail_2024','feb_month_student_detail_2024','march_month_student_detail_2024','april_month_student_detail_2024','may_month_student_detail_2024','june_month_student_detail_2024','july_month_student_detail_2024','august_month_student_detail_2024','sep_month_student_detail_2024','oct_month_student_detail_2024','nov_month_student_detail_2024','dec_month_student_detail_2024','all_students_list_2023',
-        'jan_month_student_detail_2025','feb_month_student_detail_2025','march_month_student_detail_2025','april_month_student_detail_2025','may_month_student_detail_2025','june_month_student_detail_2025','july_month_student_detail_2025','august_month_student_detail_2025','sep_month_student_detail_2025','oct_month_student_detail_2025','nov_month_student_detail_2025','dec_month_student_detail_2025',
-        'is_total_students','is_web_designing_students','is_web_development_students','is_full_stack_development','is_php','is_graphic','digital_marketing'));
+        $monthlyFees = $this->getMonthlyFeesForYear($selectedYear);
+        $year_total_fees = array_sum($monthlyFees);
+
+        $enrollmentYears = range(2023, (int) date('Y'));
+        $enrollmentData  = $this->getEnrollmentData($enrollmentYears);
+
+        $weekChartData = [];
+        if ($filterType === 'week') {
+            $weekChartData = $this->getDailyFeesForWeek($selectedYear, $selectedWeek);
+        }
+
+        $monthChartData = [];
+        if ($filterType === 'month') {
+            $monthChartData = $this->getDailyFeesForMonth($selectedYear, $selectedMonth);
+        }
+
+        $is_total_students           = User::regularStudents()->count();
+        $is_web_designing_students   = User::regularStudents()->where('course_type', 'Web Designing')->count();
+        $is_web_development_students = User::regularStudents()->where('course_type', 'Web Development')->count();
+        $is_full_stack_development   = User::regularStudents()->where('course_type', 'Full Stack Development')->count();
+        $is_php                      = User::regularStudents()->where('course_type', 'Php Development')->count();
+        $digital_marketing           = User::regularStudents()->where('course_type', 'Digital Marketing')->count();
+        $is_graphic                  = User::regularStudents()->where('course_type', 'Graphic')->count();
+
+        $periodEnrollments = User::regularStudents()
+            ->whereBetween('course_joining_date', [$periodStart, $periodEnd])
+            ->count();
+
+        [$totalFeesChange, $paidFeesChange, $pendingFeesChange] = $this->getWeekOverWeekChanges();
+
+        $availableYears  = range(2023, (int) date('Y') + 1);
+        $availableMonths = [
+            1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April',
+            5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August',
+            9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December',
+        ];
+        $availableWeeks = $this->getWeeksForYear($selectedYear);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'year_total_fees'    => $year_total_fees,
+                'period_paid_fees'   => $periodPaidFees,
+                'payment_online'     => $payment_type_online,
+                'payment_cash'       => $payment_type_cash,
+                'period_label'       => $periodLabel,
+                'period_enrollments' => $periodEnrollments,
+                'monthly_fees'       => $monthlyFees,
+                'week_chart'         => $weekChartData,
+                'month_chart'        => $monthChartData,
+                'filter_type'        => $filterType,
+            ]);
+        }
+
+        return view('admin.dashboard', compact(
+            'get_student_list',
+            'all_students_total_fees',
+            'all_students_paid_fees',
+            'periodPaidFees',
+            'payment_type_online',
+            'payment_type_cash',
+            'monthlyFees',
+            'enrollmentData',
+            'enrollmentYears',
+            'weekChartData',
+            'monthChartData',
+            'is_total_students',
+            'is_web_designing_students',
+            'is_web_development_students',
+            'is_full_stack_development',
+            'is_php',
+            'is_graphic',
+            'digital_marketing',
+            'totalFeesChange',
+            'paidFeesChange',
+            'pendingFeesChange',
+            'year_total_fees',
+            'filterType',
+            'selectedYear',
+            'selectedMonth',
+            'selectedWeek',
+            'periodLabel',
+            'periodEnrollments',
+            'availableYears',
+            'availableMonths',
+            'availableWeeks'
+        ));
+    }
+
+    private function resolvePeriod(string $filterType, int $year, int $month, int $week): array
+    {
+        if ($filterType === 'year') {
+            $start = Carbon::create($year, 1, 1)->startOfDay();
+            $end   = Carbon::create($year, 12, 31)->endOfDay();
+            return [$start, $end, "Year {$year}"];
+        }
+
+        if ($filterType === 'week') {
+            $start = Carbon::now()->setISODate($year, $week)->startOfWeek(Carbon::MONDAY);
+            $end   = Carbon::now()->setISODate($year, $week)->endOfWeek(Carbon::SUNDAY);
+            return [$start, $end, "Week {$week}, {$year} ({$start->format('d M')} – {$end->format('d M Y')})"];
+        }
+
+        $start = Carbon::create($year, $month, 1)->startOfMonth();
+        $end   = Carbon::create($year, $month, 1)->endOfMonth();
+        return [$start, $end, $start->format('F Y')];
+    }
+
+    private function getMonthlyFeesForYear(int $year): array
+    {
+        $fees = [];
+        for ($m = 1; $m <= 12; $m++) {
+            $fees[] = (int) StudentFees::where('user_status', 'Active')
+                ->whereYear('submission_date', $year)
+                ->whereMonth('submission_date', $m)
+                ->sum('user_fees');
+        }
+        return $fees;
+    }
+
+    private function getEnrollmentData(array $years): array
+    {
+        $data = [];
+        foreach ($years as $year) {
+            $monthly = [];
+            for ($m = 1; $m <= 12; $m++) {
+                $monthly[] = User::regularStudents()
+                    ->whereYear('course_joining_date', $year)
+                    ->whereMonth('course_joining_date', $m)
+                    ->count();
+            }
+            $data[$year] = $monthly;
+        }
+        return $data;
+    }
+
+    private function getDailyFeesForWeek(int $year, int $week): array
+    {
+        $start = Carbon::now()->setISODate($year, $week)->startOfWeek(Carbon::MONDAY);
+        $days  = [];
+        for ($i = 0; $i < 7; $i++) {
+            $day   = $start->copy()->addDays($i);
+            $days[] = [
+                'label'  => $day->format('D'),
+                'amount' => (int) StudentFees::where('user_status', 'Active')
+                    ->whereDate('submission_date', $day->toDateString())
+                    ->sum('user_fees'),
+            ];
+        }
+        return $days;
+    }
+
+    private function getDailyFeesForMonth(int $year, int $month): array
+    {
+        $start = Carbon::create($year, $month, 1)->startOfMonth();
+        $daysInMonth = $start->daysInMonth;
+        $days = [];
+        for ($d = 1; $d <= $daysInMonth; $d++) {
+            $day = Carbon::create($year, $month, $d);
+            $days[] = [
+                'label'  => (string) $d,
+                'amount' => (int) StudentFees::where('user_status', 'Active')
+                    ->whereDate('submission_date', $day->toDateString())
+                    ->sum('user_fees'),
+            ];
+        }
+        return $days;
+    }
+
+    private function getWeeksForYear(int $year): array
+    {
+        $weeks   = [];
+        $maxWeek = Carbon::create($year, 12, 28)->weekOfYear;
+        for ($w = 1; $w <= $maxWeek; $w++) {
+            $start = Carbon::now()->setISODate($year, $w)->startOfWeek(Carbon::MONDAY);
+            $end   = Carbon::now()->setISODate($year, $w)->endOfWeek(Carbon::SUNDAY);
+            $weeks[$w] = "Week {$w}: {$start->format('d M')} – {$end->format('d M')}";
+        }
+        return $weeks;
+    }
+
+    private function getWeekOverWeekChanges(): array
+    {
+        $currentWeekStart = Carbon::now()->startOfWeek();
+        $currentWeekEnd   = Carbon::now()->endOfWeek();
+        $lastWeekStart    = Carbon::now()->subWeek()->startOfWeek();
+        $lastWeekEnd      = Carbon::now()->subWeek()->endOfWeek();
+
+        $totalFeesChange = 0;
+
+        $currentWeekPaidFees = StudentFees::where('user_status', 'Active')
+            ->whereBetween('submission_date', [$currentWeekStart, $currentWeekEnd])
+            ->sum('user_fees');
+
+        $lastWeekPaidFees = StudentFees::where('user_status', 'Active')
+            ->whereBetween('submission_date', [$lastWeekStart, $lastWeekEnd])
+            ->sum('user_fees');
+
+        $paidFeesChange = 0;
+        if ($lastWeekPaidFees > 0) {
+            $paidFeesChange = (($currentWeekPaidFees - $lastWeekPaidFees) / $lastWeekPaidFees) * 100;
+        }
+
+        $allTotal = User::where('user_status', 'Active')->sum('total_fees');
+        $currentWeekPendingFees = $allTotal - $currentWeekPaidFees;
+        $lastWeekPendingFees    = $allTotal - $lastWeekPaidFees;
+
+        $pendingFeesChange = 0;
+        if ($lastWeekPendingFees > 0) {
+            $pendingFeesChange = (($currentWeekPendingFees - $lastWeekPendingFees) / $lastWeekPendingFees) * 100;
+        }
+
+        return [$totalFeesChange, $paidFeesChange, $pendingFeesChange];
     }
 }

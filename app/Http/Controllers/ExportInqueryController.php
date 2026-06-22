@@ -12,7 +12,6 @@ class ExportInqueryController extends Controller
         //Get input request course_type
         $course_type = $request->course_type;
        //echo $course_type;exit;
-
         return Excel::download(new ExportInquery($course_type), 'all_inqueries_list.xlsx');
     }
 }

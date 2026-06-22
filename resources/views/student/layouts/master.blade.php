@@ -13,6 +13,11 @@
       <link rel="stylesheet" href="{{ url('public/admin/css/mobile.css') }}">
       <link rel="stylesheet" href="{{ url('public/admin/css/bootstrap.min.css') }}">
       <link rel="stylesheet" href="{{ url('public/admin/css/table-custom.css') }}">
+      <link rel="stylesheet" href="{{ url('public/admin/css/custom.css') }}">
+      <link rel="stylesheet" href="{{ url('public/admin/css/listing.css') }}">
+      <link rel="stylesheet" href="{{ url('public/admin/css/modals.css') }}">
+      <link rel="stylesheet" href="{{ url('public/admin/css/forms.css') }}">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
       <link rel="icon" href="{{ url('public/Group-23.svg') }}" type="image/x-icon">
       <!-- SweetAlert2 CSS -->
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">

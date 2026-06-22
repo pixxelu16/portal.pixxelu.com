@@ -1,0 +1,20 @@
+[11-Sep-2024 22:55:40 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/pixxeluclients/portal.pixxeluclients.com/config/database.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/pixxeluclients/portal.pixxeluclients.com/config/database.php on line 18
+[11-Nov-2024 14:56:49 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/pixxeluclients/portal.pixxeluclients.com/config/database.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/pixxeluclients/portal.pixxeluclients.com/config/database.php on line 18
+[16-Mar-2025 18:31:21 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/pixxeluclients/portal.pixxeluclients.com/config/app.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/pixxeluclients/portal.pixxeluclients.com/config/app.php on line 18
+[16-Mar-2025 23:41:20 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/pixxeluclients/portal.pixxeluclients.com/config/app.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/pixxeluclients/portal.pixxeluclients.com/config/app.php on line 18
+[04-Apr-2025 21:58:08 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/pixxeluclients/portal.pixxeluclients.com/config/app.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/pixxeluclients/portal.pixxeluclients.com/config/app.php on line 18

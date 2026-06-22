@@ -83,10 +83,8 @@
 </head>
 <body>
     <div class="receipt-container">
-
         <div class="header">Fee Receipt Generated On</div>
         <p><strong>{{ \Carbon\Carbon::now()->format('d M Y') }}</strong></p>
-
         <div class="details">
             <p><strong>Name:</strong> {{ $student->name }}</p>
             <p><strong>Father Name:</strong> {{ $student->father_name }}</p>
@@ -95,11 +93,9 @@
             <p><strong>Phone:</strong> {{ substr($student->student_phone_no, 0, 5) . '-' . substr($student->student_phone_no, 5) }}</p>
             <p><strong>Joining Date:</strong> {{ \Carbon\Carbon::parse($student->course_joining_date)->format('d M Y') }}</p>
         </div>
-
         <div class="logo">
             <img src="{{ public_path('uploads/users/'. $student->user_pic) }}" alt="Photo">
         </div>
-
         <h3>Summary</h3>
         <table>
             <tr><th>Total Fees</th><td>Rs {{ number_format($totalFees) }}</td></tr>
@@ -108,7 +104,6 @@
             <tr><th>Last Paid Fees</th><td>Rs {{ number_format($lastPaidAmount) }}</td></tr>
             <tr><th>Last Paid Month</th><td>{{ \Carbon\Carbon::parse($lastPaidMonth)->format('M Y') }}</td></tr>
         </table>
-
         <h3>Monthly Payments</h3>
         <table>
             <tr>
@@ -163,12 +158,10 @@
                 <td colspan="2"></td>
             </tr>
         </table>
-
         <div class="signature">
             <p>Authorized Manager Signature</p>
             <p>__________________________</p>
         </div>
-
         <div class="footer">
             <p>Thank you for your payment.</p>
             <p>For any inquiries, contact our office.</p>

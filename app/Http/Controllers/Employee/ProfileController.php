@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Helpers\ProfileImage;
 
 class ProfileController extends Controller
 {
@@ -24,9 +25,7 @@ class ProfileController extends Controller
         $filename = "default_user.png";
         if($request->hasFile('image')) {
             $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-            $file->move(public_path('uploads/employees'), $filename);
+            $filename = ProfileImage::store($file, 'uploads/employees');
             //Check if qualification exist or not
             $qualification = '';
             if($request->has('qualification')) {

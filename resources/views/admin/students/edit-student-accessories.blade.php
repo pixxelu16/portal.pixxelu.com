@@ -5,16 +5,6 @@
    <h2>Edit Student Assign Accessories Detail:</h2>
 </div>
 <div class="main-table">
-   @if (Session::has('success')) 
-   <div class="notification-green">
-      <p>{{ Session::get('success') }}</p>
-   </div>
-   @endif 
-   @if (Session::has('unsuccess')) 
-   <div class="notification-red">
-      <p>{{ Session::get('unsuccess') }}</p>
-   </div>
-   @endif 
    <div class="login-form">
       <form action="{{ route('admin.update.assign.accessories.student', $student_accessories_detail->id) }}" Method="POST" enctype="multipart/form-data">
          @csrf 
@@ -25,7 +15,8 @@
          <div class="form-design mail">
             <label for="assign_accessories_date">Assign Accessories Date</label>
             <input type="date" id="assign_accessories_date" name="assign_accessories_date" value="{{ $student_accessories_detail->assign_accessories_date  }}" placeholder="Enter Assign Accessories Date">
-         </div>
+         </div>         @include('admin.partials.form-footer-alerts')
+
          <div class="form-button">
             <div class="back-button">
                <input type="submit" class="btn btn-success" name="submit" value="Update">

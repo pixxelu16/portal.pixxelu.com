@@ -6,6 +6,8 @@
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
       <!----======== CSS ======== -->
       <link rel="stylesheet" href="{{ url('public/admin/css/style.css') }}">
       <link rel="stylesheet" href="{{ url('public/admin/css/styles.css') }}">
@@ -13,6 +15,10 @@
       <link rel="stylesheet" href="{{ url('public/admin/css/mobile.css') }}">
       <link rel="stylesheet" href="{{ url('public/admin/css/bootstrap.min.css') }}">
       <link rel="stylesheet" href="{{ url('public/admin/css/table-custom.css') }}">
+      <link rel="stylesheet" href="{{ url('public/admin/css/custom.css') }}">
+      <link rel="stylesheet" href="{{ url('public/admin/css/listing.css') }}">
+      <link rel="stylesheet" href="{{ url('public/admin/css/modals.css') }}">
+      <link rel="stylesheet" href="{{ url('public/admin/css/forms.css') }}">
       <link rel="icon" href="{{ url('public/Group-23.svg') }}" type="image/x-icon">
       <!-- SweetAlert2 CSS -->
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -48,12 +54,16 @@
       <script> 
          var base_url = '{{ url("/") }}'; 
       </script>  
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
       <script src="{{ url('public/admin/js/super-admin-custom-ajax.js') }}"></script>
+      <script src="{{ url('public/admin/js/customnew-ajax.js') }}"></script>
       <script src="{{ url('public/admin/js/script.js') }}"></script>
       <script src="{{ url('public/admin/js/custom-script.js') }}"></script>
+      <script src="{{ url('public/admin/js/listing.js') }}"></script>
       <script src="{{ url('public/admin/js/super-admin-custom-script.js') }}"></script>
       <script src="{{ url('public/admin/js/bootstrap.min.js') }}"></script>
       <script src="{{ url('public/admin/js/bootstrap.bundle.min.js') }}"></script>
+      <script src="{{ url('public/admin/js/custom.js') }}"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
       <script src="https://use.fontawesome.com/774c27057f.js"></script>
       <!-- <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script> -->
@@ -70,17 +80,7 @@
             });
          });
       </script>
-      <script>
-         $(document).ready(function() {
-            $('#example10').DataTable({
-                  aLengthMenu: [
-                     [10, 20, 50, 100, 200, -1],
-                     [10, 20, 50, 100, 200, "All"]
-                  ],
-                  iDisplayLength: 10
-            });
-         });
-      </script>
+
       <script>
          // Get all the <li> elements
          const navLinks = document.querySelectorAll('.nav-links li');

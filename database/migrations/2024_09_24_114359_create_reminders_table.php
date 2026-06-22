@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('reminders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->integer('reminder_number'); 
+            $table->string('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('reminder_number'); 
             $table->timestamp('sent_at'); 
             $table->timestamps();
         });

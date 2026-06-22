@@ -2,65 +2,57 @@
 @section('content')
 <div class="space-remove"></div>
 <div class="title-subheading">
-   @if (Session::has('success'))
-   <div class="notification-green">
-      <p>{{ Session::get('success') }}</p>
+   @include('admin.partials.page-alerts')
+   <div class="portal-page-header">
+      <h2>All Stocks</h2>
+      <span class="portal-record-count">{{ $all_stocks_list ? $all_stocks_list->count() : 0 }} records</span>
    </div>
-   @endif 
-   @if (Session::has('unsuccess'))
-   <div class="notification-red">
-      <p>{{ Session::get('unsuccess') }}</p>
-   </div>
-   @endif
-   <h2>All Stocks Listing</h2>
 </div>
-<div class="main-table">
-   <div class="data-table-listing">
-      <div class="btn-pixxelu">
-         <a href="{{ url('admin/add-new-stock') }}"><img src="{{ url('public/admin/images/pluse.svg') }}">Add New Stock</a>
+
+<div class="portal-listing">
+   <div class="portal-listing-toolbar">
+      <div class="portal-listing-toolbar-right" style="margin-left:auto;">
+         <a href="{{ url('admin/add-new-stock') }}" class="portal-btn-primary">
+            <img src="{{ url('public/admin/images/pluse.svg') }}" alt=""> Add New Stock
+         </a>
       </div>
    </div>
-   <div class="scrolling-data-table">
-      <div class="card-body">
-         <table id="example1" class="rwd-table cloud-path">
-            <thead>
-               <tr  class="sticky">
-                  <th>Sr.No.</th>
-                  <th>Keyboard Stock</th>
-                  <th>Assigned Keyboard</th>
-                  <th>Remaining Keyboard</th>
-                  <th>Damage Keyboard</th>
-                  <th>Mouse Stock</th>
-                  <th>Assigned Mouse</th>
-                  <th>Remaining Mouse</th>
-                  <th>Damage Mouse</th>
-               </tr>
-            </thead>
-            <tbody>
-               @if($all_stocks_list && $all_stocks_list->isNotEmpty())
-               @php $count = 1; 
-               @endphp
-               @foreach($all_stocks_list as $list)   
+   <div class="portal-listing-body">
+      <table id="portalListingTable" class="portal-table">
+         <thead>
+            <tr>
+               <th>#</th>
+               <th>Keyboard Stock</th>
+               <th>Assigned</th>
+               <th>Remaining</th>
+               <th>Damage</th>
+               <th>Mouse Stock</th>
+               <th>Assigned</th>
+               <th>Remaining</th>
+               <th>Damage</th>
+            </tr>
+         </thead>
+         <tbody>
+            @if($all_stocks_list && $all_stocks_list->isNotEmpty())
+               @php $count = 1; @endphp
+               @foreach($all_stocks_list as $list)
                <tr>
-                  <td>{{ $count++ }}.</td>
-                  <td>{{ $list->total_keyboard_stock }}</td>
+                  <td class="col-num">{{ $count++ }}</td>
+                  <td><strong>{{ $list->total_keyboard_stock }}</strong></td>
                   <td>{{ $list->assign_keyboard }}</td>
                   <td>{{ $list->total_keyboard_stock - $list->assign_keyboard }}</td>
                   <td>{{ $total_keyboard_damaged ?? 0 }}</td>
-                  <td>{{ $list->total_mouse_stock }}</td>
+                  <td><strong>{{ $list->total_mouse_stock }}</strong></td>
                   <td>{{ $list->assign_mouse }}</td>
                   <td>{{ $list->total_mouse_stock - $list->assign_mouse }}</td>
                   <td>{{ $total_mouse_damaged ?? 0 }}</td>
                </tr>
-               @endforeach 
-               @else
-               <tr>
-                  <td colspan="4">No Stocks are available.</td>
-               </tr>
-               @endif
-            </tbody>
-         </table>
-      </div>
+               @endforeach
+            @else
+               <tr><td colspan="9" class="portal-no-data">No stock records found.</td></tr>
+            @endif
+         </tbody>
+      </table>
    </div>
 </div>
 @endsection

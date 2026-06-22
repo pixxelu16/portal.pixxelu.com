@@ -25,7 +25,9 @@ table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTa
 	background-position: center right
 }
 table.dataTable thead .sorting {
-	background-image: url("../images/sort_both.png")
+    /* background-image: url("../images/sort_both.png"); */
+    background: #191919;
+    color: #fff;
 }
 table.dataTable thead .sorting_asc {
 	background-image: url("../images/sort_asc.png") !important

@@ -5,16 +5,6 @@
    <h2>Add Student Previous Fees</h2>
 </div>
 <div class="main-table">
-   @if (Session::has('success')) 
-   <div class="notification-green">
-      <p>{{ Session::get('success') }}</p>
-   </div>
-   @endif 
-   @if (Session::has('unsuccess')) 
-   <div class="notification-red">
-      <p>{{ Session::get('unsuccess') }}</p>
-   </div>
-   @endif 
    <div class="login-form">
       <form action="{{ route('admin.student.submit.fees') }}" Method="POST" enctype="multipart/form-data">
          @csrf 
@@ -34,7 +24,8 @@
          <div class="form-design-previous-fees last-name">
             <label for="last-name">Date Fees</label><br>
             <input type="date" id="date" name="submission_date" value="{{ old('submission_date') }}" placeholder="Enter Date Fees">
-         </div>
+         </div>         @include('admin.partials.form-footer-alerts')
+
          <div class="form-button">
             <div class="back-button-previous-fees">
                <input type="submit" class="btn btn-success" name="submit" value="Submit">

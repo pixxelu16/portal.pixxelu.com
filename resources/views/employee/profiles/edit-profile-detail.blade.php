@@ -2,19 +2,9 @@
 @section('content')
 <div class="space-remove"></div>
 <div class="title-subheading">
-   <h2>Edit Employee Detail</h2>
+   <h2>Edit Profile</h2>
 </div>
 <div class="main-table">
-   @if (Session::has('success')) 
-   <div class="notification-green">
-      <p>{{ Session::get('success') }}</p>
-   </div>
-   @endif 
-   @if (Session::has('unsuccess')) 
-   <div class="notification-red">
-      <p>{{ Session::get('unsuccess') }}</p>
-   </div>
-   @endif 
    <div class="login-form">
       <form action="{{ route('employee.update.profile', $employee->id) }}" Method="POST" enctype="multipart/form-data">
          @csrf 
@@ -241,11 +231,10 @@
                   <option value="15 Year" @if($employee->experince == '15 Year') selected @endif>15 Year</option>
                </select>
             </div>
-         </div>
+         </div>         @include('admin.partials.form-footer-alerts')
+
          <div class="form-button">
-            <div class="back-button">
-               <input type="submit" class="btn btn-success" name="submit" value="Update">
-            </div>
+            <input type="submit" class="btn btn-success" name="submit" value="Update Profile">
          </div>
       </form>
    </div>

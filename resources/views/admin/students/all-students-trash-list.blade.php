@@ -24,6 +24,23 @@
          </a>
       </div>
    </div>
+    <!--start export order filter-->
+    <form action="{{ url('admin/export-trash-students') }}" method="GET">
+      <div class="filter-trash-csv">
+         <select name="user_status" id="user_status" class="types">
+            <option value="" disabled selected>Select Trash Status</option>
+            <option value="all">All Students</option>
+            <option value="Completed">Completed</option>
+            <option value="Leave">Leave</option>>
+         </select>
+         <div class="form-group">
+            <button class="trash-export" type="submit">
+               <img src="{{ url('public/admin/images/Excel.svg') }}" alt="Excel Icon">Download
+            </button>
+         </div>
+      </div>
+   </form>
+   <!--end export order filter-->
    <div class="scrolling-data-table" style="margin-inline: 10px;">
       <div class="card-body">
          <table id="example1" class="rwd-table cloud-path">

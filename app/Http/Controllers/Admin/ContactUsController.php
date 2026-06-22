@@ -23,3 +23,8 @@ class ContactUsController extends Controller
         // echo ($contact_id);exit;
     }
 }
+Contacts.svg
+
+Categories.svg
+
+Blogs.svg

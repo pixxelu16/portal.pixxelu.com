@@ -34,13 +34,15 @@ class ExportInquery implements FromCollection, ShouldAutoSize, WithHeadings
 
         foreach ($inqueries as $inquery) {
             $data[] = [
-                'name' => $inquery->name,
-                'mobile' => $inquery->mobile,
-                'address' => $inquery->address,
-                'course_type' => $inquery->course_type,
-                'created_at' => $inquery->created_at->format('Y-m-d'),
-                'priority' => $inquery->priority,
-                'status' => $inquery->status,
+                'name' => $inquery->name ?? '-',
+                'mobile' => $inquery->mobile ?? '-',
+                'address' => $inquery->address ?? '-',
+                'course_type' => $inquery->course_type ?? '-',
+                'created_at' => $inquery->created_at->format('Y-m-d') ?? '-',
+                'priority' => $inquery->priority ?? '-',
+                'visit' => $inquery->visit ?? '-',
+                'total_fees' => isset($inquery->total_fees) ? number_format($inquery->total_fees, 0, '.', ',') : '-',
+                'status' => $inquery->status ?? '-',
             ];
         }
 
@@ -49,6 +51,6 @@ class ExportInquery implements FromCollection, ShouldAutoSize, WithHeadings
 
     //Function for heading CSV file
     public function headings(): array {
-        return ['Name', 'Mobile', 'Address', 'Course Type', 'Inquery Date', 'Priority', 'Status'];
+        return ['Name', 'Mobile', 'Address', 'Course Type', 'Inquery Date', 'Priority', 'Visit By', 'Total Fees', 'Status'];
     }
 }
